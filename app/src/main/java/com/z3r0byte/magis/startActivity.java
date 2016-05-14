@@ -19,6 +19,8 @@ package com.z3r0byte.magis;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
+import cat.ereza.customactivityoncrash.CustomActivityOnCrash;
+
 public class startActivity extends AppCompatActivity {
 
     private static final String TAG = "startActivity";
@@ -26,6 +28,9 @@ public class startActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        CustomActivityOnCrash.install(this);
         setContentView(R.layout.activity_start);
+
+
     }
 }
