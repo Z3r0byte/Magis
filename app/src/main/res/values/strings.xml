@@ -17,6 +17,18 @@
 <resources>
     <string name="app_name">Magis</string>
 
+    <string name="setup_title_1">Welkom bij Magis</string>
+    <string name="setup_title_2">Permissies</string>
+    <string name="setup_title_3"></string>
+    <string name="setup_title_4"></string>
+    <string name="setup_title_5"></string>
+
+    <string name="setup_desc_1">Laten we beginnen...</string>
+    <string name="setup_desc_2">Magis heeft toegang nodig tot de sdkaart om logbestanden en dergelijken op te slaan.</string>
+
+
+    <string name="snackbar_no_permissions">Geef Magis aub de benodigde permissies.</string>
+
     <string name="customactivityoncrash_error_activity_error_occurred_explanation">Er is een onverwachte fout opgetreden.\nVerstuur a.u.b. de foutgegevens naar de ontwikkelaar. z3r0byte.apps@gmail.com</string>
     <string name="customactivityoncrash_error_activity_unknown_exception">Onbekende fout</string>
     <string name="customactivityoncrash_error_activity_restart_app">App opnieuw starten</string>
