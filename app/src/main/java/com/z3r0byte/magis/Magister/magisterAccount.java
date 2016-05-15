@@ -17,5 +17,5 @@
 package com.z3r0byte.magis.Magister;
 
 
-public class magisterAccount {
+public class MagisterAccount {
 }

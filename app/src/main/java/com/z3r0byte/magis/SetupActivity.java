@@ -14,12 +14,19 @@
  *    limitations under the License.
  */
 
-package com.z3r0byte.magis.GUI;
+package com.z3r0byte.magis;
 
-/**
- * Created by basva on 14-5-2016.
- */
-public class navigatieMenu {
+import android.os.Bundle;
+
+import com.heinrichreimersoftware.materialintro.app.IntroActivity;
+
+public class SetupActivity extends IntroActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_setup);
 
 
+    }
 }

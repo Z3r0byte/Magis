@@ -14,23 +14,12 @@
  *    limitations under the License.
  */
 
-package com.z3r0byte.magis;
+package com.z3r0byte.magis.GUI;
 
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-
-import cat.ereza.customactivityoncrash.CustomActivityOnCrash;
-
-public class StartActivity extends AppCompatActivity {
-
-    private static final String TAG = "StartActivity";
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        CustomActivityOnCrash.install(this);
-        setContentView(R.layout.activity_start);
+/**
+ * Created by basva on 14-5-2016.
+ */
+public class NavigationDrawer {
 
 
-    }
 }

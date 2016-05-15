@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-package com.z3r0byte.magis.Internet;
+package com.z3r0byte.magis.Networking;
 
 import java.util.Collections;
 
@@ -26,7 +26,7 @@ import okhttp3.TlsVersion;
 /**
  * Created by basva on 14-5-2016.
  */
-public class getVerzoek {
+public class GetRequest {
 
     public static String getVerzoek(String url, String cookie) {
 

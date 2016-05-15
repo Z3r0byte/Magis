@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright 2016 Bas van den Boom 'Z3r0byte'
   ~
   ~    Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,10 +22,6 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".StartActivity">
+    tools:context="com.z3r0byte.magis.SetupActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Eerste Magis build (nog niks). ☺" />
 </RelativeLayout>
