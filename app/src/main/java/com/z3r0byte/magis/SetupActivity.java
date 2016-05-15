@@ -1,17 +1,17 @@
 /*
  * Copyright 2016 Bas van den Boom 'Z3r0byte'
  *
- *    Licensed under the Apache License, Version 2.0 (the "License");
- *    you may not use this file except in compliance with the License.
- *    You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- *        http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
- *    Unless required by applicable law or agreed to in writing, software
- *    distributed under the License is distributed on an "AS IS" BASIS,
- *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *    See the License for the specific language governing permissions and
- *    limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package com.z3r0byte.magis;
@@ -23,8 +23,10 @@ import android.view.View;
 
 import com.heinrichreimersoftware.materialintro.app.IntroActivity;
 import com.heinrichreimersoftware.materialintro.app.OnNavigationBlockedListener;
+import com.heinrichreimersoftware.materialintro.slide.FragmentSlide;
 import com.heinrichreimersoftware.materialintro.slide.SimpleSlide;
 import com.heinrichreimersoftware.materialintro.slide.Slide;
+import com.z3r0byte.magis.Fragments.SearchSchoolFragment;
 
 import cat.ereza.customactivityoncrash.CustomActivityOnCrash;
 
@@ -57,6 +59,13 @@ public class SetupActivity extends IntroActivity {
                 .build();
         addSlide(permissionsSlide);
 
+        final FragmentSlide searchSlide = new FragmentSlide.Builder()
+                .background(R.color.setup_color_3)
+                .backgroundDark(R.color.setup_color_3)
+                .fragment(SearchSchoolFragment.newInstance())
+                .build();
+        addSlide(searchSlide);
+
         addOnNavigationBlockedListener(new OnNavigationBlockedListener() {
             @Override
             public void onNavigationBlocked(int position, int direction) {
@@ -65,6 +74,8 @@ public class SetupActivity extends IntroActivity {
 
                 if (slide == permissionsSlide) {
                     Snackbar.make(contentView, R.string.snackbar_no_permissions, Snackbar.LENGTH_LONG).show();
+                } else if (slide == searchSlide) {
+                    Snackbar.make(contentView, R.string.snackbar_no_school_selected, Snackbar.LENGTH_LONG).show();
                 }
             }
         });
