@@ -16,6 +16,7 @@
 
 package com.z3r0byte.magis;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
@@ -31,6 +32,8 @@ public class StartActivity extends AppCompatActivity {
         CustomActivityOnCrash.install(this);
         setContentView(R.layout.activity_start);
 
+        startActivity(new Intent(this, SetupActivity.class));
+        finish();
 
     }
 }

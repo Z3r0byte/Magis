@@ -51,7 +51,6 @@ public class SetupActivity extends IntroActivity {
         permissionsSlide = new SimpleSlide.Builder()
                 .title(R.string.setup_title_2)
                 .description(R.string.setup_desc_2)
-                .image(R.drawable.sdcard)
                 .background(R.color.setup_color_2)
                 .backgroundDark(R.color.setup_color_2)
                 .permission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
