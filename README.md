@@ -15,7 +15,7 @@ Probeer echter wel op een paar dingen te letten:
   <code>private void mVoid(String s){</code></br><code>
       //doe iets</code></br><code>
   }</code>
-<li>Vermijdt hard-coded strings, gebruik aub de resources!</li>
+<li>Vermijd hard-coded strings, gebruik aub de resources!</li>
 <li>Voor de rest: probeer <a href="https://github.com/ribot/android-guidelines/blob/master/project_and_code_guidelines.md">deze</a> richtlijnen aan te houden.</li>
 </ul>
 <br><br><br>
