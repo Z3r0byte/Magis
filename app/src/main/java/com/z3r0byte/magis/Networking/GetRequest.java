@@ -51,7 +51,7 @@ public class GetRequest {
                 .build();
 
         Request request;
-        if (cookie.isEmpty()) {
+        if (cookie == null) {
             request = new Request.Builder()
                     .url(url)
                     .build();

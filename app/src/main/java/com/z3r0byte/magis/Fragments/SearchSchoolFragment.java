@@ -19,6 +19,7 @@ package com.z3r0byte.magis.Fragments;
 
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,13 +27,17 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
+import com.google.gson.Gson;
 import com.heinrichreimersoftware.materialintro.app.SlideFragment;
+import com.z3r0byte.magis.Magister.MagisterSchool;
 import com.z3r0byte.magis.Networking.GetRequest;
 import com.z3r0byte.magis.R;
 
 import java.io.IOException;
 
 public class SearchSchoolFragment extends SlideFragment {
+
+    private static final String TAG = "SearchSchoolFragment";
 
     public SearchSchoolFragment() {
         // Required empty public constructor
@@ -49,7 +54,8 @@ public class SearchSchoolFragment extends SlideFragment {
     ListView mListSchool;
     View view;
 
-    String mSchoolJSON;
+    MagisterSchool[] mSchools;
+
 
     Thread mSearchThread;
 
@@ -83,11 +89,17 @@ public class SearchSchoolFragment extends SlideFragment {
             @Override
             public void run() {
                 try {
-                    mSchoolJSON = GetRequest.getRequest("https://mijn.magister.net/api/schools?filter=" + school, null);
+                    mSchools = new Gson().fromJson(GetRequest.getRequest("https://mijn.magister.net/api/schools?filter=" + school, null), MagisterSchool[].class);
+                    Log.d(TAG, "run: " + mSchools[0].toString());
+                    Snackbar.make(view, R.string.msg_amount_found_part_1 + mSchools.length + R.string.msg_amount_found_part_2, Snackbar.LENGTH_SHORT);
                 } catch (IOException exception) {
                     Snackbar.make(view, R.string.err_unknown, Snackbar.LENGTH_LONG);
                     exception.printStackTrace();
                 }
+                mEditTextSchool.setEnabled(true);
+                mButtonSearch.setEnabled(true);
+                mButtonSearch.setText(R.string.msg_search);
+
             }
         });
         mSearchThread.start();
