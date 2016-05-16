@@ -17,12 +17,14 @@
 package com.z3r0byte.magis.Fragments;
 
 
+import android.content.Context;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -54,16 +56,21 @@ public class SearchSchoolFragment extends SlideFragment {
     ListView mListSchool;
     View view;
 
+    ArrayAdapter<MagisterSchool> mAdapter;
+
     MagisterSchool[] mSchools;
 
 
     Thread mSearchThread;
+    Context c;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_search_school, container, false);
+        view = inflater.inflate(R.layout.fragment_search_school, container, false);
+
+        c = getActivity();
 
         mEditTextSchool = (EditText) view.findViewById(R.id.edit_text_search_school);
         mButtonSearch = (Button) view.findViewById(R.id.button_search_school);
@@ -73,6 +80,23 @@ public class SearchSchoolFragment extends SlideFragment {
             @Override
             public void onClick(View view) {
                 SearchSchool();
+            }
+        });
+
+
+        mSchools = new MagisterSchool[1];
+        mSchools[0] = new MagisterSchool();
+        //setting up adapter
+        mAdapter = new ArrayAdapter<>
+                (c, android.R.layout.simple_list_item_1, mSchools);
+        mListSchool.setAdapter(mAdapter);
+
+        mListSchool.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                if (mSchools[position] == null)
+                    Log.d(TAG, "onItemClick: Url: " + mSchools[position].getUrl());
+
             }
         });
 
@@ -90,15 +114,26 @@ public class SearchSchoolFragment extends SlideFragment {
             public void run() {
                 try {
                     mSchools = new Gson().fromJson(GetRequest.getRequest("https://mijn.magister.net/api/schools?filter=" + school, null), MagisterSchool[].class);
-                    Log.d(TAG, "run: " + mSchools[0].toString());
-                    Snackbar.make(view, R.string.msg_amount_found_part_1 + mSchools.length + R.string.msg_amount_found_part_2, Snackbar.LENGTH_SHORT);
+                    Log.d(TAG, "run: Er zijn " + mSchools.length + " resultaten gevonden.");
+                    Log.d(TAG, "run: School first object " + mSchools[0].toString());
                 } catch (IOException exception) {
-                    Snackbar.make(view, R.string.err_unknown, Snackbar.LENGTH_LONG);
+                    mSchools = new MagisterSchool[0];
+                    MagisterSchool mNoSchool = new MagisterSchool("Geen gegevens");
+                    mSchools[0] = mNoSchool;
+                    Log.d(TAG, "run: No Connection");
                     exception.printStackTrace();
                 }
-                mEditTextSchool.setEnabled(true);
-                mButtonSearch.setEnabled(true);
-                mButtonSearch.setText(R.string.msg_search);
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mEditTextSchool.setEnabled(true);
+                        mButtonSearch.setEnabled(true);
+                        mButtonSearch.setText(R.string.msg_search);
+                        mAdapter = new ArrayAdapter<>
+                                (c, android.R.layout.simple_list_item_1, mSchools);
+                        mListSchool.setAdapter(mAdapter);
+                    }
+                });
 
             }
         });
@@ -112,7 +147,6 @@ public class SearchSchoolFragment extends SlideFragment {
 
     @Override
     public void onDestroy() {
-        mSearchThread.stop();
         super.onDestroy();
     }
 

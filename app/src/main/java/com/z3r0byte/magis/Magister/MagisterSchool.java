@@ -20,18 +20,43 @@ import com.google.gson.annotations.SerializedName;
 
 public class MagisterSchool {
 
+    public MagisterSchool(String name, String url) {
+        Name = name;
+        Url = url;
+    }
+
+    public MagisterSchool(String name) {
+        Name = name;
+    }
+
+    public MagisterSchool() {
+
+    }
+
     @SerializedName("Name")
     public String Name;
 
     @SerializedName("Url")
     public String Url;
 
+    public String getName() {
+        return Name;
+    }
+
+    public void setName(String name) {
+        Name = name;
+    }
+
+    public String getUrl() {
+        return Url;
+    }
+
+    public void setUrl(String url) {
+        Url = url;
+    }
 
     @Override
     public String toString() {
-        return "MagisterSchool{" +
-                "Name='" + Name + '\'' +
-                ", Url='" + Url + '\'' +
-                '}';
+        return Name;
     }
 }

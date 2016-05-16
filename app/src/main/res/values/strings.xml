@@ -47,5 +47,6 @@
     <string name="msg_amount_found_part_1">Er zijn </string>
     <string name="msg_amount_found_part_2"> resultaten gevonden.</string>
     <string name="err_unknown">Er is een onbekende fout opgetreden, probeer het opnieuw.</string>
+    <string name="err_no_connection">Geen verbinding...</string>
     <string name="hint_search_school">Een deel van de naam/url van de school</string>
 </resources>
