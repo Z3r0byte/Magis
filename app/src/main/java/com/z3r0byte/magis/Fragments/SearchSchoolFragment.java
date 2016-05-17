@@ -19,6 +19,8 @@ package com.z3r0byte.magis.Fragments;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,6 +30,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.heinrichreimersoftware.materialintro.app.SlideFragment;
@@ -67,7 +70,6 @@ public class SearchSchoolFragment extends SlideFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_search_school, container, false);
 
         c = getActivity();
@@ -79,24 +81,33 @@ public class SearchSchoolFragment extends SlideFragment {
         mButtonSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                SearchSchool();
+                SearchSchool(true);
             }
         });
 
 
         mSchools = new MagisterSchool[1];
         mSchools[0] = new MagisterSchool();
-        //setting up adapter
-        mAdapter = new ArrayAdapter<>
-                (c, android.R.layout.simple_list_item_1, mSchools);
-        mListSchool.setAdapter(mAdapter);
 
-        mListSchool.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mEditTextSchool.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                if (mSchools[position] == null)
-                    Log.d(TAG, "onItemClick: Url: " + mSchools[position].getUrl());
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                Log.d(TAG, "afterTextChanged: Text Changed!");
+                if (mEditTextSchool.getText().length() >= 3) {
+                    SearchSchool(false);
+                } else {
+                    Log.d(TAG, "afterTextChanged: String not long enough!");
+                }
             }
         });
 
@@ -104,21 +115,22 @@ public class SearchSchoolFragment extends SlideFragment {
         return view;
     }
 
-    private void SearchSchool() {
+    private void SearchSchool(final Boolean ActionCameFromButton) {
         final String school = mEditTextSchool.getText().toString();
-        mEditTextSchool.setEnabled(false);
-        mButtonSearch.setEnabled(false);
-        mButtonSearch.setText(R.string.msg_searching);
+        if (ActionCameFromButton) {
+            mEditTextSchool.setEnabled(false);
+            mButtonSearch.setEnabled(false);
+            mButtonSearch.setText(R.string.msg_searching);
+        }
         mSearchThread = new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
                     mSchools = new Gson().fromJson(GetRequest.getRequest("https://mijn.magister.net/api/schools?filter=" + school, null), MagisterSchool[].class);
                     Log.d(TAG, "run: Er zijn " + mSchools.length + " resultaten gevonden.");
-                    Log.d(TAG, "run: School first object " + mSchools[0].toString());
                 } catch (IOException exception) {
-                    mSchools = new MagisterSchool[0];
-                    MagisterSchool mNoSchool = new MagisterSchool("Geen gegevens");
+                    mSchools = new MagisterSchool[1];
+                    MagisterSchool mNoSchool = new MagisterSchool(getResources().getString(R.string.err_no_connection));
                     mSchools[0] = mNoSchool;
                     Log.d(TAG, "run: No Connection");
                     exception.printStackTrace();
@@ -126,12 +138,29 @@ public class SearchSchoolFragment extends SlideFragment {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        mEditTextSchool.setEnabled(true);
-                        mButtonSearch.setEnabled(true);
-                        mButtonSearch.setText(R.string.msg_search);
+                        if (ActionCameFromButton) {
+                            mEditTextSchool.setEnabled(true);
+                            mButtonSearch.setEnabled(true);
+                            mButtonSearch.setText(R.string.msg_search);
+                        }
                         mAdapter = new ArrayAdapter<>
                                 (c, android.R.layout.simple_list_item_1, mSchools);
                         mListSchool.setAdapter(mAdapter);
+
+                        mListSchool.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                                if (mSchools[position] != null && mSchools[position].toString() != getResources().getString(R.string.err_no_connection)) {
+                                    Log.d(TAG, "onItemClick: Url: " + mSchools[position].getUrl());
+                                    c.getSharedPreferences("data", Context.MODE_PRIVATE).edit().
+                                            putString("SchoolBaseUrl", mSchools[position].getUrl()).apply();
+                                    c.getSharedPreferences("data", Context.MODE_PRIVATE).edit().
+                                            putString("SchoolApiUrl", mSchools[position].getUrl() + "/api/").apply();
+                                    mAllowForward = true;
+                                    Toast.makeText(c, getResources().getString(R.string.msg_school_selected) + ' ' + mSchools[position].getName(), Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
                     }
                 });
 
