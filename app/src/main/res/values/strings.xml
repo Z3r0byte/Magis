@@ -29,6 +29,7 @@
 
     <string name="snackbar_no_permissions">Geef Magis aub de benodigde permissies</string>
     <string name="snackbar_no_school_selected">Selecteer eerst een school</string>
+    <string name="snackbar_not_logged_in">Log eerst in</string>
 
     <string name="customactivityoncrash_error_activity_error_occurred_explanation">Er is een onverwachte fout opgetreden.\nVerstuur a.u.b. de foutgegevens naar de ontwikkelaar. z3r0byte.apps@gmail.com</string>
     <string name="customactivityoncrash_error_activity_unknown_exception">Onbekende fout</string>
@@ -44,10 +45,14 @@
     <string name="msg_searching">Zoeken...</string>
     <string name="msg_search">Zoek</string>
     <string name="msg_search_school">School zoeken</string>
+    <string name="msg_login_on_Magister">Log in op Magister</string>
     <string name="msg_amount_found_part_1">Er zijn </string>
     <string name="msg_amount_found_part_2"> resultaten gevonden.</string>
+    <string name="msg_login">Log in</string>
     <string name="msg_school_selected">Naam van geselcteerde school: </string>
     <string name="err_unknown">Er is een onbekende fout opgetreden, probeer het opnieuw.</string>
     <string name="err_no_connection">Geen verbinding...</string>
     <string name="hint_search_school">Een deel van de naam/url van de school</string>
+    <string name="hint_username">Gebruikersnaam</string>
+    <string name="hint_password">Wachtwoord</string>
 </resources>

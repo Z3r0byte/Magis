@@ -26,6 +26,7 @@ import com.heinrichreimersoftware.materialintro.app.OnNavigationBlockedListener;
 import com.heinrichreimersoftware.materialintro.slide.FragmentSlide;
 import com.heinrichreimersoftware.materialintro.slide.SimpleSlide;
 import com.heinrichreimersoftware.materialintro.slide.Slide;
+import com.z3r0byte.magis.Fragments.LoginFragment;
 import com.z3r0byte.magis.Fragments.SearchSchoolFragment;
 
 import cat.ereza.customactivityoncrash.CustomActivityOnCrash;
@@ -66,6 +67,13 @@ public class SetupActivity extends IntroActivity {
                 .build();
         addSlide(searchSlide);
 
+        final FragmentSlide loginSlide = new FragmentSlide.Builder()
+                .background(R.color.setup_color_5)
+                .backgroundDark(R.color.setup_color_5)
+                .fragment(LoginFragment.newInstance())
+                .build();
+        addSlide(loginSlide);
+
         addOnNavigationBlockedListener(new OnNavigationBlockedListener() {
             @Override
             public void onNavigationBlocked(int position, int direction) {
@@ -76,6 +84,8 @@ public class SetupActivity extends IntroActivity {
                     Snackbar.make(contentView, R.string.snackbar_no_permissions, Snackbar.LENGTH_LONG).show();
                 } else if (slide == searchSlide) {
                     Snackbar.make(contentView, R.string.snackbar_no_school_selected, Snackbar.LENGTH_LONG).show();
+                } else if (slide == loginSlide) {
+                    Snackbar.make(contentView, R.string.snackbar_not_logged_in, Snackbar.LENGTH_LONG).show();
                 }
             }
         });
