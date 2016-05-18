@@ -152,10 +152,9 @@ public class SearchSchoolFragment extends SlideFragment {
                             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                                 if (mSchools[position] != null && mSchools[position].toString() != getResources().getString(R.string.err_no_connection)) {
                                     Log.d(TAG, "onItemClick: Url: " + mSchools[position].getUrl());
+                                    String school = new Gson().toJson(mSchools[position]);
                                     c.getSharedPreferences("data", Context.MODE_PRIVATE).edit().
-                                            putString("SchoolBaseUrl", mSchools[position].getUrl()).apply();
-                                    c.getSharedPreferences("data", Context.MODE_PRIVATE).edit().
-                                            putString("SchoolApiUrl", mSchools[position].getUrl() + "/api/").apply();
+                                            putString("School", school).apply();
                                     mAllowForward = true;
                                     Toast.makeText(c, getResources().getString(R.string.msg_school_selected) + ' ' + mSchools[position].getName(), Toast.LENGTH_SHORT).show();
                                 }
