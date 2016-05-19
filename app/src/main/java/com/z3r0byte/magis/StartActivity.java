@@ -32,8 +32,10 @@ public class StartActivity extends AppCompatActivity {
         CustomActivityOnCrash.install(this);
         setContentView(R.layout.activity_start);
 
-        startActivity(new Intent(this, SetupActivity.class));
-        finish();
 
+        if (!getSharedPreferences("data", MODE_PRIVATE).getBoolean("LoggedIn", false)) {
+            startActivity(new Intent(this, SetupActivity.class));
+            finish();
+        }
     }
 }
