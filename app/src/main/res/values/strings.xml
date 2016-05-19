@@ -59,4 +59,5 @@
     <string name="hint_search_school">Een deel van de naam/url van de school</string>
     <string name="hint_username">Gebruikersnaam</string>
     <string name="hint_password">Wachtwoord</string>
+    <string name="title_calendar">Agenda</string>
 </resources>

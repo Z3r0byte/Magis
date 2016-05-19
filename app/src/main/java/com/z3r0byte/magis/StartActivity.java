@@ -36,6 +36,8 @@ public class StartActivity extends AppCompatActivity {
         if (!getSharedPreferences("data", MODE_PRIVATE).getBoolean("LoggedIn", false)) {
             startActivity(new Intent(this, SetupActivity.class));
             finish();
+        } else {
+            startActivity(new Intent(this, CalendarActivity.class));
         }
     }
 }

@@ -17,13 +17,28 @@
 package com.z3r0byte.magis;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 
-public class CalendarActivity extends AppCompatActivity {
+import com.z3r0byte.magis.GUI.NavigationDrawer;
+
+public class CalendarActivity extends ActionBarActivity {
+
+    Toolbar mToolbar;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calendar);
+
+        mToolbar = (Toolbar) findViewById(R.id.Toolbar);
+        mToolbar.setTitle(R.string.title_calendar);
+        setSupportActionBar(mToolbar);
+
+
+        NavigationDrawer.SetupNavigationDrawer(this, this, mToolbar);
+
+
     }
 }
