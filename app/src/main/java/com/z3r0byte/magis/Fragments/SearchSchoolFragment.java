@@ -92,12 +92,10 @@ public class SearchSchoolFragment extends SlideFragment {
         mEditTextSchool.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
             }
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
             }
 
             @Override
@@ -106,7 +104,7 @@ public class SearchSchoolFragment extends SlideFragment {
                 if (mEditTextSchool.getText().length() >= 3) {
                     SearchSchool(false);
                 } else {
-                    Log.d(TAG, "afterTextChanged: String not long enough!");
+                    Log.e(TAG, "afterTextChanged: String not long enough!");
                 }
             }
         });
@@ -126,8 +124,15 @@ public class SearchSchoolFragment extends SlideFragment {
             @Override
             public void run() {
                 try {
-                    mSchools = new Gson().fromJson(GetRequest.getRequest("https://mijn.magister.net/api/schools?filter=" + school, null), MagisterSchool[].class);
+                    mSchools = new Gson().fromJson(GetRequest.getRequest(
+                            "https://mijn.magister.net/api/schools?filter=" + school, null), MagisterSchool[].class);
                     Log.d(TAG, "run: Er zijn " + mSchools.length + " resultaten gevonden.");
+                    if (mSchools.length == 0) {
+                        mSchools = new MagisterSchool[1];
+                        MagisterSchool mNoResults = new MagisterSchool(getString(R.string.msg_no_results));
+                        mSchools[0] = mNoResults;
+                        Log.d(TAG, "run: No results");
+                    }
                 } catch (IOException exception) {
                     mSchools = new MagisterSchool[1];
                     MagisterSchool mNoSchool = new MagisterSchool(getResources().getString(R.string.err_no_connection));
@@ -156,7 +161,8 @@ public class SearchSchoolFragment extends SlideFragment {
                                     c.getSharedPreferences("data", Context.MODE_PRIVATE).edit().
                                             putString("School", school).apply();
                                     mAllowForward = true;
-                                    Toast.makeText(c, getResources().getString(R.string.msg_school_selected) + ' ' + mSchools[position].getName(), Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(c, getResources().getString(R.string.msg_school_selected) + ' ' + mSchools[position].getName()
+                                            , Toast.LENGTH_SHORT).show();
                                 }
                             }
                         });

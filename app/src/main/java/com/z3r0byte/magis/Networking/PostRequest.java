@@ -37,7 +37,7 @@ public class PostRequest {
 
     public static String postRequest(String url, String cookie, String postData) throws IOException {
         Log.d(TAG, "postRequest() called with: " + "url = [" + url + "], cookie = [" + cookie + "], postData =" +
-                " [" + postData.substring(0, 10) + "*****************" + "]");//hiding password for security reasons
+                " [" + postData.substring(0, 10) + "*****************" + "]"); // Hiding password for security reasons
 
         ConnectionSpec spec = new ConnectionSpec.Builder(ConnectionSpec.MODERN_TLS)
                 .tlsVersions(TlsVersion.TLS_1_2)

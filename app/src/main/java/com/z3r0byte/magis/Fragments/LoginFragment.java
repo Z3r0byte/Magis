@@ -28,9 +28,13 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.heinrichreimersoftware.materialintro.app.SlideFragment;
+import com.z3r0byte.magis.Magister.MagisterAccount;
 import com.z3r0byte.magis.Magister.MagisterSchool;
 import com.z3r0byte.magis.Networking.DeleteRequest;
+import com.z3r0byte.magis.Networking.GetRequest;
 import com.z3r0byte.magis.Networking.PostRequest;
 import com.z3r0byte.magis.R;
 
@@ -53,7 +57,7 @@ public class LoginFragment extends SlideFragment {
     }
 
     Boolean mAllowForward = false;
-    Boolean mSuccessfulLogin;
+    Boolean mSuccessfulLogin = false;
     Boolean mLoginError = false;
 
     EditText mUserNameEditText;
@@ -62,6 +66,9 @@ public class LoginFragment extends SlideFragment {
 
     String mUrl;
     String mCookie;
+
+    MagisterAccount mAccount = new MagisterAccount();
+    MagisterSchool mSchool;
 
     View view;
 
@@ -87,33 +94,57 @@ public class LoginFragment extends SlideFragment {
                     if (url == null) {
                         throw new IllegalArgumentException("No school is saved!");
                     }
-                    mUrl = new Gson().fromJson(url, MagisterSchool.class).getUrl();
+                    mSchool = new Gson().fromJson(url, MagisterSchool.class);
+                    mUrl = mSchool.getUrl();
                 }
 
-                mSuccessfulLogin = login(mUserNameEditText.getText().toString(), mPasswordEditText.getText().toString());
+                login(mUserNameEditText.getText().toString(), mPasswordEditText.getText().toString());
             }
         });
 
         return view;
     }
 
-    private Boolean login(final String UserName, final String Password) {
+    private void ResetButton() {
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (mSuccessfulLogin) {
+                    mLogin.setText(R.string.msg_logged_in);
+                } else {
+                    mLogin.setEnabled(true);
+                    mUserNameEditText.setEnabled(true);
+                    mPasswordEditText.setEnabled(true);
+                    mLogin.setText(R.string.msg_login);
+                }
+            }
+        });
+    }
+
+    private void login(final String UserName, final String Password) {
+        mLoginError = false;
+        mLogin.setEnabled(false);
+        mUserNameEditText.setEnabled(false);
+        mPasswordEditText.setEnabled(false);
+        mLogin.setText(R.string.msg_logging_in);
+
         if (UserName == null || UserName.length() == 0 || UserName == "") {
             Log.e(TAG, "login: Username is not filled in");
-            return false;
+            ResetButton();
         }
 
         if (Password == null || Password.length() == 0 || Password == "") {
             Log.e(TAG, "login: Password is not filled in");
-            return false;
+            ResetButton();
         }
 
         Log.d(TAG, "login() called with: " + "UserName = [" + UserName + "], Password = " +
-                "[" + Password.substring(0, 2) + "******" + "]"); //Not displaying entire password in log, for safety reasons
+                "[" + Password.substring(0, 2) + "******" + "]"); //Not displaying entire password in log for safety reasons
 
         new Thread(new Runnable() {
             @Override
             public void run() {
+                //Deleting old session
                 String initiateCookie;
                 try {
                     initiateCookie = DeleteRequest.deleteRequest(mUrl + "/api/sessies/huidige");
@@ -125,9 +156,11 @@ public class LoginFragment extends SlideFragment {
                             Toast.makeText(c, getResources().getString(R.string.err_no_connection), Toast.LENGTH_SHORT).show();
                         }
                     });
+                    ResetButton();
                     return;
                 }
 
+                //Logging in with username/password
                 try {
                     JSONObject jo = new JSONObject();
                     jo.put("Gebruikersnaam", UserName);
@@ -135,6 +168,17 @@ public class LoginFragment extends SlideFragment {
                     jo.put("IngelogdBlijven", true);
                     String Data = jo.toString();
                     mCookie = PostRequest.postRequest(mUrl + "/api/sessies", initiateCookie, Data);
+                    if (mCookie == null || mCookie == "null") {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                mLoginError = true;
+                                Toast.makeText(c, getResources().getString(R.string.err_wrong_username_or_password), Toast.LENGTH_SHORT).show();
+                                ResetButton();
+                                return;
+                            }
+                        });
+                    }
                     Log.d(TAG, "run: mCookie: " + mCookie);
                 } catch (IOException e) {
                     getActivity().runOnUiThread(new Runnable() {
@@ -143,6 +187,7 @@ public class LoginFragment extends SlideFragment {
                             Toast.makeText(c, getResources().getString(R.string.err_no_connection), Toast.LENGTH_SHORT).show();
                         }
                     });
+                    ResetButton();
                     return;
                 } catch (JSONException e) {
                     getActivity().runOnUiThread(new Runnable() {
@@ -151,12 +196,69 @@ public class LoginFragment extends SlideFragment {
                             Toast.makeText(c, getResources().getString(R.string.err_unknown), Toast.LENGTH_SHORT).show();
                         }
                     });
+                    ResetButton();
                     return;
                 }
 
+                if (!mLoginError) {
+                    //Getting sessions
+                    try {
+                        String session = GetRequest.getRequest(mUrl + "/api/sessie/huidige", mCookie);
+                    } catch (IOException e) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(c, getResources().getString(R.string.err_no_connection), Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                        ResetButton();
+                        return;
+                    }
+
+
+                    try {
+                        String account = GetRequest.getRequest(mUrl + "/api/account", mCookie);
+
+                        JsonParser parser = new JsonParser();
+                        JsonObject jsonObject = parser.parse(account).getAsJsonObject();
+
+                        mAccount = new Gson().fromJson(jsonObject.getAsJsonObject("Persoon"), MagisterAccount.class);
+                        if (mAccount.getName() != null && mAccount.getName() != "null") {
+                            mAccount.setUsername(UserName);
+                            mAccount.setPasssword(Password);
+                            mAccount.setSchool(mSchool);
+                            String Account = new Gson().toJson(mAccount, MagisterAccount.class);
+                            c.getSharedPreferences("data", Context.MODE_PRIVATE).edit().putString("Account", Account).apply();
+                            c.getSharedPreferences("data", Context.MODE_PRIVATE).edit().putBoolean("LoggedIn", true).apply();
+                            mSuccessfulLogin = true;
+                            mAllowForward = true;
+                        } else {
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(c, getResources().getString(R.string.err_unknown), Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                            ResetButton();
+                            return;
+                        }
+                    } catch (IOException e) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(c, getResources().getString(R.string.err_no_connection), Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                        ResetButton();
+                        return;
+                    }
+
+
+                }
+
+                ResetButton();
             }
         }).start();
-        return true;
     }
 
 

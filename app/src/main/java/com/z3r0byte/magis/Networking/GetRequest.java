@@ -65,6 +65,9 @@ public class GetRequest {
 
         Response response = client.newCall(request).execute();
 
-        return response.body().string();
+        String responseStr = response.body().string();
+
+        Log.d(TAG, "getRequest: response: " + responseStr);
+        return responseStr;
     }
 }

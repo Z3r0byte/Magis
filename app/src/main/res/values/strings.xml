@@ -50,8 +50,12 @@
     <string name="msg_amount_found_part_2"> resultaten gevonden.</string>
     <string name="msg_login">Log in</string>
     <string name="msg_school_selected">Naam van geselcteerde school: </string>
+    <string name="msg_no_results">Er zijn geen resultaten</string>
+    <string name="msg_logging_in">Inloggen...</string>
+    <string name="msg_logged_in">Ingelogd</string>
     <string name="err_unknown">Er is een onbekende fout opgetreden, probeer het opnieuw.</string>
     <string name="err_no_connection">Geen verbinding...</string>
+    <string name="err_wrong_username_or_password">Verkeerde gebruikersnaam of wachtwoord</string>
     <string name="hint_search_school">Een deel van de naam/url van de school</string>
     <string name="hint_username">Gebruikersnaam</string>
     <string name="hint_password">Wachtwoord</string>
