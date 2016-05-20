@@ -56,4 +56,6 @@ dependencies {
     compile('com.mikepenz:materialdrawer:5.2.6@aar') {
         transitive = true
     }
+
+    compile 'com.github.xiprox.errorview:library:2.+'
 }

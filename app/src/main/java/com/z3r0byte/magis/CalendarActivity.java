@@ -19,12 +19,19 @@ package com.z3r0byte.magis;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
+import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.z3r0byte.magis.GUI.NavigationDrawer;
+import com.z3r0byte.magis.Magister.MagisterAccount;
 
 public class CalendarActivity extends ActionBarActivity {
 
     Toolbar mToolbar;
+
+    MagisterAccount mAccount;
+
+    Boolean mError = false;
 
 
     @Override
@@ -36,9 +43,25 @@ public class CalendarActivity extends ActionBarActivity {
         mToolbar.setTitle(R.string.title_calendar);
         setSupportActionBar(mToolbar);
 
+        String account = getSharedPreferences("data", MODE_PRIVATE).getString("Account", null);
+        if (account == null) {
+            Toast.makeText(CalendarActivity.this, R.string.err_terrible_wrong_on_login, Toast.LENGTH_LONG).show();
+            mError = true;
+        } else {
+            mAccount = new Gson().fromJson(account, MagisterAccount.class);
+        }
 
-        NavigationDrawer.SetupNavigationDrawer(this, this, mToolbar);
+        NavigationDrawer.SetupNavigationDrawer(this, this, mToolbar, mAccount, "Agenda");
 
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (NavigationDrawer.isDrawerOpen()) {
+            NavigationDrawer.CloseDrawer();
+        } else {
+            super.onBackPressed();
+        }
     }
 }

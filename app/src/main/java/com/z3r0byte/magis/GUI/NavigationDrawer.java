@@ -22,12 +22,16 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
+import com.mikepenz.materialdrawer.AccountHeader;
+import com.mikepenz.materialdrawer.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.mikepenz.materialdrawer.model.DividerDrawerItem;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
+import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
+import com.z3r0byte.magis.Magister.MagisterAccount;
 import com.z3r0byte.magis.R;
 
 /**
@@ -35,16 +39,36 @@ import com.z3r0byte.magis.R;
  */
 public class NavigationDrawer {
 
-    static PrimaryDrawerItem agendaItem = new PrimaryDrawerItem().withName(R.string.title_calendar).withIcon(GoogleMaterial.Icon.gmd_today);
+    static Drawer drawer;
 
-    public static void SetupNavigationDrawer(Context c, Activity activity, Toolbar toolbar) {
-        Drawer drawer = new DrawerBuilder()
+    static PrimaryDrawerItem calendarItem = new PrimaryDrawerItem().withName(R.string.title_calendar)
+            .withIcon(GoogleMaterial.Icon.gmd_today);
+    static PrimaryDrawerItem refreshSessionItem = new SecondaryDrawerItem().withName(R.string.drawer_refresh_session)
+            .withIcon(GoogleMaterial.Icon.gmd_refresh).withSelectable(false);
+    static PrimaryDrawerItem logoutItem = new SecondaryDrawerItem().withName(R.string.drawer_logout)
+            .withIcon(GoogleMaterial.Icon.gmd_exit_to_app).withSelectable(false);
+
+    public static void SetupNavigationDrawer(Context c, Activity activity, Toolbar toolbar, MagisterAccount account, String selection) {
+
+        AccountHeader accountHeader = new AccountHeaderBuilder()
+                .withActivity(activity)
+                .withHeaderBackground(R.drawable.header_bg)
+                .addProfiles(
+                        new ProfileDrawerItem().withName(account.getFullName()).withEmail(account.getUsername()).withIcon(R.drawable.magis512)
+                )
+                .withSelectionListEnabledForSingleProfile(false)
+                .build();
+
+
+        drawer = new DrawerBuilder()
+                .withAccountHeader(accountHeader)
                 .withActivity(activity)
                 .withToolbar(toolbar)
                 .addDrawerItems(
-                        agendaItem,
+                        calendarItem,
                         new DividerDrawerItem(),
-                        new SecondaryDrawerItem().withName(R.string.msg_login)
+                        refreshSessionItem,
+                        logoutItem
                 )
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
@@ -54,6 +78,26 @@ public class NavigationDrawer {
                 })
                 .build();
 
+        setSelection(selection);
+
+    }
+
+    private static void setSelection(String selection) {
+        switch (selection) {
+            case "Agenda":
+                drawer.setSelection(calendarItem);
+                break;
+            case "":
+                drawer.setSelection(-1);
+        }
+    }
+
+    public static void CloseDrawer() {
+        drawer.closeDrawer();
+    }
+
+    public static Boolean isDrawerOpen() {
+        return drawer.isDrawerOpen();
     }
 
 

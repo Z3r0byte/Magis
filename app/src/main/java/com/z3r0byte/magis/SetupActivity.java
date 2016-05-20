@@ -17,8 +17,10 @@
 package com.z3r0byte.magis;
 
 import android.Manifest;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.v4.view.ViewPager;
 import android.view.View;
 
 import com.heinrichreimersoftware.materialintro.app.IntroActivity;
@@ -89,6 +91,28 @@ public class SetupActivity extends IntroActivity {
                 }
             }
         });
+
+        addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                if (positionOffset == 0 && position == 4) {
+                    Intent intent = new Intent(getApplicationContext(), StartActivity.class);
+                    startActivity(intent);
+                    finish();
+                    overridePendingTransition(0, 0);
+                }
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+            }
+
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+            }
+        });
+
 
 
     }

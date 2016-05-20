@@ -155,7 +155,7 @@ public class SearchSchoolFragment extends SlideFragment {
                         mListSchool.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                             @Override
                             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                                if (mSchools[position] != null && mSchools[position].toString() != getResources().getString(R.string.err_no_connection)) {
+                                if (mSchools[position] != null && !mSchools[position].getName().equals(getResources().getString(R.string.err_no_connection))) {
                                     Log.d(TAG, "onItemClick: Url: " + mSchools[position].getUrl());
                                     String school = new Gson().toJson(mSchools[position]);
                                     c.getSharedPreferences("data", Context.MODE_PRIVATE).edit().

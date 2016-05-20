@@ -27,6 +27,44 @@
         android:background="@color/colorPrimary"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:theme="@style/ToolBarStyle"></android.support.v7.widget.Toolbar>
+        app:theme="@style/ToolBarStyle" />
+
+    <ListView
+        android:layout_below="@+id/Toolbar"
+        android:id="@+id/list_calendar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="50dp" />
+
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:gravity="bottom"
+        android:id="@+id/layout_day_control"
+        android:background="@color/primary"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+        <ImageButton
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:id="@+id/button_previous_day"
+            android:background="@color/primary"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="false" />
+
+        <ImageButton
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:id="@+id/button_next_day"
+            android:background="@color/primary"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
+    </RelativeLayout>
+
 
 </RelativeLayout>
