@@ -29,12 +29,19 @@
         android:layout_height="wrap_content"
         app:theme="@style/ToolBarStyle" />
 
-    <ListView
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/layout_refresh"
         android:layout_below="@+id/Toolbar"
-        android:id="@+id/list_calendar"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="50dp" />
+        android:layout_marginBottom="50dp">
+
+        <ListView
+            android:id="@+id/list_calendar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </android.support.v4.widget.SwipeRefreshLayout>
 
 
     <RelativeLayout

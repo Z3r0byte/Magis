@@ -53,6 +53,7 @@
     <string name="msg_no_results">Er zijn geen resultaten</string>
     <string name="msg_logging_in">Inloggen...</string>
     <string name="msg_logged_in">Ingelogd</string>
+    <string name="msg_today">Vandaag</string>
     <string name="err_unknown">Er is een onbekende fout opgetreden, probeer het opnieuw.</string>
     <string name="err_no_connection">Geen verbinding...</string>
     <string name="err_wrong_username_or_password">Verkeerde gebruikersnaam of wachtwoord</string>

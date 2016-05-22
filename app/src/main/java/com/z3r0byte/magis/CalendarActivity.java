@@ -16,18 +16,29 @@
 
 package com.z3r0byte.magis;
 
+import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.os.Handler;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.mikepenz.google_material_typeface_library.GoogleMaterial;
+import com.mikepenz.iconics.IconicsDrawable;
 import com.z3r0byte.magis.GUI.NavigationDrawer;
 import com.z3r0byte.magis.Magister.MagisterAccount;
 
-public class CalendarActivity extends ActionBarActivity {
+public class CalendarActivity extends AppCompatActivity {
+    private static final String TAG = "CalendarActivity";
+
 
     Toolbar mToolbar;
+    SwipeRefreshLayout mSwipeRefreshLayout;
+    ImageButton mNextButton, mPreviousButton;
 
     MagisterAccount mAccount;
 
@@ -39,8 +50,39 @@ public class CalendarActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calendar);
 
+        mNextButton = (ImageButton) findViewById(R.id.button_next_day);
+        mPreviousButton = (ImageButton) findViewById(R.id.button_previous_day);
+
+        mNextButton.setImageDrawable(new IconicsDrawable(this).icon(GoogleMaterial.Icon.gmd_arrow_forward)
+                .color(Color.WHITE).sizeDp(24));
+        mPreviousButton.setImageDrawable(new IconicsDrawable(this).icon(GoogleMaterial.Icon.gmd_arrow_back)
+                .color(Color.WHITE).sizeDp(24));
+        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.layout_refresh);
+        mSwipeRefreshLayout.setColorSchemeResources(
+                R.color.colorPrimary,
+                R.color.setup_color_3,
+                R.color.setup_color_5);
+        mSwipeRefreshLayout.setOnRefreshListener(
+                new SwipeRefreshLayout.OnRefreshListener() {
+                    @Override
+                    public void onRefresh() {
+                        Log.d(TAG, "onRefresh: Refreshing!");
+
+                        // This method performs the actual data-refresh operation.
+                        // The method calls setRefreshing(false) when it's finished.
+                        final Handler handler = new Handler();
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                mSwipeRefreshLayout.setRefreshing(false);
+                            }
+                        }, 2000);
+                    }
+                }
+        );
+
         mToolbar = (Toolbar) findViewById(R.id.Toolbar);
-        mToolbar.setTitle(R.string.title_calendar);
+        mToolbar.setTitle(R.string.msg_today);
         setSupportActionBar(mToolbar);
 
         String account = getSharedPreferences("data", MODE_PRIVATE).getString("Account", null);
@@ -55,6 +97,7 @@ public class CalendarActivity extends ActionBarActivity {
 
 
     }
+
 
     @Override
     public void onBackPressed() {
