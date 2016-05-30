@@ -101,7 +101,7 @@ public class SearchSchoolFragment extends SlideFragment {
             @Override
             public void afterTextChanged(Editable editable) {
                 Log.d(TAG, "afterTextChanged: Text Changed!");
-                if (mEditTextSchool.getText().length() >= 3) {
+                if (mEditTextSchool.getText().length() >= 3 && !mEditTextSchool.getText().toString().endsWith(" ")) {
                     SearchSchool(false);
                 } else {
                     Log.e(TAG, "afterTextChanged: String not long enough!");
