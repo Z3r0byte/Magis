@@ -35,7 +35,8 @@
         <activity
             android:name=".SetupActivity"
             android:theme="@style/Theme.Intro" />
-        <activity android:name=".CalendarActivity"></activity>
+        <activity android:name=".CalendarActivity" />
+        <activity android:name=".ReLogin"></activity>
     </application>
 
 </manifest>

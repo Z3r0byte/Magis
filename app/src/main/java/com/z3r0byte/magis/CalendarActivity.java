@@ -16,13 +16,16 @@
 
 package com.z3r0byte.magis;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
@@ -31,6 +34,7 @@ import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.z3r0byte.magis.GUI.NavigationDrawer;
 import com.z3r0byte.magis.Magister.MagisterAccount;
+import com.z3r0byte.magis.Utils.LoginUtils;
 
 public class CalendarActivity extends AppCompatActivity {
     private static final String TAG = "CalendarActivity";
@@ -42,6 +46,8 @@ public class CalendarActivity extends AppCompatActivity {
 
     MagisterAccount mAccount;
 
+    View view;
+
     Boolean mError = false;
 
 
@@ -49,6 +55,8 @@ public class CalendarActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calendar);
+        view = findViewById(R.id.layout_calendar);
+
 
         mNextButton = (ImageButton) findViewById(R.id.button_next_day);
         mPreviousButton = (ImageButton) findViewById(R.id.button_previous_day);
@@ -94,6 +102,20 @@ public class CalendarActivity extends AppCompatActivity {
         }
 
         NavigationDrawer.SetupNavigationDrawer(this, this, mToolbar, mAccount, "Agenda");
+
+
+        if (LoginUtils.reLogin(this)) {
+            startActivity(new Intent(this, ReLogin.class));
+            finish();
+        } else if (LoginUtils.loginError(this)) {
+            Snackbar.make(view, R.string.snackbar_login_error, Snackbar.LENGTH_INDEFINITE).setAction(R.string.msg_refresh_session_short, new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    startActivity(new Intent(getApplicationContext(), ReLogin.class));
+                    finish();
+                }
+            }).show();
+        }
 
 
     }

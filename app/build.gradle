@@ -48,6 +48,7 @@ dependencies {
     compile 'com.heinrichreimersoftware:material-intro:1.4'
     compile 'com.squareup.okhttp3:okhttp:3.2.0'
     compile 'com.android.support:support-v4:23.4.0'
+    compile 'com.pnikosis:materialish-progress:1.7'
 
     compile 'com.google.code.gson:gson:2.6.2'
 

@@ -30,6 +30,7 @@
     <string name="snackbar_no_permissions">Geef Magis aub de benodigde permissies</string>
     <string name="snackbar_no_school_selected">Selecteer eerst een school</string>
     <string name="snackbar_not_logged_in">Log eerst in</string>
+    <string name="snackbar_login_error">De vorige keer is het inloggen mislukt.</string>
 
     <string name="customactivityoncrash_error_activity_error_occurred_explanation">Er is een onverwachte fout opgetreden.\nVerstuur a.u.b. de foutgegevens naar de ontwikkelaar. z3r0byte.apps@gmail.com</string>
     <string name="customactivityoncrash_error_activity_unknown_exception">Onbekende fout</string>
@@ -54,6 +55,12 @@
     <string name="msg_logging_in">Inloggen...</string>
     <string name="msg_logged_in">Ingelogd</string>
     <string name="msg_today">Vandaag</string>
+    <string name="msg_login_progress_1">Stap 1/2: oude sessie verwijderen...</string>
+    <string name="msg_login_progress_2">Stap 2/2: opnieuw inloggen...</string>
+    <string name="msg_refresh_session_short">Opn probrn</string>
+    <string name="dialog_skip_login_title">Inloggen overslaan?</string>
+    <string name="dialog_skip_login_desc">Als je het inloggen overslaat, kun je alleen de offline data gebruiken
+        totdat je de sessie ververst.</string>
     <string name="err_unknown">Er is een onbekende fout opgetreden, probeer het opnieuw.</string>
     <string name="err_no_connection">Geen verbinding...</string>
     <string name="err_wrong_username_or_password">Verkeerde gebruikersnaam of wachtwoord</string>

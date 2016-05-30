@@ -18,6 +18,7 @@ package com.z3r0byte.magis.GUI;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
@@ -33,6 +34,7 @@ import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.z3r0byte.magis.Magister.MagisterAccount;
 import com.z3r0byte.magis.R;
+import com.z3r0byte.magis.ReLogin;
 
 /**
  * Created by basva on 14-5-2016.
@@ -48,7 +50,7 @@ public class NavigationDrawer {
     static PrimaryDrawerItem logoutItem = new SecondaryDrawerItem().withName(R.string.drawer_logout)
             .withIcon(GoogleMaterial.Icon.gmd_exit_to_app).withSelectable(false);
 
-    public static void SetupNavigationDrawer(Context c, Activity activity, Toolbar toolbar, MagisterAccount account, String selection) {
+    public static void SetupNavigationDrawer(final Context c, final Activity activity, Toolbar toolbar, MagisterAccount account, String selection) {
 
         AccountHeader accountHeader = new AccountHeaderBuilder()
                 .withActivity(activity)
@@ -73,13 +75,16 @@ public class NavigationDrawer {
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
+                        if (drawerItem == refreshSessionItem) {
+                            c.startActivity(new Intent(c, ReLogin.class));
+                            activity.finish();
+                        }
                         return true;
                     }
                 })
                 .build();
 
         setSelection(selection);
-
     }
 
     private static void setSelection(String selection) {
