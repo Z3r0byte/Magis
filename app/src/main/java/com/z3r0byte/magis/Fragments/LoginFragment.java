@@ -31,12 +31,14 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.heinrichreimersoftware.materialintro.app.SlideFragment;
-import com.z3r0byte.magis.Magister.MagisterAccount;
-import com.z3r0byte.magis.Magister.MagisterSchool;
 import com.z3r0byte.magis.Networking.DeleteRequest;
 import com.z3r0byte.magis.Networking.GetRequest;
 import com.z3r0byte.magis.Networking.PostRequest;
 import com.z3r0byte.magis.R;
+
+import net.ilexiconn.magister.container.Profile;
+import net.ilexiconn.magister.container.School;
+import net.ilexiconn.magister.container.User;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -67,8 +69,9 @@ public class LoginFragment extends SlideFragment {
     String mUrl;
     String mCookie;
 
-    MagisterAccount mAccount = new MagisterAccount();
-    MagisterSchool mSchool;
+    Profile mProfile = new Profile();
+    School mSchool;
+    User mUser;
 
     View view;
 
@@ -94,8 +97,8 @@ public class LoginFragment extends SlideFragment {
                     if (url == null) {
                         throw new IllegalArgumentException("No school is saved!");
                     }
-                    mSchool = new Gson().fromJson(url, MagisterSchool.class);
-                    mUrl = mSchool.getUrl();
+                    mSchool = new Gson().fromJson(url, School.class);
+                    mUrl = mSchool.url;
                 }
 
                 login(mUserNameEditText.getText().toString(), mPasswordEditText.getText().toString());
@@ -222,13 +225,13 @@ public class LoginFragment extends SlideFragment {
                         JsonParser parser = new JsonParser();
                         JsonObject jsonObject = parser.parse(account).getAsJsonObject();
 
-                        mAccount = new Gson().fromJson(jsonObject.getAsJsonObject("Persoon"), MagisterAccount.class);
-                        if (mAccount.getName() != null && mAccount.getName() != "null") {
-                            mAccount.setUsername(UserName);
-                            mAccount.setPasssword(Password);
-                            mAccount.setSchool(mSchool);
-                            String Account = new Gson().toJson(mAccount, MagisterAccount.class);
-                            c.getSharedPreferences("data", Context.MODE_PRIVATE).edit().putString("Account", Account).apply();
+                        mProfile = new Gson().fromJson(jsonObject.getAsJsonObject("Persoon"), Profile.class);
+                        if (mProfile.nickname != null && mProfile.nickname != "null") {
+                            mUser = new User(UserName, Password, true);
+                            String Account = new Gson().toJson(mProfile, Profile.class);
+                            String User = new Gson().toJson(mUser, net.ilexiconn.magister.container.User.class);
+                            c.getSharedPreferences("data", Context.MODE_PRIVATE).edit().putString("Profile", Account).apply();
+                            c.getSharedPreferences("data", Context.MODE_PRIVATE).edit().putString("User", User).apply();
                             c.getSharedPreferences("data", Context.MODE_PRIVATE).edit().putBoolean("LoggedIn", true).apply();
                             mSuccessfulLogin = true;
                             mAllowForward = true;

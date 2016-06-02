@@ -33,8 +33,19 @@ import com.google.gson.Gson;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.z3r0byte.magis.GUI.NavigationDrawer;
-import com.z3r0byte.magis.Magister.MagisterAccount;
+import com.z3r0byte.magis.Utils.DB_Handlers.CalendarDB;
+import com.z3r0byte.magis.Utils.DateUtils;
 import com.z3r0byte.magis.Utils.LoginUtils;
+
+import net.ilexiconn.magister.Magister;
+import net.ilexiconn.magister.container.Appointment;
+import net.ilexiconn.magister.container.Profile;
+import net.ilexiconn.magister.container.School;
+import net.ilexiconn.magister.container.User;
+import net.ilexiconn.magister.handler.AppointmentHandler;
+
+import java.io.IOException;
+import java.text.ParseException;
 
 public class CalendarActivity extends AppCompatActivity {
     private static final String TAG = "CalendarActivity";
@@ -44,7 +55,13 @@ public class CalendarActivity extends AppCompatActivity {
     SwipeRefreshLayout mSwipeRefreshLayout;
     ImageButton mNextButton, mPreviousButton;
 
-    MagisterAccount mAccount;
+    Profile mProfile;
+    Appointment[] mAppointments;
+    Magister mMagister;
+    School mSchool;
+    User mUser;
+
+    CalendarDB mCalendarDB;
 
     View view;
 
@@ -57,6 +74,7 @@ public class CalendarActivity extends AppCompatActivity {
         setContentView(R.layout.activity_calendar);
         view = findViewById(R.id.layout_calendar);
 
+        mCalendarDB = new CalendarDB(this);
 
         mNextButton = (ImageButton) findViewById(R.id.button_next_day);
         mPreviousButton = (ImageButton) findViewById(R.id.button_previous_day);
@@ -84,7 +102,7 @@ public class CalendarActivity extends AppCompatActivity {
                             public void run() {
                                 mSwipeRefreshLayout.setRefreshing(false);
                             }
-                        }, 2000);
+                        }, 6000);
                     }
                 }
         );
@@ -98,10 +116,18 @@ public class CalendarActivity extends AppCompatActivity {
             Toast.makeText(CalendarActivity.this, R.string.err_terrible_wrong_on_login, Toast.LENGTH_LONG).show();
             mError = true;
         } else {
-            mAccount = new Gson().fromJson(account, MagisterAccount.class);
+            mProfile = new Gson().fromJson(account, Profile.class);
+            mUser = new Gson().fromJson(getSharedPreferences("data", MODE_PRIVATE).getString("User", null), User.class);
+            try {
+                mMagister = Magister.login(new School(), mUser.username, mUser.password);
+            } catch (IOException e) {
+                Snackbar.make(view, R.string.err_no_connection, Snackbar.LENGTH_LONG);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
         }
 
-        NavigationDrawer.SetupNavigationDrawer(this, this, mToolbar, mAccount, "Agenda");
+        NavigationDrawer.SetupNavigationDrawer(this, this, mToolbar, mProfile, "Agenda");
 
 
         if (LoginUtils.reLogin(this)) {
@@ -115,9 +141,32 @@ public class CalendarActivity extends AppCompatActivity {
                     finish();
                 }
             }).show();
+        } else {
+            getCalendar();
         }
 
 
+    }
+
+    private void getCalendar() {
+        String baseUrl = mAccount.getSchool().getUrl();
+        final String fullUrl = baseUrl + "/api/personen/" + mAccount.getId() + "/afspraken?status=1&tot="
+                + DateUtils.formatDate(DateUtils.addDays(DateUtils.getToday(), 1), "yyyy-MM-dd")
+                + "&van="
+                + DateUtils.formatDate(DateUtils.addDays(DateUtils.getToday(), -14), "yyyy-MM-dd");
+        final String cookie = this.getSharedPreferences("data", MODE_PRIVATE).getString("Cookie", null);
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    mAppointments = AppointmentHandler.get
+                    mCalendarDB.addItems(mCalendarItems);
+                } catch (IOException e) {
+                    Snackbar.make(view, R.string.err_no_connection, Snackbar.LENGTH_LONG);
+                }
+            }
+        }).start();
     }
 
 

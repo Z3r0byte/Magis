@@ -59,4 +59,6 @@ dependencies {
     }
 
     compile 'com.github.xiprox.errorview:library:2.+'
+
+    compile "net.ilexiconn:magister:0.1.2"
 }

@@ -19,6 +19,7 @@ package com.z3r0byte.magis;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.Toast;
 
 import cat.ereza.customactivityoncrash.CustomActivityOnCrash;
 
@@ -32,6 +33,11 @@ public class StartActivity extends AppCompatActivity {
         CustomActivityOnCrash.install(this);
         setContentView(R.layout.activity_start);
 
+        if (getSharedPreferences("data", MODE_PRIVATE).getInt("DataVersion", 1) != 2) {
+            Toast.makeText(StartActivity.this, getString(R.string.msg_old_version), Toast.LENGTH_LONG).show();
+            startActivity(new Intent(this, SetupActivity.class));
+            finish();
+        }
 
         if (!getSharedPreferences("data", MODE_PRIVATE).getBoolean("LoggedIn", false)) {
             startActivity(new Intent(this, SetupActivity.class));

@@ -34,11 +34,9 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.heinrichreimersoftware.materialintro.app.SlideFragment;
-import com.z3r0byte.magis.Magister.MagisterSchool;
-import com.z3r0byte.magis.Networking.GetRequest;
 import com.z3r0byte.magis.R;
 
-import java.io.IOException;
+import net.ilexiconn.magister.container.School;
 
 public class SearchSchoolFragment extends SlideFragment {
 
@@ -59,9 +57,9 @@ public class SearchSchoolFragment extends SlideFragment {
     ListView mListSchool;
     View view;
 
-    ArrayAdapter<MagisterSchool> mAdapter;
+    ArrayAdapter<School> mAdapter;
 
-    MagisterSchool[] mSchools;
+    School[] mSchools;
 
 
     Thread mSearchThread;
@@ -86,8 +84,8 @@ public class SearchSchoolFragment extends SlideFragment {
         });
 
 
-        mSchools = new MagisterSchool[1];
-        mSchools[0] = new MagisterSchool();
+        mSchools = new School[1];
+        mSchools[0] = new School();
 
         mEditTextSchool.addTextChangedListener(new TextWatcher() {
             @Override
@@ -123,22 +121,14 @@ public class SearchSchoolFragment extends SlideFragment {
         mSearchThread = new Thread(new Runnable() {
             @Override
             public void run() {
-                try {
-                    mSchools = new Gson().fromJson(GetRequest.getRequest(
-                            "https://mijn.magister.net/api/schools?filter=" + school, null), MagisterSchool[].class);
-                    Log.d(TAG, "run: Er zijn " + mSchools.length + " resultaten gevonden.");
-                    if (mSchools.length == 0) {
-                        mSchools = new MagisterSchool[1];
-                        MagisterSchool mNoResults = new MagisterSchool(getString(R.string.msg_no_results));
-                        mSchools[0] = mNoResults;
-                        Log.d(TAG, "run: No results");
-                    }
-                } catch (IOException exception) {
-                    mSchools = new MagisterSchool[1];
-                    MagisterSchool mNoSchool = new MagisterSchool(getResources().getString(R.string.err_no_connection));
-                    mSchools[0] = mNoSchool;
-                    Log.d(TAG, "run: No Connection");
-                    exception.printStackTrace();
+                mSchools = School.findSchool(school);
+                Log.d(TAG, "run: Er zijn " + mSchools.length + " resultaten gevonden.");
+                if (mSchools.length == 0) {
+                    mSchools = new School[1];
+                    School mNoResults = new School();
+                    mNoResults.name = getString(R.string.msg_no_results);
+                    mSchools[0] = mNoResults;
+                    Log.d(TAG, "run: No results");
                 }
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
@@ -155,13 +145,13 @@ public class SearchSchoolFragment extends SlideFragment {
                         mListSchool.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                             @Override
                             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                                if (mSchools[position] != null && !mSchools[position].getName().equals(getResources().getString(R.string.err_no_connection))) {
-                                    Log.d(TAG, "onItemClick: Url: " + mSchools[position].getUrl());
+                                if (mSchools[position] != null && !mSchools[position].name.equals(getResources().getString(R.string.msg_no_results))) {
+                                    Log.d(TAG, "onItemClick: Url: " + mSchools[position].url);
                                     String school = new Gson().toJson(mSchools[position]);
                                     c.getSharedPreferences("data", Context.MODE_PRIVATE).edit().
                                             putString("School", school).apply();
                                     mAllowForward = true;
-                                    Toast.makeText(c, getResources().getString(R.string.msg_school_selected) + ' ' + mSchools[position].getName()
+                                    Toast.makeText(c, getResources().getString(R.string.msg_school_selected) + ' ' + mSchools[position].name
                                             , Toast.LENGTH_SHORT).show();
                                 }
                             }

@@ -21,6 +21,7 @@ import android.content.Context;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -42,6 +43,18 @@ public class DateUtils {
         }
         Date error = new Date(2000, 12, 31);
         return error;
+    }
+
+    public static Date getToday() {
+        Calendar calendar = Calendar.getInstance();
+        return new Date(calendar.getTimeInMillis());
+    }
+
+    public static Date addDays(Date date, int days) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.add(Calendar.DATE, days);
+        return new Date(calendar.getTimeInMillis());
     }
 
     public static void lastLogin(Context context, String date) {

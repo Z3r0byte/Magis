@@ -44,6 +44,7 @@
     <string name="customactivityoncrash_error_activity_error_details_clipboard_label">Fouten-informatie</string>
 
     <string name="msg_searching">Zoeken...</string>
+    <string name="msg_old_version">De data-structuur van Magis is veranderd, we laten je daarom de login-stappen opnieuw doorlopen.</string>
     <string name="msg_search">Zoek</string>
     <string name="msg_search_school">School zoeken</string>
     <string name="msg_login_on_Magister">Log in op Magister</string>

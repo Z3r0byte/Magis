@@ -16,14 +16,22 @@
 
 package com.z3r0byte.magis.Utils.DB_Handlers;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
+
+import com.z3r0byte.magis.Magister.CalendarItem;
 
 /**
  * Created by bas on 31-5-16.
  */
 public class CalendarDB extends SQLiteOpenHelper {
+
+    private static final String TAG = "CalendarDB";
+    
     private static final int DATABASE_VERSION = 1;
 
     private static final String DATABASE_NAME = "calendarDB";
@@ -32,6 +40,7 @@ public class CalendarDB extends SQLiteOpenHelper {
 
     private static final String KEY_ID = "id";
     private static final String KEY_DESC = "description";
+    private static final String KEY_CALENDAR_ID = "calendarId";
     private static final String KEY_CLASS_ROOMS = "classrooms";
     private static final String KEY_TEACHER = "teachers";
     private static final String KEY_CONTENT = "content";
@@ -52,8 +61,24 @@ public class CalendarDB extends SQLiteOpenHelper {
     // Creating Tables
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String CREATE_CALENDAR_TABLE = "CREATE TABLE " + TABLE_CALENDAR + "("
-                + KEY_ID + " INTEGER PRIMARY KEY," + KEY_DESC + " TEXT," + ")"; //Todo finish this
+        String CREATE_CALENDAR_TABLE = "CREATE TABLE IF NOT EXISTS "
+                + TABLE_CALENDAR + "("
+                + KEY_ID + " INTEGER PRIMARY KEY,"
+                + KEY_DESC + " TEXT,"
+                + KEY_CALENDAR_ID + " INTEGER,"
+                + KEY_CLASS_ROOMS + " TEXT,"
+                + KEY_CONTENT + " TEXT,"
+                + KEY_END + " TEXT,"
+                + KEY_FINISHED + " BOOLEAN,"
+                + KEY_FULL_DATE + " TEXT,"
+                + KEY_LOCATION + " TEXT,"
+                + KEY_PERIOD_FROM + " INTEGER,"
+                + KEY_PERIOD_TO + " INTEGER,"
+                + KEY_START + " TEXT,"
+                + KEY_STATE + " TEXT,"
+                + KEY_TEACHER + " TEXT,"
+                + KEY_TAKES_ALL_DAY + " BOOLEAN"
+                + ")";
         db.execSQL(CREATE_CALENDAR_TABLE);
     }
 
@@ -65,5 +90,49 @@ public class CalendarDB extends SQLiteOpenHelper {
 
         // Create tables again
         onCreate(db);
+    }
+
+    public void addItems(CalendarItem[] calendarItems) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues contentValues = new ContentValues();
+
+        Log.d(TAG, "addItems: amount of items: " + calendarItems.length);
+
+        for (CalendarItem item :
+                calendarItems) {
+            Integer id = item.getId();
+            if (!CheckInDB(TABLE_CALENDAR, KEY_CALENDAR_ID, id.toString())) {
+                Log.d(TAG, "addItems: item doesnt exist");
+                contentValues.put(KEY_CALENDAR_ID, id);
+                contentValues.put(KEY_DESC, item.getDescription());
+
+                db.insert(TABLE_CALENDAR, null, contentValues);
+                db.close();
+            } else {
+                Log.d(TAG, "addItems: updating item");
+                contentValues.put(KEY_CALENDAR_ID, id);
+                contentValues.put(KEY_DESC, item.getDescription());
+
+                db.update(TABLE_CALENDAR, contentValues, KEY_CALENDAR_ID + "=" + id, null);
+                db.close();
+            }
+
+
+        }
+
+    }
+
+    public boolean CheckInDB(String TableName, String dbfield, String fieldValue) {
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        String Query = "Select * from " + TableName + " where " + dbfield + " = " + fieldValue;
+        Cursor cursor = db.rawQuery(Query, null);
+        if (cursor.getCount() <= 0) {
+            cursor.close();
+            return false;
+        }
+        cursor.close();
+        return true;
     }
 }

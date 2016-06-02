@@ -86,4 +86,14 @@ public class CalendarItem {
     public void setFinished(boolean finished) {
         finished = finished;
     }
+
+    @Override
+    public String toString() {
+        return "CalendarItem{" +
+                "description='" + description + '\'' +
+                ", periodFrom=" + periodFrom +
+                ", periodTo=" + periodTo +
+                ", location='" + location + '\'' +
+                '}';
+    }
 }

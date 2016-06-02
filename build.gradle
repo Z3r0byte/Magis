@@ -31,6 +31,10 @@ buildscript {
 allprojects {
     repositories {
         jcenter()
+        maven {
+            name = "ilexiconn"
+            url = "http://maven.ilexiconn.net/"
+        }
         maven { url 'https://jitpack.io' }
     }
 }
