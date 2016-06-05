@@ -18,6 +18,7 @@ package com.z3r0byte.magis.Fragments;
 
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -230,9 +231,14 @@ public class LoginFragment extends SlideFragment {
                             mUser = new User(UserName, Password, true);
                             String Account = new Gson().toJson(mProfile, Profile.class);
                             String User = new Gson().toJson(mUser, net.ilexiconn.magister.container.User.class);
-                            c.getSharedPreferences("data", Context.MODE_PRIVATE).edit().putString("Profile", Account).apply();
-                            c.getSharedPreferences("data", Context.MODE_PRIVATE).edit().putString("User", User).apply();
-                            c.getSharedPreferences("data", Context.MODE_PRIVATE).edit().putBoolean("LoggedIn", true).apply();
+
+                            SharedPreferences.Editor editor = c.getSharedPreferences("data", Context.MODE_PRIVATE).edit();
+                            editor.putString("Profile", Account);
+                            editor.putString("User", User);
+                            editor.putBoolean("LoggedIn", true);
+                            editor.putInt("DataVersion", 2);
+                            editor.apply();
+
                             mSuccessfulLogin = true;
                             mAllowForward = true;
                         } else {

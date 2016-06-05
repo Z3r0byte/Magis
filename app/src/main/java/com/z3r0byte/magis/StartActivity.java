@@ -27,22 +27,25 @@ public class StartActivity extends AppCompatActivity {
 
     private static final String TAG = "StartActivity";
 
+    Boolean relogin = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         CustomActivityOnCrash.install(this);
         setContentView(R.layout.activity_start);
 
-        if (getSharedPreferences("data", MODE_PRIVATE).getInt("DataVersion", 1) != 2) {
+        if (getSharedPreferences("data", MODE_PRIVATE).getInt("DataVersion", 1) != 2 && getSharedPreferences("data", MODE_PRIVATE).getBoolean("LoggedIn", false)) {
+            relogin = true;
             Toast.makeText(StartActivity.this, getString(R.string.msg_old_version), Toast.LENGTH_LONG).show();
             startActivity(new Intent(this, SetupActivity.class));
             finish();
         }
 
-        if (!getSharedPreferences("data", MODE_PRIVATE).getBoolean("LoggedIn", false)) {
+        if (!getSharedPreferences("data", MODE_PRIVATE).getBoolean("LoggedIn", false) || relogin) {
             startActivity(new Intent(this, SetupActivity.class));
             finish();
-        } else {
+        } else if (!relogin) {
             startActivity(new Intent(this, CalendarActivity.class));
             finish();
         }

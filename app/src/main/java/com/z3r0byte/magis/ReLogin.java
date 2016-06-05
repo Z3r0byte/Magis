@@ -16,43 +16,29 @@
 
 package com.z3r0byte.magis;
 
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.afollestad.materialdialogs.DialogAction;
-import com.afollestad.materialdialogs.MaterialDialog;
-import com.google.gson.Gson;
-import com.z3r0byte.magis.Magister.MagisterAccount;
-import com.z3r0byte.magis.Magister.MagisterSchool;
-import com.z3r0byte.magis.Networking.DeleteRequest;
-import com.z3r0byte.magis.Networking.PostRequest;
-import com.z3r0byte.magis.Utils.DateUtils;
-import com.z3r0byte.magis.Utils.LoginUtils;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
-import java.util.Calendar;
-import java.util.Date;
+import net.ilexiconn.magister.Magister;
+import net.ilexiconn.magister.container.Profile;
+import net.ilexiconn.magister.container.School;
+import net.ilexiconn.magister.container.User;
 
 public class ReLogin extends AppCompatActivity {
 
     String mCookie;
-    MagisterAccount mAccount;
-    MagisterSchool mSchool;
+    Profile mProfile;
+    School mSchool;
+    Magister mMagister;
+    User mUser;
 
     TextView mTextViewStatus;
 
     Boolean mLoginError = false;
     private static final String TAG = "ReLogin";
+}
 
+    /*
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,8 +48,18 @@ public class ReLogin extends AppCompatActivity {
 
         SharedPreferences sharedPreferences = getSharedPreferences("data", MODE_PRIVATE);
 
-        mAccount = new Gson().fromJson(sharedPreferences.getString("Account", null), MagisterAccount.class);
-        mSchool = new Gson().fromJson(sharedPreferences.getString("School", null), MagisterSchool.class);
+        mProfile = new Gson().fromJson(sharedPreferences.getString("Profile", null), Profile.class);
+        mUser = new Gson().fromJson(sharedPreferences.getString("User", null), User.class);
+        mSchool = new Gson().fromJson(sharedPreferences.getString("School", null), School.class);
+
+
+        try{
+            mMagister = Magister.login(mSchool, mUser.username, mUser.password);
+        } catch (IOException e){
+            mLoginError = true;
+            Toast.makeText(getApplicationContext(), getResources().getString(R.string.err_wrong_username_or_password), Toast.LENGTH_SHORT).show();
+            return;
+        } catch ()
 
 
         new Thread(new Runnable() {
@@ -167,4 +163,6 @@ public class ReLogin extends AppCompatActivity {
     public void onBackPressed() {
         skipLogin();
     }
-}
+
+
+}*/

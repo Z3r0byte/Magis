@@ -26,7 +26,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -34,6 +33,7 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.heinrichreimersoftware.materialintro.app.SlideFragment;
+import com.z3r0byte.magis.Adapters.SchoolAdapter;
 import com.z3r0byte.magis.R;
 
 import net.ilexiconn.magister.container.School;
@@ -57,9 +57,10 @@ public class SearchSchoolFragment extends SlideFragment {
     ListView mListSchool;
     View view;
 
-    ArrayAdapter<School> mAdapter;
+    SchoolAdapter mAdapter;
 
     School[] mSchools;
+    String[] mSchoolNames;
 
 
     Thread mSearchThread;
@@ -86,6 +87,8 @@ public class SearchSchoolFragment extends SlideFragment {
 
         mSchools = new School[1];
         mSchools[0] = new School();
+        mSchoolNames = new String[1];
+        mSchoolNames[0] = getString(R.string.msg_no_results);
 
         mEditTextSchool.addTextChangedListener(new TextWatcher() {
             @Override
@@ -123,6 +126,26 @@ public class SearchSchoolFragment extends SlideFragment {
             public void run() {
                 mSchools = School.findSchool(school);
                 Log.d(TAG, "run: Er zijn " + mSchools.length + " resultaten gevonden.");
+                /*int i =0;
+                for (School school : mSchools
+                        ) {
+                    if (i <= 19) {
+                        Log.d(TAG, "run: I= " + i);
+                        if (mSchools.length > 19){
+                            mSchoolNames = new String[20];
+                        } else {
+                            mSchoolNames = new String[mSchools.length];
+                        }
+                        Log.d(TAG, "run: School: " + school.name);
+                        mSchoolNames[i] = school.name + " ";
+                        Log.d(TAG, "run: ArraySchool: " + mSchoolNames[i]);
+                        Log.d(TAG, "run: Arraylength" + mSchoolNames.length);
+                        i++;
+                    } else {
+                        break;
+                    }
+                }*/
+
                 if (mSchools.length == 0) {
                     mSchools = new School[1];
                     School mNoResults = new School();
@@ -138,8 +161,7 @@ public class SearchSchoolFragment extends SlideFragment {
                             mButtonSearch.setEnabled(true);
                             mButtonSearch.setText(R.string.msg_search);
                         }
-                        mAdapter = new ArrayAdapter<>
-                                (c, android.R.layout.simple_list_item_1, mSchools);
+                        mAdapter = new SchoolAdapter(getActivity(), mSchools);
                         mListSchool.setAdapter(mAdapter);
 
                         mListSchool.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -173,6 +195,5 @@ public class SearchSchoolFragment extends SlideFragment {
     public void onDestroy() {
         super.onDestroy();
     }
-
 
 }

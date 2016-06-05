@@ -16,10 +16,13 @@
 
 package com.z3r0byte.magis;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -45,7 +48,7 @@ import net.ilexiconn.magister.container.User;
 import net.ilexiconn.magister.handler.AppointmentHandler;
 
 import java.io.IOException;
-import java.text.ParseException;
+import java.util.Date;
 
 public class CalendarActivity extends AppCompatActivity {
     private static final String TAG = "CalendarActivity";
@@ -54,6 +57,7 @@ public class CalendarActivity extends AppCompatActivity {
     Toolbar mToolbar;
     SwipeRefreshLayout mSwipeRefreshLayout;
     ImageButton mNextButton, mPreviousButton;
+    CoordinatorLayout coordinatorLayout;
 
     Profile mProfile;
     Appointment[] mAppointments;
@@ -63,7 +67,6 @@ public class CalendarActivity extends AppCompatActivity {
 
     CalendarDB mCalendarDB;
 
-    View view;
 
     Boolean mError = false;
 
@@ -72,7 +75,9 @@ public class CalendarActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calendar);
-        view = findViewById(R.id.layout_calendar);
+
+        coordinatorLayout = (CoordinatorLayout) findViewById(R.id.layout_calendar);
+
 
         mCalendarDB = new CalendarDB(this);
 
@@ -83,6 +88,15 @@ public class CalendarActivity extends AppCompatActivity {
                 .color(Color.WHITE).sizeDp(24));
         mPreviousButton.setImageDrawable(new IconicsDrawable(this).icon(GoogleMaterial.Icon.gmd_arrow_back)
                 .color(Color.WHITE).sizeDp(24));
+
+        mPreviousButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "onClick: showing snackbar");
+                Snackbar.make(coordinatorLayout, R.string.err_no_connection, Snackbar.LENGTH_LONG).show();
+            }
+        });
+
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.layout_refresh);
         mSwipeRefreshLayout.setColorSchemeResources(
                 R.color.colorPrimary,
@@ -111,30 +125,26 @@ public class CalendarActivity extends AppCompatActivity {
         mToolbar.setTitle(R.string.msg_today);
         setSupportActionBar(mToolbar);
 
-        String account = getSharedPreferences("data", MODE_PRIVATE).getString("Account", null);
+        String account = getSharedPreferences("data", MODE_PRIVATE).getString("Profile", null);
         if (account == null) {
             Toast.makeText(CalendarActivity.this, R.string.err_terrible_wrong_on_login, Toast.LENGTH_LONG).show();
             mError = true;
         } else {
             mProfile = new Gson().fromJson(account, Profile.class);
+            Log.d(TAG, "onCreate: Profile: " + mProfile.surname);
             mUser = new Gson().fromJson(getSharedPreferences("data", MODE_PRIVATE).getString("User", null), User.class);
-            try {
-                mMagister = Magister.login(new School(), mUser.username, mUser.password);
-            } catch (IOException e) {
-                Snackbar.make(view, R.string.err_no_connection, Snackbar.LENGTH_LONG);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
+            mSchool = new Gson().fromJson(getSharedPreferences("data", MODE_PRIVATE).getString("School", null), School.class);
+            getMagister();
+            NavigationDrawer.SetupNavigationDrawer(this, coordinatorLayout, this, mToolbar, mProfile, mUser, "Agenda");
         }
 
-        NavigationDrawer.SetupNavigationDrawer(this, this, mToolbar, mProfile, "Agenda");
 
 
         if (LoginUtils.reLogin(this)) {
-            startActivity(new Intent(this, ReLogin.class));
-            finish();
+            //startActivity(new Intent(this, ReLogin.class));
+            //finish();
         } else if (LoginUtils.loginError(this)) {
-            Snackbar.make(view, R.string.snackbar_login_error, Snackbar.LENGTH_INDEFINITE).setAction(R.string.msg_refresh_session_short, new View.OnClickListener() {
+            Snackbar.make(coordinatorLayout, R.string.snackbar_login_error, Snackbar.LENGTH_INDEFINITE).setAction(R.string.msg_refresh_session_short, new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     startActivity(new Intent(getApplicationContext(), ReLogin.class));
@@ -142,15 +152,27 @@ public class CalendarActivity extends AppCompatActivity {
                 }
             }).show();
         } else {
-            getCalendar();
+            // getCalendar();
         }
 
 
     }
 
+
+    private void getMagister() {
+        final Context c = this;
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Looper.prepare();
+                mMagister = LoginUtils.magisterLogin(c, mUser, mSchool, coordinatorLayout);
+            }
+        }).start();
+    }
+
     private void getCalendar() {
-        String baseUrl = mAccount.getSchool().getUrl();
-        final String fullUrl = baseUrl + "/api/personen/" + mAccount.getId() + "/afspraken?status=1&tot="
+        String baseUrl = mSchool.url;
+        final String fullUrl = baseUrl + "/api/personen/" + mProfile.id + "/afspraken?status=1&tot="
                 + DateUtils.formatDate(DateUtils.addDays(DateUtils.getToday(), 1), "yyyy-MM-dd")
                 + "&van="
                 + DateUtils.formatDate(DateUtils.addDays(DateUtils.getToday(), -14), "yyyy-MM-dd");
@@ -160,10 +182,13 @@ public class CalendarActivity extends AppCompatActivity {
             @Override
             public void run() {
                 try {
-                    mAppointments = AppointmentHandler.get
-                    mCalendarDB.addItems(mCalendarItems);
+                    Date from = DateUtils.addDays(DateUtils.getToday(), -14);
+                    Date until = DateUtils.addDays(DateUtils.getToday(), 1);
+                    AppointmentHandler appointmentHandler = new AppointmentHandler(mMagister);
+                    mAppointments = appointmentHandler.getAppointments(from, until);
+                    //mCalendarDB.addItems(mCalendarItems);
                 } catch (IOException e) {
-                    Snackbar.make(view, R.string.err_no_connection, Snackbar.LENGTH_LONG);
+                    Snackbar.make(coordinatorLayout, R.string.err_no_connection, Snackbar.LENGTH_LONG);
                 }
             }
         }).start();
@@ -178,4 +203,6 @@ public class CalendarActivity extends AppCompatActivity {
             super.onBackPressed();
         }
     }
+
+
 }
