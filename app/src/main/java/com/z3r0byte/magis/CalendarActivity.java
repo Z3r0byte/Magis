@@ -166,11 +166,26 @@ public class CalendarActivity extends AppCompatActivity {
             public void run() {
                 Looper.prepare();
                 mMagister = LoginUtils.magisterLogin(c, mUser, mSchool, coordinatorLayout);
+                if (mMagister != null) {
+                    AppointmentHandler appointmentHandler = new AppointmentHandler(mMagister);
+                    try {
+                        Date date1 = DateUtils.getToday();
+                        Date date2 = DateUtils.addDays(DateUtils.getToday(), 1);
+                        mAppointments = appointmentHandler.getAppointments(date1, date2);
+                        Log.d(TAG, "run: Amount of appointments: " + mAppointments.length);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        Snackbar.make(coordinatorLayout, R.string.err_no_connection, Snackbar.LENGTH_SHORT);
+                    }
+                } else {
+                    Log.d(TAG, "run: Magister is null");
+                    Snackbar.make(coordinatorLayout, R.string.err_no_connection, Snackbar.LENGTH_SHORT);
+                }
             }
         }).start();
     }
 
-    private void getCalendar() {
+    private void getAppointments() {
         String baseUrl = mSchool.url;
         final String fullUrl = baseUrl + "/api/personen/" + mProfile.id + "/afspraken?status=1&tot="
                 + DateUtils.formatDate(DateUtils.addDays(DateUtils.getToday(), 1), "yyyy-MM-dd")

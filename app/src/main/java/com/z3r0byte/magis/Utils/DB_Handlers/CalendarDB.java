@@ -23,7 +23,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import com.z3r0byte.magis.Magister.CalendarItem;
+import net.ilexiconn.magister.container.Appointment;
+
 
 /**
  * Created by bas on 31-5-16.
@@ -92,27 +93,27 @@ public class CalendarDB extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public void addItems(CalendarItem[] calendarItems) {
+    public void addItems(Appointment[] appointments) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues contentValues = new ContentValues();
 
-        Log.d(TAG, "addItems: amount of items: " + calendarItems.length);
+        Log.d(TAG, "addItems: amount of items: " + appointments.length);
 
-        for (CalendarItem item :
-                calendarItems) {
-            Integer id = item.getId();
+        for (Appointment item :
+                appointments) {
+            Integer id = item.id;
             if (!CheckInDB(TABLE_CALENDAR, KEY_CALENDAR_ID, id.toString())) {
                 Log.d(TAG, "addItems: item doesnt exist");
                 contentValues.put(KEY_CALENDAR_ID, id);
-                contentValues.put(KEY_DESC, item.getDescription());
+                contentValues.put(KEY_DESC, item.description);
 
                 db.insert(TABLE_CALENDAR, null, contentValues);
                 db.close();
             } else {
                 Log.d(TAG, "addItems: updating item");
                 contentValues.put(KEY_CALENDAR_ID, id);
-                contentValues.put(KEY_DESC, item.getDescription());
+                contentValues.put(KEY_DESC, item.description);
 
                 db.update(TABLE_CALENDAR, contentValues, KEY_CALENDAR_ID + "=" + id, null);
                 db.close();
