@@ -71,7 +71,6 @@ public class HttpUtil {
         connection.setDoOutput(true);
         connection.setRequestMethod("POST");
         connection.setRequestProperty("Cookie", getCurrentCookies());
-        connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
         byte[] data_url = convertToDataString(data).getBytes("UTF-8");
         DataOutputStream outputStream = new DataOutputStream(connection.getOutputStream());
         outputStream.write(data_url);
