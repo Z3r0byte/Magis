@@ -122,7 +122,8 @@ public class Magister {
         magister.logout();
         Map<String, String> nameValuePairMap = magister.gson.fromJson(magister.gson.toJson(magister.user), new TypeToken<Map<String, String>>() {
         }.getType());
-        magister.session = magister.gson.fromJson(HttpUtil.httpPost(url.getSessionUrl(), nameValuePairMap), Session.class);
+        String data = magister.gson.toJson(magister.user);
+        magister.session = magister.gson.fromJson(HttpUtil.httpPost(url.getSessionUrl(), data), Session.class);
         if (!magister.session.state.equals("active")) {
             LogUtil.printError("Invalid credentials", new InvalidParameterException());
             return null;
@@ -152,7 +153,8 @@ public class Magister {
         logout();
         Map<String, String> nameValuePairMap = gson.fromJson(gson.toJson(user), new TypeToken<Map<String, String>>() {
         }.getType());
-        session = gson.fromJson(HttpUtil.httpPost(schoolUrl.getSessionUrl(), nameValuePairMap), Session.class);
+        String data = gson.toJson(user);
+        session = gson.fromJson(HttpUtil.httpPost(schoolUrl.getSessionUrl(), data), Session.class);
         loginTime = System.currentTimeMillis();
         return session;
     }

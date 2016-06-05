@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.CookieManager;
 import java.net.HttpCookie;
@@ -66,16 +67,22 @@ public class HttpUtil {
         return new InputStreamReader(connection.getInputStream());
     }
 
-    public static InputStreamReader httpPost(String url, Map<String, String> data) throws IOException {
+    public static InputStreamReader httpPost(String url, String data) throws IOException {
         HttpsURLConnection connection = (HttpsURLConnection) new URL(url).openConnection();
         connection.setDoOutput(true);
         connection.setRequestMethod("POST");
         connection.setRequestProperty("Cookie", getCurrentCookies());
-        byte[] data_url = convertToDataString(data).getBytes("UTF-8");
-        DataOutputStream outputStream = new DataOutputStream(connection.getOutputStream());
-        outputStream.write(data_url);
-        outputStream.flush();
-        outputStream.close();
+        connection.setRequestProperty("Content-Type", "application/json");
+
+        OutputStreamWriter wr = new OutputStreamWriter(connection.getOutputStream());
+        wr.write(data);
+        wr.flush();
+
+        //byte[] data_url = convertToDataString(data).getBytes("UTF-8");
+        //DataOutputStream outputStream = new DataOutputStream(connection.getOutputStream());
+        //outputStream.write(data);
+        //outputStream.flush();
+        //outputStream.close();
         storeCookies(connection);
         return new InputStreamReader(connection.getInputStream());
     }
