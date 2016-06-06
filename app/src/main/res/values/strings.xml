@@ -59,6 +59,8 @@
     <string name="msg_login_progress_1">Stap 1/2: oude sessie verwijderen...</string>
     <string name="msg_login_progress_2">Stap 2/2: opnieuw inloggen...</string>
     <string name="msg_refresh_session_short">Opn probrn</string>
+    <string name="msg_patience">Even geduld aub</string>
+    <string name="err_invalid_session">Ongeldige sessie, ververs de sessie</string>
     <string name="dialog_skip_login_title">Inloggen overslaan?</string>
     <string name="dialog_skip_login_desc">Als je het inloggen overslaat, kun je alleen de offline data gebruiken
         totdat je de sessie ververst.</string>

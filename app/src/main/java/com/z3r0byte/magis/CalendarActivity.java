@@ -16,12 +16,9 @@
 
 package com.z3r0byte.magis;
 
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -36,6 +33,8 @@ import com.google.gson.Gson;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.z3r0byte.magis.GUI.NavigationDrawer;
+import com.z3r0byte.magis.Tasks.AppointmentsTask;
+import com.z3r0byte.magis.Tasks.LoginTask;
 import com.z3r0byte.magis.Utils.DB_Handlers.CalendarDB;
 import com.z3r0byte.magis.Utils.DateUtils;
 import com.z3r0byte.magis.Utils.LoginUtils;
@@ -45,9 +44,7 @@ import net.ilexiconn.magister.container.Appointment;
 import net.ilexiconn.magister.container.Profile;
 import net.ilexiconn.magister.container.School;
 import net.ilexiconn.magister.container.User;
-import net.ilexiconn.magister.handler.AppointmentHandler;
 
-import java.io.IOException;
 import java.util.Date;
 
 public class CalendarActivity extends AppCompatActivity {
@@ -55,13 +52,13 @@ public class CalendarActivity extends AppCompatActivity {
 
 
     Toolbar mToolbar;
-    SwipeRefreshLayout mSwipeRefreshLayout;
+    public SwipeRefreshLayout mSwipeRefreshLayout;
     ImageButton mNextButton, mPreviousButton;
     CoordinatorLayout coordinatorLayout;
 
     Profile mProfile;
-    Appointment[] mAppointments;
-    Magister mMagister;
+    public Appointment[] mAppointments;
+    public Magister mMagister;
     School mSchool;
     User mUser;
 
@@ -107,16 +104,7 @@ public class CalendarActivity extends AppCompatActivity {
                     @Override
                     public void onRefresh() {
                         Log.d(TAG, "onRefresh: Refreshing!");
-
-                        // This method performs the actual data-refresh operation.
-                        // The method calls setRefreshing(false) when it's finished.
-                        final Handler handler = new Handler();
-                        handler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                mSwipeRefreshLayout.setRefreshing(false);
-                            }
-                        }, 6000);
+                        getAppointments();
                     }
                 }
         );
@@ -140,9 +128,12 @@ public class CalendarActivity extends AppCompatActivity {
 
 
 
+    }
+
+
+    public void getMagister() {
         if (LoginUtils.reLogin(this)) {
-            //startActivity(new Intent(this, ReLogin.class));
-            //finish();
+            new LoginTask(this, mSchool, mUser).execute();
         } else if (LoginUtils.loginError(this)) {
             Snackbar.make(coordinatorLayout, R.string.snackbar_login_error, Snackbar.LENGTH_INDEFINITE).setAction(R.string.msg_refresh_session_short, new View.OnClickListener() {
                 @Override
@@ -151,40 +142,28 @@ public class CalendarActivity extends AppCompatActivity {
                     finish();
                 }
             }).show();
-        } else {
-            // getCalendar();
         }
 
-
     }
 
-
-    private void getMagister() {
-        final Context c = this;
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Looper.prepare();
-                mMagister = LoginUtils.magisterLogin(c, mUser, mSchool, coordinatorLayout);
-                if (mMagister != null) {
-                    AppointmentHandler appointmentHandler = new AppointmentHandler(mMagister);
-                    try {
-                        Date date1 = DateUtils.getToday();
-                        Date date2 = DateUtils.addDays(DateUtils.getToday(), 1);
-                        mAppointments = appointmentHandler.getAppointments(date1, date2);
-                        Log.d(TAG, "run: Amount of appointments: " + mAppointments.length);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                        Snackbar.make(coordinatorLayout, R.string.err_no_connection, Snackbar.LENGTH_SHORT);
-                    }
-                } else {
-                    Log.d(TAG, "run: Magister is null");
-                    Snackbar.make(coordinatorLayout, R.string.err_no_connection, Snackbar.LENGTH_SHORT);
-                }
-            }
-        }).start();
+    public void getAppointments() {
+        if (mMagister != null) {
+            Date from = DateUtils.addDays(DateUtils.getToday(), 0);
+            Date until = DateUtils.addDays(DateUtils.getToday(), 1);
+            new AppointmentsTask(this, mMagister, from, until).execute();
+        } else {
+            Snackbar.make(coordinatorLayout, R.string.err_invalid_session, Snackbar.LENGTH_SHORT)
+                    .setAction(R.string.msg_refresh_session_short, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            getMagister();
+                        }
+                    }).show();
+            mSwipeRefreshLayout.setRefreshing(false);
+        }
     }
 
+    /*
     private void getAppointments() {
         String baseUrl = mSchool.url;
         final String fullUrl = baseUrl + "/api/personen/" + mProfile.id + "/afspraken?status=1&tot="
@@ -207,7 +186,7 @@ public class CalendarActivity extends AppCompatActivity {
                 }
             }
         }).start();
-    }
+    }*/
 
 
     @Override
