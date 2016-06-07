@@ -23,9 +23,9 @@ import android.util.Log;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.z3r0byte.magis.CalendarActivity;
 import com.z3r0byte.magis.R;
 import com.z3r0byte.magis.Utils.LoginUtils;
+import com.z3r0byte.magis.Utils.MagisActivity;
 
 import net.ilexiconn.magister.Magister;
 import net.ilexiconn.magister.container.School;
@@ -43,7 +43,7 @@ import java.text.ParseException;
 public class LoginTask extends AsyncTask<Void, Void, Magister> {
     private static final String TAG = "LoginTask";
 
-    public CalendarActivity activity;
+    public MagisActivity activity;
     public School school;
     public String username;
     public String password;
@@ -53,7 +53,7 @@ public class LoginTask extends AsyncTask<Void, Void, Magister> {
     public MaterialDialog.Builder dialogBuilder;
     public MaterialDialog dialog;
 
-    public LoginTask(CalendarActivity activity, School school, User user) {
+    public LoginTask(MagisActivity activity, School school, User user) {
         this.activity = activity;
         this.school = school;
         this.username = user.username;
@@ -103,7 +103,7 @@ public class LoginTask extends AsyncTask<Void, Void, Magister> {
     protected void onPostExecute(Magister magister) {
         if (magister != null) {
             activity.mMagister = magister;
-            activity.getAppointments();
+            activity.retrieveData(activity);
             LoginUtils.loginError(activity, false);
             Snackbar.make(activity.getCurrentFocus(), "Ingelogd", Snackbar.LENGTH_LONG).show();
         } else {

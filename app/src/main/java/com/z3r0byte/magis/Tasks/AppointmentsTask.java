@@ -20,8 +20,9 @@ import android.os.AsyncTask;
 import android.support.design.widget.Snackbar;
 import android.util.Log;
 
-import com.z3r0byte.magis.CalendarActivity;
+import com.z3r0byte.magis.Adapters.AppointmentsAdapter;
 import com.z3r0byte.magis.R;
+import com.z3r0byte.magis.Utils.MagisActivity;
 
 import net.ilexiconn.magister.Magister;
 import net.ilexiconn.magister.container.Appointment;
@@ -37,7 +38,7 @@ import java.util.Date;
 public class AppointmentsTask extends AsyncTask<Void, Void, Appointment[]> {
     private static final String TAG = "AppointmentsTask";
 
-    public CalendarActivity activity;
+    public MagisActivity activity;
     public Magister magister;
     public Date date1;
     public Date date2;
@@ -45,7 +46,7 @@ public class AppointmentsTask extends AsyncTask<Void, Void, Appointment[]> {
     public String error;
 
 
-    public AppointmentsTask(CalendarActivity activity, Magister magister, Date date1, Date date2) {
+    public AppointmentsTask(MagisActivity activity, Magister magister, Date date1, Date date2) {
         this.activity = activity;
         this.magister = magister;
         this.date1 = date1;
@@ -78,10 +79,17 @@ public class AppointmentsTask extends AsyncTask<Void, Void, Appointment[]> {
 
     @Override
     protected void onPostExecute(Appointment[] appointments) {
-        if (appointments.length != 0) {
+        if (appointments != null) {
             activity.mAppointments = appointments;
             activity.mSwipeRefreshLayout.setRefreshing(false);
+
+            //refreshing adapter
+            activity.mAppointmentAdapter = new AppointmentsAdapter(activity, activity.mAppointments);
+            activity.listView.setAdapter(activity.mAppointmentAdapter);
         } else {
+            appointments = new Appointment[1];
+            activity.mAppointments = appointments;
+            activity.mSwipeRefreshLayout.setRefreshing(false);
             Log.e(TAG, error);
             Snackbar.make(activity.getCurrentFocus(), error, Snackbar.LENGTH_LONG).show();
         }

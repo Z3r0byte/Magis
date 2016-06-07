@@ -22,11 +22,11 @@ import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -38,32 +38,24 @@ import com.z3r0byte.magis.Tasks.LoginTask;
 import com.z3r0byte.magis.Utils.DB_Handlers.CalendarDB;
 import com.z3r0byte.magis.Utils.DateUtils;
 import com.z3r0byte.magis.Utils.LoginUtils;
+import com.z3r0byte.magis.Utils.MagisActivity;
 
-import net.ilexiconn.magister.Magister;
-import net.ilexiconn.magister.container.Appointment;
 import net.ilexiconn.magister.container.Profile;
 import net.ilexiconn.magister.container.School;
 import net.ilexiconn.magister.container.User;
 
 import java.util.Date;
 
-public class CalendarActivity extends AppCompatActivity {
+public class CalendarActivity extends MagisActivity {
     private static final String TAG = "CalendarActivity";
 
 
     Toolbar mToolbar;
-    public SwipeRefreshLayout mSwipeRefreshLayout;
     ImageButton mNextButton, mPreviousButton;
-    CoordinatorLayout coordinatorLayout;
 
     Profile mProfile;
-    public Appointment[] mAppointments;
-    public Magister mMagister;
-    School mSchool;
-    User mUser;
 
     CalendarDB mCalendarDB;
-
 
     Boolean mError = false;
 
@@ -77,6 +69,8 @@ public class CalendarActivity extends AppCompatActivity {
 
 
         mCalendarDB = new CalendarDB(this);
+
+        listView = (ListView) findViewById(R.id.list_calendar);
 
         mNextButton = (ImageButton) findViewById(R.id.button_next_day);
         mPreviousButton = (ImageButton) findViewById(R.id.button_previous_day);
@@ -162,31 +156,6 @@ public class CalendarActivity extends AppCompatActivity {
             mSwipeRefreshLayout.setRefreshing(false);
         }
     }
-
-    /*
-    private void getAppointments() {
-        String baseUrl = mSchool.url;
-        final String fullUrl = baseUrl + "/api/personen/" + mProfile.id + "/afspraken?status=1&tot="
-                + DateUtils.formatDate(DateUtils.addDays(DateUtils.getToday(), 1), "yyyy-MM-dd")
-                + "&van="
-                + DateUtils.formatDate(DateUtils.addDays(DateUtils.getToday(), -14), "yyyy-MM-dd");
-        final String cookie = this.getSharedPreferences("data", MODE_PRIVATE).getString("Cookie", null);
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    Date from = DateUtils.addDays(DateUtils.getToday(), -14);
-                    Date until = DateUtils.addDays(DateUtils.getToday(), 1);
-                    AppointmentHandler appointmentHandler = new AppointmentHandler(mMagister);
-                    mAppointments = appointmentHandler.getAppointments(from, until);
-                    //mCalendarDB.addItems(mCalendarItems);
-                } catch (IOException e) {
-                    Snackbar.make(coordinatorLayout, R.string.err_no_connection, Snackbar.LENGTH_LONG);
-                }
-            }
-        }).start();
-    }*/
 
 
     @Override
