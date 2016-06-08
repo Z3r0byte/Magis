@@ -35,7 +35,6 @@ import com.mikepenz.iconics.IconicsDrawable;
 import com.z3r0byte.magis.GUI.NavigationDrawer;
 import com.z3r0byte.magis.Tasks.AppointmentsTask;
 import com.z3r0byte.magis.Tasks.LoginTask;
-import com.z3r0byte.magis.Utils.DB_Handlers.CalendarDB;
 import com.z3r0byte.magis.Utils.DateUtils;
 import com.z3r0byte.magis.Utils.LoginUtils;
 import com.z3r0byte.magis.Utils.MagisActivity;
@@ -55,8 +54,6 @@ public class CalendarActivity extends MagisActivity {
 
     Profile mProfile;
 
-    CalendarDB mCalendarDB;
-
     Boolean mError = false;
 
 
@@ -68,8 +65,6 @@ public class CalendarActivity extends MagisActivity {
         coordinatorLayout = (CoordinatorLayout) findViewById(R.id.layout_calendar);
 
 
-        mCalendarDB = new CalendarDB(this);
-
         listView = (ListView) findViewById(R.id.list_calendar);
 
         mNextButton = (ImageButton) findViewById(R.id.button_next_day);
@@ -80,11 +75,19 @@ public class CalendarActivity extends MagisActivity {
         mPreviousButton.setImageDrawable(new IconicsDrawable(this).icon(GoogleMaterial.Icon.gmd_arrow_back)
                 .color(Color.WHITE).sizeDp(24));
 
+        mNextButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mSwipeRefreshLayout.setRefreshing(true);
+                getAppointments();
+            }
+        });
+
         mPreviousButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d(TAG, "onClick: showing snackbar");
-                Snackbar.make(coordinatorLayout, R.string.err_no_connection, Snackbar.LENGTH_LONG).show();
+                mSwipeRefreshLayout.setRefreshing(true);
+                getAppointments();
             }
         });
 
@@ -143,7 +146,7 @@ public class CalendarActivity extends MagisActivity {
     public void getAppointments() {
         if (mMagister != null) {
             Date from = DateUtils.addDays(DateUtils.getToday(), 0);
-            Date until = DateUtils.addDays(DateUtils.getToday(), 1);
+            Date until = DateUtils.addDays(DateUtils.getToday(), 0);
             new AppointmentsTask(this, mMagister, from, until).execute();
         } else {
             Snackbar.make(coordinatorLayout, R.string.err_invalid_session, Snackbar.LENGTH_SHORT)

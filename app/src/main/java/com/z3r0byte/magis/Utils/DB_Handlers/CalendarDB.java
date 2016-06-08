@@ -25,6 +25,8 @@ import android.util.Log;
 
 import net.ilexiconn.magister.container.Appointment;
 
+import java.util.Arrays;
+
 
 /**
  * Created by bas on 31-5-16.
@@ -54,6 +56,11 @@ public class CalendarDB extends SQLiteOpenHelper {
     private static final String KEY_LOCATION = "location";
     private static final String KEY_STATE = "state";
     private static final String KEY_FINISHED = "finished";
+    private static final String KEY_LINKS = "links";
+    private static final String KEY_TYPE = "type";
+    private static final String KEY_INFO_TYPE = "infoType";
+    private static final String KEY_SUBJECTS = "subjects";
+    private static final String KEY_GROUP = "group";
 
     public CalendarDB(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -72,13 +79,17 @@ public class CalendarDB extends SQLiteOpenHelper {
                 + KEY_END + " TEXT,"
                 + KEY_FINISHED + " BOOLEAN,"
                 + KEY_FULL_DATE + " TEXT,"
+                + KEY_INFO_TYPE + " TEXT,"
+                + KEY_LINKS + " TEXT,"
                 + KEY_LOCATION + " TEXT,"
                 + KEY_PERIOD_FROM + " INTEGER,"
                 + KEY_PERIOD_TO + " INTEGER,"
+                + KEY_SUBJECTS + " TEXT,"
                 + KEY_START + " TEXT,"
                 + KEY_STATE + " TEXT,"
                 + KEY_TEACHER + " TEXT,"
-                + KEY_TAKES_ALL_DAY + " BOOLEAN"
+                + KEY_TAKES_ALL_DAY + " BOOLEAN,"
+                + KEY_TYPE + " TEXT"
                 + ")";
         db.execSQL(CREATE_CALENDAR_TABLE);
     }
@@ -107,20 +118,49 @@ public class CalendarDB extends SQLiteOpenHelper {
                 Log.d(TAG, "addItems: item doesnt exist");
                 contentValues.put(KEY_CALENDAR_ID, id);
                 contentValues.put(KEY_DESC, item.description);
+                contentValues.put(KEY_CLASS_ROOMS, Arrays.toString(item.classrooms));
+                contentValues.put(KEY_CONTENT, item.content);
+                contentValues.put(KEY_END, item.endDateString);
+                contentValues.put(KEY_FINISHED, item.finished);
+                contentValues.put(KEY_FULL_DATE, item.startDateString.replaceAll("[T:Z.]", ""));
+                contentValues.put(KEY_LINKS, Arrays.toString(item.links));
+                contentValues.put(KEY_LOCATION, item.location);
+                contentValues.put(KEY_PERIOD_FROM, item.periodFrom);
+                contentValues.put(KEY_PERIOD_TO, item.periodUpToAndIncluding);
+                contentValues.put(KEY_START, item.startDateString);
+                contentValues.put(KEY_STATE, item.classState);
+                contentValues.put(KEY_SUBJECTS, Arrays.toString(item.subjects));
+                contentValues.put(KEY_TEACHER, Arrays.toString(item.teachers));
+                contentValues.put(KEY_TAKES_ALL_DAY, item.takesAllDay);
+
 
                 db.insert(TABLE_CALENDAR, null, contentValues);
-                db.close();
             } else {
                 Log.d(TAG, "addItems: updating item");
                 contentValues.put(KEY_CALENDAR_ID, id);
                 contentValues.put(KEY_DESC, item.description);
+                contentValues.put(KEY_CLASS_ROOMS, Arrays.toString(item.classrooms));
+                contentValues.put(KEY_CONTENT, item.content);
+                contentValues.put(KEY_END, item.endDateString);
+                contentValues.put(KEY_FINISHED, item.finished);
+                contentValues.put(KEY_FULL_DATE, item.startDateString.replaceAll("[T:Z.]", ""));
+                contentValues.put(KEY_LINKS, Arrays.toString(item.links));
+                contentValues.put(KEY_LOCATION, item.location);
+                contentValues.put(KEY_PERIOD_FROM, item.periodFrom);
+                contentValues.put(KEY_PERIOD_TO, item.periodUpToAndIncluding);
+                contentValues.put(KEY_START, item.startDateString);
+                contentValues.put(KEY_STATE, item.classState);
+                contentValues.put(KEY_SUBJECTS, Arrays.toString(item.subjects));
+                contentValues.put(KEY_TEACHER, Arrays.toString(item.teachers));
+                contentValues.put(KEY_TAKES_ALL_DAY, item.takesAllDay);
 
                 db.update(TABLE_CALENDAR, contentValues, KEY_CALENDAR_ID + "=" + id, null);
-                db.close();
             }
 
 
         }
+
+        db.close();
 
     }
 

@@ -23,4 +23,11 @@ import java.io.Serializable;
 public class Classroom implements Serializable {
     @SerializedName("Naam")
     public String name;
+
+    @Override
+    public String toString() {
+        return "Classroom{" +
+                "name='" + name + '\'' +
+                '}';
+    }
 }

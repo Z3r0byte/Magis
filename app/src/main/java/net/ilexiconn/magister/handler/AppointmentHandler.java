@@ -70,7 +70,7 @@ public class AppointmentHandler implements IHandler {
         DateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
         String dateNow = format.format(from);
         String dateFrom = format.format(until);
-        return gson.fromJson(HttpUtil.httpGet(magister.school.url + "/api/personen/" + magister.profile.id + "/afspraken?status=0&van=" + dateNow + "&tot=" + dateFrom), Appointment[].class);
+        return gson.fromJson(HttpUtil.httpGet(magister.school.url + "/api/personen/" + magister.profile.id + "/afspraken?status=1&van=" + dateNow + "&tot=" + dateFrom), Appointment[].class);
     }
 
     /**

@@ -42,4 +42,11 @@ public enum DisplayType implements Serializable {
     public int getID() {
         return id;
     }
+
+    @Override
+    public String toString() {
+        return "DisplayType{" +
+                "id=" + id +
+                '}';
+    }
 }

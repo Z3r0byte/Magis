@@ -29,4 +29,13 @@ public class Teacher implements Serializable {
 
     @SerializedName("Docentcode")
     public String abbreviation;
+
+    @Override
+    public String toString() {
+        return "Teacher{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", abbreviation='" + abbreviation + '\'' +
+                '}';
+    }
 }
