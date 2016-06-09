@@ -163,6 +163,11 @@ public class CalendarDB extends SQLiteOpenHelper {
         db.close();
 
     }
+    
+    public Appointment[] getAppointmentsByDate(Date date){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String Query ="Select * from " + TableName + " where
+    }
 
     public boolean CheckInDB(String TableName, String dbfield, String fieldValue) {
 
