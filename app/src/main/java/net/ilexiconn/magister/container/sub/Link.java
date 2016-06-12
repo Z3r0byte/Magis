@@ -27,11 +27,5 @@ public class Link implements Serializable {
     @SerializedName(value = "rel", alternate = "Rel")
     public String rel;
 
-    @Override
-    public String toString() {
-        return "Link{" +
-                "href='" + href + '\'' +
-                ", rel='" + rel + '\'' +
-                '}';
-    }
+
 }

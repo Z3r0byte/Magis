@@ -106,6 +106,7 @@ public class CalendarActivity extends MagisActivity {
                 }
         );
 
+        new Gson().toJson(mMagister);
         mToolbar = (Toolbar) findViewById(R.id.Toolbar);
         mToolbar.setTitle(R.string.msg_today);
         setSupportActionBar(mToolbar);
@@ -145,8 +146,8 @@ public class CalendarActivity extends MagisActivity {
 
     public void getAppointments() {
         if (mMagister != null) {
-            Date from = DateUtils.addDays(DateUtils.getToday(), 0);
-            Date until = DateUtils.addDays(DateUtils.getToday(), 0);
+            Date from = DateUtils.addDays(DateUtils.getToday(), -7);
+            Date until = DateUtils.addDays(DateUtils.getToday(), 14);
             new AppointmentsTask(this, mMagister, from, until).execute();
         } else {
             Snackbar.make(coordinatorLayout, R.string.err_invalid_session, Snackbar.LENGTH_SHORT)

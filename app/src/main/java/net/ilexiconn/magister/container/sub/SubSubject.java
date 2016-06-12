@@ -29,13 +29,4 @@ public class SubSubject implements Serializable {
 
     @SerializedName("Afkorting")
     public String abbreviation;
-
-    @Override
-    public String toString() {
-        return "SubSubject{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", abbreviation='" + abbreviation + '\'' +
-                '}';
-    }
 }

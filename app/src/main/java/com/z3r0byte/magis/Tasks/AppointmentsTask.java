@@ -23,6 +23,7 @@ import android.util.Log;
 import com.z3r0byte.magis.Adapters.AppointmentsAdapter;
 import com.z3r0byte.magis.R;
 import com.z3r0byte.magis.Utils.DB_Handlers.CalendarDB;
+import com.z3r0byte.magis.Utils.DateUtils;
 import com.z3r0byte.magis.Utils.MagisActivity;
 
 import net.ilexiconn.magister.Magister;
@@ -68,6 +69,7 @@ public class AppointmentsTask extends AsyncTask<Void, Void, Appointment[]> {
 
             CalendarDB db = new CalendarDB(activity);
             db.addItems(appointments);
+            appointments = db.getAppointmentsByDate(DateUtils.getToday());
 
             Log.d(TAG, "doInBackground: " + appointments.length);
             return appointments;

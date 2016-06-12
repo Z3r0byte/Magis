@@ -73,8 +73,8 @@ public class MagisActivity extends AppCompatActivity {
             switch (type) {
                 case 0:
                     if (mMagister != null || mMagister.isExpired()) {
-                        Date from = DateUtils.getToday();//DateUtils.addDays(DateUtils.getToday(), 0);
-                        Date until = DateUtils.getToday();//DateUtils.addDays(DateUtils.getToday(), 1);
+                        Date from = DateUtils.addDays(DateUtils.getToday(), -7);
+                        Date until = DateUtils.addDays(DateUtils.getToday(), 14);
                         new AppointmentsTask(activity, mMagister, from, until).execute();
                     } else {
                         Snackbar.make(coordinatorLayout, R.string.err_invalid_session, Snackbar.LENGTH_SHORT)

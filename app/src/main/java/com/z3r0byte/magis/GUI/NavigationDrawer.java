@@ -16,9 +16,8 @@
 
 package com.z3r0byte.magis.GUI;
 
-import android.app.Activity;
 import android.content.Context;
-import android.support.design.widget.Snackbar;
+import android.content.Intent;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
@@ -33,6 +32,9 @@ import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.z3r0byte.magis.R;
+import com.z3r0byte.magis.StartActivity;
+import com.z3r0byte.magis.Tasks.LoginTask;
+import com.z3r0byte.magis.Utils.MagisActivity;
 
 import net.ilexiconn.magister.container.Profile;
 import net.ilexiconn.magister.container.User;
@@ -51,7 +53,7 @@ public class NavigationDrawer {
     static PrimaryDrawerItem logoutItem = new SecondaryDrawerItem().withName(R.string.drawer_logout)
             .withIcon(GoogleMaterial.Icon.gmd_exit_to_app).withSelectable(false);
 
-    public static void SetupNavigationDrawer(final Context c, final View View, final Activity activity,
+    public static void SetupNavigationDrawer(final Context c, final View View, final MagisActivity activity,
                                              Toolbar toolbar, Profile profile, User user, String selection) {
 
         AccountHeader accountHeader = new AccountHeaderBuilder()
@@ -80,7 +82,12 @@ public class NavigationDrawer {
                         if (drawerItem == refreshSessionItem) {
                             //c.startActivity(new Intent(c, ReLogin.class));
                             //activity.finish();
-                            Snackbar.make(View, "Test", Snackbar.LENGTH_INDEFINITE).show();
+                            new LoginTask(activity, activity.mSchool, activity.mUser);
+                        } else if (drawerItem == logoutItem) {
+                            activity.getSharedPreferences("data", Context.MODE_PRIVATE).edit().clear().apply();
+                            activity.deleteDatabase("CalendarDB");
+                            activity.startActivity(new Intent(activity, StartActivity.class));
+                            activity.finish();
                         }
                         return true;
                     }

@@ -21,9 +21,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.z3r0byte.magis.R;
+import com.z3r0byte.magis.Utils.DateUtils;
 
 import net.ilexiconn.magister.container.Appointment;
 
@@ -44,15 +46,23 @@ public class AppointmentsAdapter extends ArrayAdapter<Appointment> {
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View rowView = inflater.inflate(R.layout.list_simple, parent, false);
+        View rowView = inflater.inflate(R.layout.list_lesson, parent, false);
 
-        TextView textView = (TextView) rowView.findViewById(R.id.list_text_schools);
+        TextView period = (TextView) rowView.findViewById(R.id.text_list_period);
+        TextView lesson = (TextView) rowView.findViewById(R.id.text_lesson);
+        TextView classroom = (TextView) rowView.findViewById(R.id.text_classroom);
+        TextView time = (TextView) rowView.findViewById(R.id.text_time);
+        ImageView homework = (ImageView) rowView.findViewById(R.id.image_homework);
 
-        if (appointments[0] != null) {
-            textView.setText(appointments[position].description + "  in " + appointments[position].location);
-        } else {
-            textView.setText("");
-        }
+
+        period.setText(appointments[position].periodFrom + "");
+        lesson.setText(appointments[position].description);
+        classroom.setText(appointments[position].location);
+        time.setText(DateUtils.formatDate(appointments[0].startDate, "HH:mm") + " - "
+                + DateUtils.formatDate(appointments[0].endDate, "HH:mm"));
+
+        homework.setImageDrawable(null);
+
 
 
         return rowView;
