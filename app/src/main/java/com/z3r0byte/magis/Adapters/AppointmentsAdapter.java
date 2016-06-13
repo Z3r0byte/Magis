@@ -58,8 +58,8 @@ public class AppointmentsAdapter extends ArrayAdapter<Appointment> {
         period.setText(appointments[position].periodFrom + "");
         lesson.setText(appointments[position].description);
         classroom.setText(appointments[position].location);
-        time.setText(DateUtils.formatDate(appointments[0].startDate, "HH:mm") + " - "
-                + DateUtils.formatDate(appointments[0].endDate, "HH:mm"));
+        time.setText(DateUtils.formatDate(DateUtils.addHours(appointments[position].startDate, 2), "HH:mm") + " - "
+                + DateUtils.formatDate(DateUtils.addHours(appointments[position].endDate, 2), "HH:mm"));
 
         homework.setImageDrawable(null);
 

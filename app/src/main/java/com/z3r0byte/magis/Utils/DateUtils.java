@@ -57,6 +57,13 @@ public class DateUtils {
         return new Date(calendar.getTimeInMillis());
     }
 
+    public static Date addHours(Date date, int hours) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.add(Calendar.HOUR, hours);
+        return new Date(calendar.getTimeInMillis());
+    }
+
     public static void lastLogin(Context context, String date) {
         context.getSharedPreferences("data", Context.MODE_PRIVATE).edit().putString("LastLogin", date).apply();
     }

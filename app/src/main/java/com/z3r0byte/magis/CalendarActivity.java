@@ -32,9 +32,11 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
+import com.z3r0byte.magis.Adapters.AppointmentsAdapter;
 import com.z3r0byte.magis.GUI.NavigationDrawer;
 import com.z3r0byte.magis.Tasks.AppointmentsTask;
 import com.z3r0byte.magis.Tasks.LoginTask;
+import com.z3r0byte.magis.Utils.DB_Handlers.CalendarDB;
 import com.z3r0byte.magis.Utils.DateUtils;
 import com.z3r0byte.magis.Utils.LoginUtils;
 import com.z3r0byte.magis.Utils.MagisActivity;
@@ -69,24 +71,20 @@ public class CalendarActivity extends MagisActivity {
 
         mNextButton = (ImageButton) findViewById(R.id.button_next_day);
         mPreviousButton = (ImageButton) findViewById(R.id.button_previous_day);
-
         mNextButton.setImageDrawable(new IconicsDrawable(this).icon(GoogleMaterial.Icon.gmd_arrow_forward)
                 .color(Color.WHITE).sizeDp(24));
         mPreviousButton.setImageDrawable(new IconicsDrawable(this).icon(GoogleMaterial.Icon.gmd_arrow_back)
                 .color(Color.WHITE).sizeDp(24));
-
         mNextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 nextDay();
             }
         });
-
         mPreviousButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mSwipeRefreshLayout.setRefreshing(true);
-                getAppointments();
+                previousDay();
             }
         });
 
@@ -160,8 +158,30 @@ public class CalendarActivity extends MagisActivity {
         }
     }
 
+    private void previousDay() {
+        date = DateUtils.addDays(date, -1);
+        mAppointments = new CalendarDB(this).getAppointmentsByDate(date);
+        mAppointmentAdapter = new AppointmentsAdapter(this, mAppointments);
+        listView.setAdapter(mAppointmentAdapter);
+
+        if (date.toString().substring(0, 10).equals(DateUtils.getToday().toString().substring(0, 10))) {
+            mToolbar.setTitle(R.string.msg_today);
+        } else {
+            mToolbar.setTitle(DateUtils.formatDate(date, "EEEE dd MMM"));
+        }
+    }
+
     private void nextDay() {
         date = DateUtils.addDays(date, 1);
+        mAppointments = new CalendarDB(this).getAppointmentsByDate(date);
+        mAppointmentAdapter = new AppointmentsAdapter(this, mAppointments);
+        listView.setAdapter(mAppointmentAdapter);
+
+        if (date.toString().substring(0, 10).equals(DateUtils.getToday().toString().substring(0, 10))) {
+            mToolbar.setTitle(R.string.msg_today);
+        } else {
+            mToolbar.setTitle(DateUtils.formatDate(date, "EEEE dd MMM"));
+        }
     }
 
     @Override
