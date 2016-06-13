@@ -53,6 +53,8 @@ public class CalendarActivity extends MagisActivity {
 
     Toolbar mToolbar;
     ImageButton mNextButton, mPreviousButton;
+    Date firstdate;
+    Date lastdate;
 
     Profile mProfile;
 
@@ -143,9 +145,9 @@ public class CalendarActivity extends MagisActivity {
 
     public void getAppointments() {
         if (mMagister != null) {
-            Date from = DateUtils.addDays(DateUtils.getToday(), -7);
-            Date until = DateUtils.addDays(DateUtils.getToday(), 14);
-            new AppointmentsTask(this, mMagister, from, until).execute();
+            firstdate = DateUtils.addDays(date, -7);
+            lastdate = DateUtils.addDays(date, 14);
+            new AppointmentsTask(this, mMagister, firstdate, lastdate).execute();
         } else {
             Snackbar.make(coordinatorLayout, R.string.err_invalid_session, Snackbar.LENGTH_SHORT)
                     .setAction(R.string.msg_refresh_session_short, new View.OnClickListener() {
