@@ -124,7 +124,7 @@ public class SearchSchoolFragment extends SlideFragment {
         mSearchThread = new Thread(new Runnable() {
             @Override
             public void run() {
-                mSchools = School.findSchool(school);
+                mSchools = School.findSchool(school.replace(" ", "%20"));
                 Log.d(TAG, "run: Er zijn " + mSchools.length + " resultaten gevonden.");
                 /*int i =0;
                 for (School school : mSchools
