@@ -225,4 +225,9 @@ public class CalendarDB extends SQLiteOpenHelper {
         cursor.close();
         return true;
     }
+
+    public void removeAll() {
+        SQLiteDatabase db = this.getWritableDatabase(); // helper is object extends SQLiteOpenHelper
+        db.delete(TABLE_CALENDAR, null, null);
+    }
 }

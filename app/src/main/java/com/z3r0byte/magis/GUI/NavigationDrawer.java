@@ -18,9 +18,13 @@ package com.z3r0byte.magis.GUI;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
@@ -34,6 +38,7 @@ import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.z3r0byte.magis.R;
 import com.z3r0byte.magis.StartActivity;
 import com.z3r0byte.magis.Tasks.LoginTask;
+import com.z3r0byte.magis.Utils.DB_Handlers.CalendarDB;
 import com.z3r0byte.magis.Utils.MagisActivity;
 
 import net.ilexiconn.magister.container.Profile;
@@ -43,6 +48,8 @@ import net.ilexiconn.magister.container.User;
  * Created by basva on 14-5-2016.
  */
 public class NavigationDrawer {
+
+    private static final String TAG = "NavigationDrawer";
 
     static Drawer drawer;
 
@@ -80,14 +87,25 @@ public class NavigationDrawer {
                     @Override
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
                         if (drawerItem == refreshSessionItem) {
-                            //c.startActivity(new Intent(c, ReLogin.class));
-                            //activity.finish();
+                            Log.d(TAG, "onItemClick: Refreshing session");
                             new LoginTask(activity, activity.mSchool, activity.mUser);
                         } else if (drawerItem == logoutItem) {
-                            activity.getSharedPreferences("data", Context.MODE_PRIVATE).edit().clear().apply();
-                            activity.deleteDatabase("CalendarDB");
-                            activity.startActivity(new Intent(activity, StartActivity.class));
-                            activity.finish();
+                            new MaterialDialog.Builder(activity)
+                                    .title(R.string.dialog_logout_title)
+                                    .content(R.string.dialog_skip_login_desc)
+                                    .positiveText(android.R.string.ok)
+                                    .onPositive(new MaterialDialog.SingleButtonCallback() {
+                                        @Override
+                                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                            activity.getSharedPreferences("data", Context.MODE_PRIVATE).edit().clear().apply();
+                                            new CalendarDB(activity).removeAll();
+                                            activity.startActivity(new Intent(activity, StartActivity.class));
+                                            activity.finish();
+                                        }
+                                    })
+                                    .negativeText(android.R.string.cancel)
+                                    .show();
+
                         }
                         return true;
                     }

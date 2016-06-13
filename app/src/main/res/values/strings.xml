@@ -43,6 +43,8 @@
     <string name="customactivityoncrash_error_activity_error_details_copied">Gekopiëerd naar klembord</string>
     <string name="customactivityoncrash_error_activity_error_details_clipboard_label">Fouten-informatie</string>
 
+    <string name="dialog_logout_title">Uitloggen?</string>
+    <string name="dialog_logout_desc">Als je uitlogt zul je opnieuw moeten inloggen en alle data wordt gewist.</string>
     <string name="msg_searching">Zoeken...</string>
     <string name="msg_old_version">De data-structuur van Magis is veranderd, we laten je daarom de login-stappen opnieuw doorlopen.</string>
     <string name="msg_search">Zoek</string>

@@ -78,8 +78,7 @@ public class CalendarActivity extends MagisActivity {
         mNextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mSwipeRefreshLayout.setRefreshing(true);
-                getAppointments();
+                nextDay();
             }
         });
 
@@ -124,7 +123,7 @@ public class CalendarActivity extends MagisActivity {
             NavigationDrawer.SetupNavigationDrawer(this, coordinatorLayout, this, mToolbar, mProfile, mUser, "Agenda");
         }
 
-
+        date = DateUtils.getToday();
 
     }
 
@@ -161,6 +160,9 @@ public class CalendarActivity extends MagisActivity {
         }
     }
 
+    private void nextDay() {
+        date = DateUtils.addDays(date, 1);
+    }
 
     @Override
     public void onBackPressed() {

@@ -51,6 +51,9 @@ public class MagisActivity extends AppCompatActivity {
     public AppointmentsAdapter mAppointmentAdapter;
     public ListView listView;
 
+    public Date date;
+
+
     Integer type = 0;
 
     public void getMagister(MagisActivity activity, School mSchool, User mUser) {
