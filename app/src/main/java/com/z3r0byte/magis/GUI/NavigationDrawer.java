@@ -30,10 +30,10 @@ import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
-import com.mikepenz.materialdrawer.model.DividerDrawerItem;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
+import com.mikepenz.materialdrawer.model.SectionDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.z3r0byte.magis.R;
 import com.z3r0byte.magis.StartActivity;
@@ -79,7 +79,7 @@ public class NavigationDrawer {
                 .withToolbar(toolbar)
                 .addDrawerItems(
                         calendarItem,
-                        new DividerDrawerItem(),
+                        new SectionDrawerItem().withName(R.string.drawer_tools),
                         refreshSessionItem,
                         logoutItem
                 )

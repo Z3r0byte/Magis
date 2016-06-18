@@ -16,13 +16,17 @@
 
 package com.z3r0byte.magis.Tasks;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.support.design.widget.Snackbar;
 import android.util.Log;
 
 import com.z3r0byte.magis.Adapters.AppointmentsAdapter;
+import com.z3r0byte.magis.CalendarActivity;
 import com.z3r0byte.magis.R;
 import com.z3r0byte.magis.Utils.DB_Handlers.CalendarDB;
+import com.z3r0byte.magis.Utils.DateUtils;
 import com.z3r0byte.magis.Utils.MagisActivity;
 
 import net.ilexiconn.magister.Magister;
@@ -43,15 +47,17 @@ public class AppointmentsTask extends AsyncTask<Void, Void, Appointment[]> {
     public Magister magister;
     public Date date1;
     public Date date2;
+    public Integer whatToSave;
 
     public String error;
 
 
-    public AppointmentsTask(MagisActivity activity, Magister magister, Date date1, Date date2) {
+    public AppointmentsTask(MagisActivity activity, Magister magister, Date date1, Date date2, Integer whatToSave) {
         this.activity = activity;
         this.magister = magister;
         this.date1 = date1;
         this.date2 = date2;
+        this.whatToSave = whatToSave;
 
     }
 
@@ -88,6 +94,27 @@ public class AppointmentsTask extends AsyncTask<Void, Void, Appointment[]> {
         if (appointments != null) {
             activity.mAppointments = appointments;
             activity.mSwipeRefreshLayout.setRefreshing(false);
+
+            CalendarActivity activity1 = (CalendarActivity) activity;
+            if (activity1.firstDate.after(DateUtils.parseDate("3000", "yyyy"))) {
+                whatToSave = 0;
+            }
+            Log.d(TAG, "onPostExecute: " + activity1.firstDate.after(DateUtils.parseDate("3000", "yyyy")));
+
+            SharedPreferences sharedPreferences = activity.getSharedPreferences("data", Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            if (whatToSave == 0) {
+                activity1.firstDate = date1;
+                activity1.lastDate = date2;
+                editor.putString("firstDate", DateUtils.formatDate(date1, "yyyy-MM-dd"));
+                editor.putString("lastDate", DateUtils.formatDate(date2, "yyyy-MM-dd")).apply();
+            } else if (whatToSave == 1) {
+                activity1.firstDate = date1;
+                editor.putString("firstDate", DateUtils.formatDate(date1, "yyyy-MM-dd")).apply();
+            } else if (whatToSave == 2) {
+                activity1.lastDate = date2;
+                editor.putString("lastDate", DateUtils.formatDate(date2, "yyyy-MM-dd")).apply();
+            }
 
             //refreshing adapter
             activity.mAppointmentAdapter = new AppointmentsAdapter(activity, activity.mAppointments);

@@ -119,12 +119,18 @@ public class CalendarDB extends SQLiteOpenHelper {
         ContentValues contentValues = new ContentValues();
 
         Log.d(TAG, "addItems: amount of items: " + appointments.length);
+        String day = "";
 
         for (Appointment item :
                 appointments) {
             Integer id = item.id;
+            Log.d(TAG, "addItems: DAY + ITEMDAY[" + day + "] [" + item.startDateString.substring(0, 10) + "]");
+            if (!day.equals(item.startDateString.substring(0, 10))) {
+                deleteAppointmentByDateString(item.startDateString);
+            }
+            day = item.startDateString.substring(0, 10);
+
             if (!CheckInDB(TABLE_CALENDAR, KEY_CALENDAR_ID, id.toString())) {
-                Log.d(TAG, "addItems: item doesnt exist");
                 contentValues.put(KEY_CALENDAR_ID, id);
                 contentValues.put(KEY_DESC, item.description);
                 contentValues.put(KEY_CLASS_ROOMS, new Gson().toJson(item.classrooms));
@@ -145,7 +151,6 @@ public class CalendarDB extends SQLiteOpenHelper {
 
                 db.insert(TABLE_CALENDAR, null, contentValues);
             } else {
-                Log.d(TAG, "addItems: updating item");
                 contentValues.put(KEY_CALENDAR_ID, id);
                 contentValues.put(KEY_DESC, item.description);
                 contentValues.put(KEY_CLASS_ROOMS, new Gson().toJson(item.classrooms));
@@ -171,6 +176,21 @@ public class CalendarDB extends SQLiteOpenHelper {
 
         db.close();
 
+    }
+
+    public void deleteAppointmentByDate(Date date) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String dateStr = DateUtils.formatDate(date, "yyyyMMdd");
+        String Query = "DELETE FROM " + TABLE_CALENDAR + " WHERE " + KEY_FULL_DATE + " LIKE '" + dateStr + "%'";
+        db.execSQL(Query);
+    }
+
+    public void deleteAppointmentByDateString(String date) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String dateStr = date.replaceAll("[T:Z.-]", "").substring(0, 8);
+        String Query = "DELETE FROM " + TABLE_CALENDAR + " WHERE " + KEY_FULL_DATE + " LIKE '" + dateStr + "%'";
+        Log.d(TAG, "deleteAppointmentByDateString: Query: " + Query);
+        db.execSQL(Query);
     }
     
     public Appointment[] getAppointmentsByDate(Date date){

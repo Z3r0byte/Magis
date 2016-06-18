@@ -76,4 +76,5 @@
     <string name="title_calendar">Agenda</string>
     <string name="drawer_refresh_session">Sessie verversen</string>
     <string name="drawer_logout">Log uit</string>
+    <string name="drawer_tools">Tools</string>
 </resources>

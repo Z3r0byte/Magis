@@ -54,6 +54,7 @@ public class LoginTask extends AsyncTask<Void, Void, Magister> {
     public MaterialDialog dialog;
 
     public LoginTask(MagisActivity activity, School school, User user) {
+        Log.d(TAG, "LoginTask() called with: " + "activity = [" + activity + "], school = [" + school + "], user = [" + user + "]");
         this.activity = activity;
         this.school = school;
         this.username = user.username;

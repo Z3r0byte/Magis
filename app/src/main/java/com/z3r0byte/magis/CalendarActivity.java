@@ -17,6 +17,7 @@
 package com.z3r0byte.magis;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
@@ -53,8 +54,8 @@ public class CalendarActivity extends MagisActivity {
 
     Toolbar mToolbar;
     ImageButton mNextButton, mPreviousButton;
-    Date firsDdate;
-    Date lastDate;
+    public Date firstDate;
+    public Date lastDate;
 
     Profile mProfile;
 
@@ -125,6 +126,10 @@ public class CalendarActivity extends MagisActivity {
 
         date = DateUtils.getToday();
 
+        SharedPreferences sharedPreferences = this.getSharedPreferences("data", MODE_PRIVATE);
+        firstDate = DateUtils.parseDate(sharedPreferences.getString("firstDate", ""), "yyyy-MM-dd");
+        lastDate = DateUtils.parseDate(sharedPreferences.getString("lastDate", ""), "yyyy-MM-dd");
+
     }
 
 
@@ -145,9 +150,9 @@ public class CalendarActivity extends MagisActivity {
 
     public void getAppointments() {
         if (mMagister != null) {
-            Date firstdate = DateUtils.addDays(date, -7);
-            Date lastdate = DateUtils.addDays(date, 14);
-            new AppointmentsTask(this, mMagister, firstdate, lastdate).execute();
+            Date from = DateUtils.addDays(date, -7);
+            Date until = DateUtils.addDays(date, 14);
+            new AppointmentsTask(this, mMagister, from, until, 3).execute();
         } else {
             Snackbar.make(coordinatorLayout, R.string.err_invalid_session, Snackbar.LENGTH_SHORT)
                     .setAction(R.string.msg_refresh_session_short, new View.OnClickListener() {
@@ -162,9 +167,15 @@ public class CalendarActivity extends MagisActivity {
 
     private void previousDay() {
         date = DateUtils.addDays(date, -1);
-        mAppointments = new CalendarDB(this).getAppointmentsByDate(date);
-        mAppointmentAdapter = new AppointmentsAdapter(this, mAppointments);
-        listView.setAdapter(mAppointmentAdapter);
+        if (date.before(firstDate)) {
+            Date until = firstDate;
+            Date from = DateUtils.addDays(firstDate, -14);
+            new AppointmentsTask(this, mMagister, from, until, 1).execute();
+        } else {
+            mAppointments = new CalendarDB(this).getAppointmentsByDate(date);
+            mAppointmentAdapter = new AppointmentsAdapter(this, mAppointments);
+            listView.setAdapter(mAppointmentAdapter);
+        }
 
         if (date.toString().substring(0, 10).equals(DateUtils.getToday().toString().substring(0, 10))) {
             mToolbar.setTitle(R.string.msg_today);
@@ -175,9 +186,15 @@ public class CalendarActivity extends MagisActivity {
 
     private void nextDay() {
         date = DateUtils.addDays(date, 1);
-        mAppointments = new CalendarDB(this).getAppointmentsByDate(date);
-        mAppointmentAdapter = new AppointmentsAdapter(this, mAppointments);
-        listView.setAdapter(mAppointmentAdapter);
+        if (date.after(lastDate)) {
+            Date from = date;
+            Date until = DateUtils.addDays(lastDate, 14);
+            new AppointmentsTask(this, mMagister, from, until, 2).execute();
+        } else {
+            mAppointments = new CalendarDB(this).getAppointmentsByDate(date);
+            mAppointmentAdapter = new AppointmentsAdapter(this, mAppointments);
+            listView.setAdapter(mAppointmentAdapter);
+        }
 
         if (date.toString().substring(0, 10).equals(DateUtils.getToday().toString().substring(0, 10))) {
             mToolbar.setTitle(R.string.msg_today);
