@@ -204,6 +204,7 @@ public class LoginFragment extends SlideFragment {
                     return;
                 }
 
+
                 if (!mLoginError) {
                     //Getting sessions
                     try {
@@ -264,7 +265,11 @@ public class LoginFragment extends SlideFragment {
 
 
                 }
-
+                try {
+                    Thread.sleep(5000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 ResetButton();
             }
         }).start();
