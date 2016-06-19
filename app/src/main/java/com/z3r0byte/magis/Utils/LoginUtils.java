@@ -25,9 +25,7 @@ import java.util.Date;
 
 import static java.lang.Math.abs;
 
-/**
- * Created by bas on 24-5-16.
- */
+
 public class LoginUtils {
 
     private static final String TAG = "LoginUtils";

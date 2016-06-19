@@ -16,7 +16,6 @@
 
 package com.z3r0byte.magis;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -137,10 +136,11 @@ public class CalendarActivity extends MagisActivity {
         if (LoginUtils.reLogin(this)) {
             new LoginTask(this, mSchool, mUser).execute();
         } else if (LoginUtils.loginError(this)) {
+            final MagisActivity activity = this;
             Snackbar.make(coordinatorLayout, R.string.snackbar_login_error, Snackbar.LENGTH_INDEFINITE).setAction(R.string.msg_refresh_session_short, new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    startActivity(new Intent(getApplicationContext(), ReLogin.class));
+                    new LoginTask(activity, mSchool, mUser).execute();
                     finish();
                 }
             }).show();

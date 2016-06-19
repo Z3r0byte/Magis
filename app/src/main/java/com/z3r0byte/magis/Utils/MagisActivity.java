@@ -16,7 +16,6 @@
 
 package com.z3r0byte.magis.Utils;
 
-import android.content.Intent;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -26,7 +25,6 @@ import android.widget.ListView;
 
 import com.z3r0byte.magis.Adapters.AppointmentsAdapter;
 import com.z3r0byte.magis.R;
-import com.z3r0byte.magis.ReLogin;
 import com.z3r0byte.magis.Tasks.AppointmentsTask;
 import com.z3r0byte.magis.Tasks.LoginTask;
 
@@ -56,14 +54,14 @@ public class MagisActivity extends AppCompatActivity {
 
     Integer type = 0;
 
-    public void getMagister(MagisActivity activity, School mSchool, User mUser) {
+    public void getMagister(final MagisActivity activity, final School mSchool, final User mUser) {
         if (LoginUtils.reLogin(this)) {
             new LoginTask(activity, mSchool, mUser).execute();
         } else if (LoginUtils.loginError(this)) {
             Snackbar.make(coordinatorLayout, R.string.snackbar_login_error, Snackbar.LENGTH_INDEFINITE).setAction(R.string.msg_refresh_session_short, new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    startActivity(new Intent(getApplicationContext(), ReLogin.class));
+                    new LoginTask(activity, mSchool, mUser).execute();
                     finish();
                 }
             }).show();
