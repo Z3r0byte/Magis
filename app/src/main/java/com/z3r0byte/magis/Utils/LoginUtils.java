@@ -18,18 +18,8 @@ package com.z3r0byte.magis.Utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.support.design.widget.Snackbar;
 import android.util.Log;
-import android.view.View;
 
-import com.z3r0byte.magis.R;
-
-import net.ilexiconn.magister.Magister;
-import net.ilexiconn.magister.container.School;
-import net.ilexiconn.magister.container.User;
-
-import java.io.IOException;
-import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -79,20 +69,5 @@ public class LoginUtils {
 
     public static boolean loginError(Context context) {
         return context.getSharedPreferences("data", Context.MODE_PRIVATE).getBoolean("LoginError", false);
-    }
-
-    public static Magister magisterLogin(final Context c, User user, School school, View view) {
-        Magister magister = null;
-        try {
-            magister = Magister.login(school, user.username, user.password);
-        } catch (IOException e) {
-            e.printStackTrace();
-            Snackbar.make(view, R.string.err_no_connection, Snackbar.LENGTH_LONG);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-        //materialDialog.dismiss();
-        return magister;
     }
 }
