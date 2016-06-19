@@ -121,7 +121,6 @@ public class CalendarDB extends SQLiteOpenHelper {
         for (Appointment item :
                 appointments) {
             Integer id = item.id;
-            Log.d(TAG, "addItems: DAY + ITEMDAY[" + day + "] [" + item.startDateString.substring(0, 10) + "]");
             if (!day.equals(item.startDateString.substring(0, 10))) {
                 deleteAppointmentByDateString(item.startDateString);
             }
@@ -164,7 +163,6 @@ public class CalendarDB extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         String dateStr = date.replaceAll("[T:Z.-]", "").substring(0, 8);
         String Query = "DELETE FROM " + TABLE_CALENDAR + " WHERE " + KEY_FULL_DATE + " LIKE '" + dateStr + "%'";
-        Log.d(TAG, "deleteAppointmentByDateString: Query: " + Query);
         db.execSQL(Query);
     }
     
