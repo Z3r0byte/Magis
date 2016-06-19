@@ -82,28 +82,6 @@ public class LoginUtils {
     }
 
     public static Magister magisterLogin(final Context c, User user, School school, View view) {
-        /*MaterialDialog materialDialog = new MaterialDialog.Builder(c)
-                .content(R.string.msg_logging_in)
-                .progress(true, 0)
-                .show();
-
-        .negativeText(android.R.string.cancel)
-                .onNegative(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        new MaterialDialog.Builder(c)
-                                .title(R.string.dialog_skip_login_title)
-                                .content(R.string.dialog_skip_login_desc)
-                                .positiveText(android.R.string.ok)
-                                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                                    @Override
-                                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                        LoginUtils.loginError(c, true);
-                                    }
-                                })
-                                .show();
-                    }
-                })*/
         Magister magister = null;
         try {
             magister = Magister.login(school, user.username, user.password);
