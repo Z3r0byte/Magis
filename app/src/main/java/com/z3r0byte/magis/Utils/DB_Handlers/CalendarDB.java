@@ -35,9 +35,6 @@ import net.ilexiconn.magister.container.sub.Teacher;
 import java.util.Date;
 
 
-/**
- * Created by bas on 31-5-16.
- */
 public class CalendarDB extends SQLiteOpenHelper {
 
     private static final String TAG = "CalendarDB";
@@ -130,47 +127,25 @@ public class CalendarDB extends SQLiteOpenHelper {
             }
             day = item.startDateString.substring(0, 10);
 
-            if (!CheckInDB(TABLE_CALENDAR, KEY_CALENDAR_ID, id.toString())) {
-                contentValues.put(KEY_CALENDAR_ID, id);
-                contentValues.put(KEY_DESC, item.description);
-                contentValues.put(KEY_CLASS_ROOMS, new Gson().toJson(item.classrooms));
-                contentValues.put(KEY_CONTENT, item.content);
-                contentValues.put(KEY_END, item.endDateString);
-                contentValues.put(KEY_FINISHED, item.finished);
-                contentValues.put(KEY_FULL_DATE, item.startDateString.replaceAll("[T:Z.-]", ""));
-                contentValues.put(KEY_LINKS, new Gson().toJson(item.links));
-                contentValues.put(KEY_LOCATION, item.location);
-                contentValues.put(KEY_PERIOD_FROM, item.periodFrom);
-                contentValues.put(KEY_PERIOD_TO, item.periodUpToAndIncluding);
-                contentValues.put(KEY_START, item.startDateString);
-                contentValues.put(KEY_STATE, item.classState);
-                contentValues.put(KEY_SUBJECTS, new Gson().toJson(item.subjects));
-                contentValues.put(KEY_TEACHER, new Gson().toJson(item.teachers));
-                contentValues.put(KEY_TAKES_ALL_DAY, item.takesAllDay);
+            contentValues.put(KEY_CALENDAR_ID, id);
+            contentValues.put(KEY_DESC, item.description);
+            contentValues.put(KEY_CLASS_ROOMS, new Gson().toJson(item.classrooms));
+            contentValues.put(KEY_CONTENT, item.content);
+            contentValues.put(KEY_END, item.endDateString);
+            contentValues.put(KEY_FINISHED, item.finished);
+            contentValues.put(KEY_FULL_DATE, item.startDateString.replaceAll("[T:Z.-]", ""));
+            contentValues.put(KEY_LINKS, new Gson().toJson(item.links));
+            contentValues.put(KEY_LOCATION, item.location);
+            contentValues.put(KEY_PERIOD_FROM, item.periodFrom);
+            contentValues.put(KEY_PERIOD_TO, item.periodUpToAndIncluding);
+            contentValues.put(KEY_START, item.startDateString);
+            contentValues.put(KEY_STATE, item.classState);
+            contentValues.put(KEY_SUBJECTS, new Gson().toJson(item.subjects));
+            contentValues.put(KEY_TEACHER, new Gson().toJson(item.teachers));
+            contentValues.put(KEY_TAKES_ALL_DAY, item.takesAllDay);
 
 
-                db.insert(TABLE_CALENDAR, null, contentValues);
-            } else {
-                contentValues.put(KEY_CALENDAR_ID, id);
-                contentValues.put(KEY_DESC, item.description);
-                contentValues.put(KEY_CLASS_ROOMS, new Gson().toJson(item.classrooms));
-                contentValues.put(KEY_CONTENT, item.content);
-                contentValues.put(KEY_END, item.endDateString);
-                contentValues.put(KEY_FINISHED, item.finished);
-                contentValues.put(KEY_FULL_DATE, item.startDateString.replaceAll("[T:Z.-]", ""));
-                contentValues.put(KEY_LINKS, new Gson().toJson(item.links));
-                contentValues.put(KEY_LOCATION, item.location);
-                contentValues.put(KEY_PERIOD_FROM, item.periodFrom);
-                contentValues.put(KEY_PERIOD_TO, item.periodUpToAndIncluding);
-                contentValues.put(KEY_START, item.startDateString);
-                contentValues.put(KEY_STATE, item.classState);
-                contentValues.put(KEY_SUBJECTS, new Gson().toJson(item.subjects));
-                contentValues.put(KEY_TEACHER, new Gson().toJson(item.teachers));
-                contentValues.put(KEY_TAKES_ALL_DAY, item.takesAllDay);
-
-                db.update(TABLE_CALENDAR, contentValues, KEY_CALENDAR_ID + "=" + id, null);
-            }
-
+            db.insert(TABLE_CALENDAR, null, contentValues);
 
         }
 
