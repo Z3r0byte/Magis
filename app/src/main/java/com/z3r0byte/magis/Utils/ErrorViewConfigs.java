@@ -27,4 +27,10 @@ public class ErrorViewConfigs {
             .subtitle(null)
             .retryVisible(false)
             .build();
+
+    public static ErrorView.Config NoCacheConfig = ErrorView.Config.create()
+            .title("Geen cache")
+            .subtitle("Er is geen cache beschikbaar")
+            .retryVisible(false)
+            .build();
 }

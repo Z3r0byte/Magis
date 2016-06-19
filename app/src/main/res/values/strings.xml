@@ -58,6 +58,7 @@
     <string name="msg_logging_in">Inloggen...</string>
     <string name="msg_logged_in">Ingelogd</string>
     <string name="msg_today">Vandaag</string>
+    <string name="msg_using_cache">Cache wordt gebruikt.</string>
     <string name="msg_login_progress_1">Stap 1/2: oude sessie verwijderen...</string>
     <string name="msg_login_progress_2">Stap 2/2: opnieuw inloggen...</string>
     <string name="msg_refresh_session_short">Opn proberen</string>

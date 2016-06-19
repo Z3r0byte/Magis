@@ -132,11 +132,24 @@ public class AppointmentsTask extends AsyncTask<Void, Void, Appointment[]> {
             activity.mAppointmentAdapter = new AppointmentsAdapter(activity, activity.mAppointments);
             activity.listView.setAdapter(activity.mAppointmentAdapter);
         } else {
-            appointments = new Appointment[1];
+            CalendarActivity activity1 = (CalendarActivity) activity;
+
+            CalendarDB db = new CalendarDB(activity);
+            appointments = db.getAppointmentsByDate(activity.date);
             activity.mAppointments = appointments;
+            activity.mAppointmentAdapter = new AppointmentsAdapter(activity, activity.mAppointments);
+            activity.listView.setAdapter(activity.mAppointmentAdapter);
+
+            if (date1.before(activity1.firstDate) || date2.after(activity1.lastDate)) {
+                activity.errorView.setConfig(ErrorViewConfigs.NoCacheConfig);
+                activity.errorView.setVisibility(View.VISIBLE);
+            } else {
+                activity.errorView.setVisibility(View.GONE);
+            }
+
             activity.mSwipeRefreshLayout.setRefreshing(false);
             Log.e(TAG, error);
-            Snackbar.make(activity.getCurrentFocus(), error, Snackbar.LENGTH_LONG).show();
+            Snackbar.make(activity.coordinatorLayout, error + " " + activity.getString(R.string.msg_using_cache), Snackbar.LENGTH_LONG).show();
         }
     }
 }

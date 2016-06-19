@@ -20,14 +20,21 @@ import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.util.Log;
+import android.view.View;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.z3r0byte.magis.Adapters.AppointmentsAdapter;
+import com.z3r0byte.magis.CalendarActivity;
 import com.z3r0byte.magis.R;
+import com.z3r0byte.magis.Utils.DB_Handlers.CalendarDB;
+import com.z3r0byte.magis.Utils.DateUtils;
+import com.z3r0byte.magis.Utils.ErrorViewConfigs;
 import com.z3r0byte.magis.Utils.LoginUtils;
 import com.z3r0byte.magis.Utils.MagisActivity;
 
 import net.ilexiconn.magister.Magister;
+import net.ilexiconn.magister.container.Appointment;
 import net.ilexiconn.magister.container.School;
 import net.ilexiconn.magister.container.User;
 import net.ilexiconn.magister.util.HttpUtil;
@@ -36,6 +43,7 @@ import net.ilexiconn.magister.util.SchoolUrl;
 import java.io.IOException;
 import java.security.InvalidParameterException;
 import java.text.ParseException;
+import java.util.Date;
 
 /**
  * Created by bas on 6-6-16.
@@ -102,15 +110,38 @@ public class LoginTask extends AsyncTask<Void, Void, Magister> {
 
     @Override
     protected void onPostExecute(Magister magister) {
+        CalendarActivity activity1 = (CalendarActivity) activity;
         if (magister != null) {
             activity.mMagister = magister;
             activity.retrieveData(activity);
             LoginUtils.loginError(activity, false);
-            Snackbar.make(activity.getCurrentFocus(), "Ingelogd", Snackbar.LENGTH_LONG).show();
+            Snackbar.make(activity.coordinatorLayout, activity1.getString(R.string.msg_logged_in), Snackbar.LENGTH_LONG).show();
         } else {
+            CalendarDB db = new CalendarDB(activity);
+            Appointment[] appointments = db.getAppointmentsByDate(activity.date);
+            activity.mAppointments = appointments;
+            activity.mAppointmentAdapter = new AppointmentsAdapter(activity, activity.mAppointments);
+            activity.listView.setAdapter(activity.mAppointmentAdapter);
+
+            if (appointments.length == 0) {
+                activity.errorView.setVisibility(View.VISIBLE);
+                activity.errorView.setConfig(ErrorViewConfigs.NoLessonConfig);
+            } else {
+                activity.errorView.setVisibility(View.GONE);
+            }
+
+
+            Date date1 = DateUtils.addDays(DateUtils.getToday(), -7);
+            Date date2 = DateUtils.addDays(DateUtils.getToday(), 14);
+
+            if (date1.before(activity1.firstDate) || date2.after(activity1.lastDate)) {
+                activity.errorView.setConfig(ErrorViewConfigs.NoCacheConfig);
+                activity.errorView.setVisibility(View.VISIBLE);
+            }
+            
             LoginUtils.loginError(activity, true);
             Log.e(TAG, error);
-            Snackbar.make(activity.getCurrentFocus(), error, Snackbar.LENGTH_LONG).show();
+            Snackbar.make(activity.coordinatorLayout, error + " " + activity1.getString(R.string.msg_using_cache), Snackbar.LENGTH_LONG).show();
         }
         dialog.dismiss();
     }

@@ -174,7 +174,19 @@ public class CalendarActivity extends MagisActivity {
         if (date.before(firstDate)) {
             Date until = firstDate;
             Date from = DateUtils.addDays(firstDate, -14);
-            new AppointmentsTask(this, mMagister, from, until, 1).execute();
+            if (mMagister != null) {
+                new AppointmentsTask(this, mMagister, from, until, 1).execute();
+            } else {
+                Snackbar.make(coordinatorLayout, R.string.err_invalid_session, Snackbar.LENGTH_SHORT)
+                        .setAction(R.string.msg_refresh_session_short, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                getMagister();
+                            }
+                        }).show();
+                date = DateUtils.addDays(date, 1);
+            }
+
         } else {
             mAppointments = new CalendarDB(this).getAppointmentsByDate(date);
 
@@ -201,7 +213,18 @@ public class CalendarActivity extends MagisActivity {
         if (date.after(lastDate)) {
             Date from = date;
             Date until = DateUtils.addDays(lastDate, 14);
-            new AppointmentsTask(this, mMagister, from, until, 2).execute();
+            if (mMagister != null) {
+                new AppointmentsTask(this, mMagister, from, until, 2).execute();
+            } else {
+                Snackbar.make(coordinatorLayout, R.string.err_invalid_session, Snackbar.LENGTH_SHORT)
+                        .setAction(R.string.msg_refresh_session_short, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                getMagister();
+                            }
+                        }).show();
+                date = DateUtils.addDays(date, -1);
+            }
         } else {
             mAppointments = new CalendarDB(this).getAppointmentsByDate(date);
 
