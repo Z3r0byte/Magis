@@ -35,6 +35,8 @@ import net.ilexiconn.magister.container.User;
 
 import java.util.Date;
 
+import tr.xip.errorview.ErrorView;
+
 /**
  * Created by bas on 7-6-16.
  */
@@ -48,6 +50,7 @@ public class MagisActivity extends AppCompatActivity {
     public CoordinatorLayout coordinatorLayout;
     public AppointmentsAdapter mAppointmentAdapter;
     public ListView listView;
+    public ErrorView errorView;
 
     public Date date;
 

@@ -38,6 +38,7 @@ import com.z3r0byte.magis.Tasks.AppointmentsTask;
 import com.z3r0byte.magis.Tasks.LoginTask;
 import com.z3r0byte.magis.Utils.DB_Handlers.CalendarDB;
 import com.z3r0byte.magis.Utils.DateUtils;
+import com.z3r0byte.magis.Utils.ErrorViewConfigs;
 import com.z3r0byte.magis.Utils.LoginUtils;
 import com.z3r0byte.magis.Utils.MagisActivity;
 
@@ -46,6 +47,8 @@ import net.ilexiconn.magister.container.School;
 import net.ilexiconn.magister.container.User;
 
 import java.util.Date;
+
+import tr.xip.errorview.ErrorView;
 
 public class CalendarActivity extends MagisActivity {
     private static final String TAG = "CalendarActivity";
@@ -67,12 +70,11 @@ public class CalendarActivity extends MagisActivity {
         setContentView(R.layout.activity_calendar);
 
         coordinatorLayout = (CoordinatorLayout) findViewById(R.id.layout_calendar);
-
-
         listView = (ListView) findViewById(R.id.list_calendar);
-
+        errorView = (ErrorView) findViewById(R.id.error_view_calendar);
         mNextButton = (ImageButton) findViewById(R.id.button_next_day);
         mPreviousButton = (ImageButton) findViewById(R.id.button_previous_day);
+
         mNextButton.setImageDrawable(new IconicsDrawable(this).icon(GoogleMaterial.Icon.gmd_arrow_forward)
                 .color(Color.WHITE).sizeDp(24));
         mPreviousButton.setImageDrawable(new IconicsDrawable(this).icon(GoogleMaterial.Icon.gmd_arrow_back)
@@ -104,6 +106,8 @@ public class CalendarActivity extends MagisActivity {
                     }
                 }
         );
+
+        errorView.setVisibility(View.GONE);
 
         new Gson().toJson(mMagister);
         mToolbar = (Toolbar) findViewById(R.id.Toolbar);
@@ -173,6 +177,14 @@ public class CalendarActivity extends MagisActivity {
             new AppointmentsTask(this, mMagister, from, until, 1).execute();
         } else {
             mAppointments = new CalendarDB(this).getAppointmentsByDate(date);
+
+            if (mAppointments.length == 0) {
+                errorView.setVisibility(View.VISIBLE);
+                errorView.setConfig(ErrorViewConfigs.NoLessonConfig);
+            } else {
+                errorView.setVisibility(View.GONE);
+            }
+
             mAppointmentAdapter = new AppointmentsAdapter(this, mAppointments);
             listView.setAdapter(mAppointmentAdapter);
         }
@@ -192,6 +204,14 @@ public class CalendarActivity extends MagisActivity {
             new AppointmentsTask(this, mMagister, from, until, 2).execute();
         } else {
             mAppointments = new CalendarDB(this).getAppointmentsByDate(date);
+
+            if (mAppointments.length == 0) {
+                errorView.setVisibility(View.VISIBLE);
+                errorView.setConfig(ErrorViewConfigs.NoLessonConfig);
+            } else {
+                errorView.setVisibility(View.GONE);
+            }
+
             mAppointmentAdapter = new AppointmentsAdapter(this, mAppointments);
             listView.setAdapter(mAppointmentAdapter);
         }

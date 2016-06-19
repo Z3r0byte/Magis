@@ -29,6 +29,21 @@
         app:theme="@style/ToolBarStyle" />
 
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="48dp"
+        android:layout_marginTop="75dp">
+
+        <tr.xip.errorview.ErrorView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/error_view_calendar"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center" />
+    </RelativeLayout>
+
+
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/layout_refresh"
         android:layout_below="@+id/Toolbar"
@@ -72,6 +87,8 @@
             android:layout_alignParentTop="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true" />
+
+
     </RelativeLayout>
 
 

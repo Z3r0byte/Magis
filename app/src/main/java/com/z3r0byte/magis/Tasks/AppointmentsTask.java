@@ -21,12 +21,14 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.support.design.widget.Snackbar;
 import android.util.Log;
+import android.view.View;
 
 import com.z3r0byte.magis.Adapters.AppointmentsAdapter;
 import com.z3r0byte.magis.CalendarActivity;
 import com.z3r0byte.magis.R;
 import com.z3r0byte.magis.Utils.DB_Handlers.CalendarDB;
 import com.z3r0byte.magis.Utils.DateUtils;
+import com.z3r0byte.magis.Utils.ErrorViewConfigs;
 import com.z3r0byte.magis.Utils.MagisActivity;
 
 import net.ilexiconn.magister.Magister;
@@ -114,6 +116,16 @@ public class AppointmentsTask extends AsyncTask<Void, Void, Appointment[]> {
             } else if (whatToSave == 2) {
                 activity1.lastDate = date2;
                 editor.putString("lastDate", DateUtils.formatDate(date2, "yyyy-MM-dd")).apply();
+            }
+
+            if (appointments.length == 0) {
+                Log.i(TAG, "onPostExecute: No appointments!");
+                Log.d(TAG, "onPostExecute: Zichtbaarheid:" + activity.errorView.getVisibility());
+                activity.errorView.setVisibility(View.VISIBLE);
+                activity.errorView.setConfig(ErrorViewConfigs.NoLessonConfig);
+                Log.d(TAG, "onPostExecute: Zichtbaarheid:" + activity.errorView.getVisibility());
+            } else {
+                activity.errorView.setVisibility(View.GONE);
             }
 
             //refreshing adapter
