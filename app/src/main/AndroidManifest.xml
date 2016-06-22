@@ -35,8 +35,11 @@
         </activity>
         <activity
             android:name=".SetupActivity"
-            android:theme="@style/Theme.Intro" />
-        <activity android:name=".CalendarActivity" />
+            android:theme="@style/Theme.Intro"
+            android:configChanges="keyboardHidden|orientation|screenSize" />
+        <activity
+            android:name=".CalendarActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize" />
     </application>
 
 </manifest>
