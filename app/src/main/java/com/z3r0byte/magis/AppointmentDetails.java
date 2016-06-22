@@ -18,12 +18,44 @@ package com.z3r0byte.magis;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.widget.Toast;
+
+import com.google.gson.Gson;
+import com.z3r0byte.magis.GUI.HeaderCard;
+
+import net.ilexiconn.magister.container.Appointment;
+
+import it.gmariotti.cardslib.library.internal.CardHeader;
+import it.gmariotti.cardslib.library.view.CardViewNative;
 
 public class AppointmentDetails extends AppCompatActivity {
+    private static final String TAG = "AppointmentDetails";
+
+    Appointment appointment;
+    CardViewNative cardMain;
+    CardViewNative cardHomeWork;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_appointment_details);
+
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            appointment = new Gson().fromJson(extras.getString("Appointment"), Appointment.class);
+        } else {
+            Log.e(TAG, "onCreate: Impossible to show details of a null Appointment!", new IllegalArgumentException());
+            Toast.makeText(AppointmentDetails.this, R.string.err_unknown, Toast.LENGTH_SHORT).show();
+            finish();
+        }
+
+        HeaderCard mainCardContent = new HeaderCard(this);
+        CardHeader cardHeader = new CardHeader(this);
+        cardHeader.setTitle(getString(R.string.msg_details));
+        mainCardContent.setDescription(appointment.description);
+        mainCardContent.addCardHeader(cardHeader);
+        cardMain = (CardViewNative) findViewById(R.id.card_main_details);
+        cardMain.setCard(mainCardContent);
     }
 }

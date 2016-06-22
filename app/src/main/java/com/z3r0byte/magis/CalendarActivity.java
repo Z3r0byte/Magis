@@ -16,6 +16,7 @@
 
 package com.z3r0byte.magis;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -25,6 +26,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -108,6 +110,13 @@ public class CalendarActivity extends MagisActivity {
         );
 
         errorView.setVisibility(View.GONE);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                showDetails(i);
+            }
+        });
 
         new Gson().toJson(mMagister);
         mToolbar = (Toolbar) findViewById(R.id.Toolbar);
@@ -244,6 +253,12 @@ public class CalendarActivity extends MagisActivity {
         } else {
             mToolbar.setTitle(DateUtils.formatDate(date, "EEEE dd MMM"));
         }
+    }
+
+    private void showDetails(int i) {
+        Intent intent = new Intent(this, AppointmentDetails.class);
+        intent.putExtra("Appointment", new Gson().toJson(mAppointments[i]));
+        startActivity(intent);
     }
 
     @Override
