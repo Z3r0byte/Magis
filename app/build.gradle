@@ -59,4 +59,5 @@ dependencies {
     }
 
     compile 'com.github.xiprox.errorview:library:2.+'
+    compile 'com.github.gabrielemariotti.cards:cardslib-core:2.1.0'
 }
