@@ -79,6 +79,9 @@ public class LoginTask extends AsyncTask<Void, Void, Magister> {
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        useCache();
+                        checkCahce((CalendarActivity) activity);
+                        Snackbar.make(activity.coordinatorLayout, activity.getString(R.string.msg_using_cache), Snackbar.LENGTH_LONG).show();
                         cancel(true);
                     }
                 })
@@ -117,32 +120,38 @@ public class LoginTask extends AsyncTask<Void, Void, Magister> {
             LoginUtils.loginError(activity, false);
             Snackbar.make(activity.coordinatorLayout, activity1.getString(R.string.msg_logged_in), Snackbar.LENGTH_LONG).show();
         } else {
-            CalendarDB db = new CalendarDB(activity);
-            Appointment[] appointments = db.getAppointmentsByDate(activity.date);
-            activity.mAppointments = appointments;
-            activity.mAppointmentAdapter = new AppointmentsAdapter(activity, activity.mAppointments);
-            activity.listView.setAdapter(activity.mAppointmentAdapter);
-
-            if (appointments.length == 0) {
-                activity.errorView.setVisibility(View.VISIBLE);
-                activity.errorView.setConfig(ErrorViewConfigs.NoLessonConfig);
-            } else {
-                activity.errorView.setVisibility(View.GONE);
-            }
-
-
-            Date date1 = DateUtils.addDays(DateUtils.getToday(), -7);
-            Date date2 = DateUtils.addDays(DateUtils.getToday(), 14);
-
-            if (date1.before(activity1.firstDate) || date2.after(activity1.lastDate)) {
-                activity.errorView.setConfig(ErrorViewConfigs.NoCacheConfig);
-                activity.errorView.setVisibility(View.VISIBLE);
-            }
+            useCache();
+            checkCahce(activity1);
             
             LoginUtils.loginError(activity, true);
             Log.e(TAG, error);
             Snackbar.make(activity.coordinatorLayout, error + " " + activity1.getString(R.string.msg_using_cache), Snackbar.LENGTH_LONG).show();
         }
         dialog.dismiss();
+    }
+
+    private void useCache() {
+        CalendarDB db = new CalendarDB(activity);
+        Appointment[] appointments = db.getAppointmentsByDate(activity.date);
+        activity.mAppointments = appointments;
+        activity.mAppointmentAdapter = new AppointmentsAdapter(activity, activity.mAppointments);
+        activity.listView.setAdapter(activity.mAppointmentAdapter);
+
+        if (appointments.length == 0) {
+            activity.errorView.setVisibility(View.VISIBLE);
+            activity.errorView.setConfig(ErrorViewConfigs.NoLessonConfig);
+        } else {
+            activity.errorView.setVisibility(View.GONE);
+        }
+    }
+
+    private void checkCahce(CalendarActivity activity1) {
+        Date date1 = DateUtils.addDays(DateUtils.getToday(), -7);
+        Date date2 = DateUtils.addDays(DateUtils.getToday(), 14);
+
+        if (date1.before(activity1.firstDate) || date2.after(activity1.lastDate)) {
+            activity.errorView.setConfig(ErrorViewConfigs.NoCacheConfig);
+            activity.errorView.setVisibility(View.VISIBLE);
+        }
     }
 }
