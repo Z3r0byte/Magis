@@ -24,7 +24,7 @@ public class ErrorViewConfigs {
 
     public static ErrorView.Config NoLessonConfig = ErrorView.Config.create()
             .title("Geen lessen")
-            .subtitle(null)
+            .subtitle("")
             .retryVisible(false)
             .build();
 
