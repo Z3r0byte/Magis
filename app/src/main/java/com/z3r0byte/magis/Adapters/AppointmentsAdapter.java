@@ -24,10 +24,13 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.mikepenz.google_material_typeface_library.GoogleMaterial;
+import com.mikepenz.iconics.IconicsDrawable;
 import com.z3r0byte.magis.R;
 import com.z3r0byte.magis.Utils.DateUtils;
 
 import net.ilexiconn.magister.container.Appointment;
+import net.ilexiconn.magister.container.type.InfoType;
 
 /**
  * Created by bas on 7-6-16.
@@ -65,7 +68,42 @@ public class AppointmentsAdapter extends ArrayAdapter<Appointment> {
         time.setText(DateUtils.formatDate(DateUtils.addHours(appointments[position].startDate, 2), "HH:mm") + " - "
                 + DateUtils.formatDate(DateUtils.addHours(appointments[position].endDate, 2), "HH:mm"));
 
-        homework.setImageDrawable(null);
+
+        InfoType infoType = appointments[position].infoType;
+        int type = infoType.getID();
+        switch (type) {
+            case 1:
+                IconicsDrawable drawable1 = new IconicsDrawable(context, GoogleMaterial.Icon.gmd_assignment);
+                homework.setImageDrawable(drawable1);
+                break;
+            case 2:
+                IconicsDrawable drawable2 = new IconicsDrawable(context, GoogleMaterial.Icon.gmd_class);
+                homework.setImageDrawable(drawable2);
+                break;
+            case 3:
+                IconicsDrawable drawable3 = new IconicsDrawable(context, GoogleMaterial.Icon.gmd_class);
+                homework.setImageDrawable(drawable3);
+                break;
+            case 4:
+                IconicsDrawable drawable4 = new IconicsDrawable(context, GoogleMaterial.Icon.gmd_class);
+                homework.setImageDrawable(drawable4);
+                break;
+            case 5:
+                IconicsDrawable drawable5 = new IconicsDrawable(context, GoogleMaterial.Icon.gmd_question_answer);
+                homework.setImageDrawable(drawable5);
+                break;
+            case 6:
+                IconicsDrawable drawable6 = new IconicsDrawable(context, GoogleMaterial.Icon.gmd_info);
+                homework.setImageDrawable(drawable6);
+                break;
+            case 7:
+                IconicsDrawable drawable7 = new IconicsDrawable(context, GoogleMaterial.Icon.gmd_announcement);
+                homework.setImageDrawable(drawable7);
+                break;
+            default:
+                homework.setImageDrawable(null);
+                break;
+        }
 
 
 

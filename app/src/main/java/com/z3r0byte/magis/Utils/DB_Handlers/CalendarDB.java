@@ -31,6 +31,7 @@ import net.ilexiconn.magister.container.sub.Classroom;
 import net.ilexiconn.magister.container.sub.Link;
 import net.ilexiconn.magister.container.sub.SubSubject;
 import net.ilexiconn.magister.container.sub.Teacher;
+import net.ilexiconn.magister.container.type.InfoType;
 
 import java.util.Date;
 
@@ -133,6 +134,7 @@ public class CalendarDB extends SQLiteOpenHelper {
             contentValues.put(KEY_END, item.endDateString);
             contentValues.put(KEY_FINISHED, item.finished);
             contentValues.put(KEY_FULL_DATE, item.startDateString.replaceAll("[T:Z.-]", ""));
+            contentValues.put(KEY_INFO_TYPE, item.infoType.getID());
             contentValues.put(KEY_LINKS, new Gson().toJson(item.links));
             contentValues.put(KEY_LOCATION, item.location);
             contentValues.put(KEY_PERIOD_FROM, item.periodFrom);
@@ -186,6 +188,7 @@ public class CalendarDB extends SQLiteOpenHelper {
                     appointment.content = cursor.getString(cursor.getColumnIndex(KEY_CONTENT));
                     appointment.endDate = DateUtils.parseDate(cursor.getString(cursor.getColumnIndex(KEY_END)), "yyyy-MM-dd'T'HH:mm:ss.0000000'Z'");
                     appointment.finished = cursor.getInt(cursor.getColumnIndex(KEY_FINISHED)) > 0;
+                    appointment.infoType = InfoType.getTypeById(cursor.getInt(cursor.getColumnIndex(KEY_INFO_TYPE)));
                     appointment.links = gson.fromJson(cursor.getString(cursor.getColumnIndex(KEY_LINKS)), Link[].class);
                     appointment.location = cursor.getString(cursor.getColumnIndex(KEY_LOCATION));
                     appointment.periodFrom = cursor.getInt(cursor.getColumnIndex(KEY_PERIOD_FROM));
