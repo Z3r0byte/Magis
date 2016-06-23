@@ -56,6 +56,10 @@ public class AppointmentsAdapter extends ArrayAdapter<Appointment> {
 
 
         period.setText(appointments[position].periodFrom + "");
+        if (appointments[position].periodFrom == 0) {
+            period.setText("");
+            rowView.findViewById(R.id.layout_list_calendar_period).setBackgroundResource(0);
+        }
         lesson.setText(appointments[position].description);
         classroom.setText(appointments[position].location);
         time.setText(DateUtils.formatDate(DateUtils.addHours(appointments[position].startDate, 2), "HH:mm") + " - "
