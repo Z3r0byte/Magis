@@ -14,15 +14,17 @@
  * limitations under the License.
  */
 
-package com.z3r0byte.magis;
+package com.z3r0byte.magis.DetailActivity;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
-import com.z3r0byte.magis.GUI.HeaderCard;
+import com.z3r0byte.magis.GUI.AppointmentDetailCard;
+import com.z3r0byte.magis.R;
 
 import net.ilexiconn.magister.container.Appointment;
 
@@ -50,10 +52,14 @@ public class AppointmentDetails extends AppCompatActivity {
             finish();
         }
 
-        HeaderCard mainCardContent = new HeaderCard(this);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.Toolbar);
+        toolbar.setTitle(appointment.description);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        AppointmentDetailCard mainCardContent = new AppointmentDetailCard(this);
         CardHeader cardHeader = new CardHeader(this);
         cardHeader.setTitle(getString(R.string.msg_details));
-        mainCardContent.setDescription(appointment.description);
         mainCardContent.addCardHeader(cardHeader);
         cardMain = (CardViewNative) findViewById(R.id.card_main_details);
         cardMain.setCard(mainCardContent);

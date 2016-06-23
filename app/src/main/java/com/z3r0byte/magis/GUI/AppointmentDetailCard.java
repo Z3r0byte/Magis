@@ -27,17 +27,18 @@ import com.z3r0byte.magis.R;
 import it.gmariotti.cardslib.library.internal.Card;
 
 
-public class HeaderCard extends Card {
-    private static final String TAG = "HeaderCard";
+public class AppointmentDetailCard extends Card {
+    private static final String TAG = "AppointmentDetailCard";
+
     TextView contentTextView;
 
     Boolean ready = false;
 
-    public HeaderCard(Context context) {
-        this(context, R.layout.card_simple_inner_layout);
+    public AppointmentDetailCard(Context context) {
+        this(context, R.layout.card_simple_appointments_details_layout);
     }
 
-    public HeaderCard(Context context, int innerLayout) {
+    public AppointmentDetailCard(Context context, int innerLayout) {
         super(context, innerLayout);
         init();
     }
@@ -51,7 +52,6 @@ public class HeaderCard extends Card {
             public void run() {
                 while (ready != true) {
                 }
-                contentTextView.setText(content);
             }
         }).start();
     }
@@ -99,7 +99,6 @@ public class HeaderCard extends Card {
 
     @Override
     public void setupInnerViewElements(ViewGroup parent, View view) {
-        contentTextView = (TextView) parent.findViewById(R.id.card_simple_title);
         ready = true;
         Log.d(TAG, "setupInnerViewElements: Done setting up");
     }

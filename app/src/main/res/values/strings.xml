@@ -64,6 +64,12 @@
     <string name="msg_refresh_session_short">Opn proberen</string>
     <string name="msg_patience">Even geduld aub</string>
     <string name="msg_details">Details</string>
+    <string name="msg_description">Beschrijving</string>
+    <string name="msg_period">Lesuur</string>
+    <string name="msg_location">Lokatie</string>
+    <string name="msg_teacher">Docent</string>
+    <string name="msg_homework">Huiswerk</string>
+    <string name="msg_duration">Duur</string>
     <string name="err_invalid_session">Ongeldige sessie...</string>
     <string name="dialog_skip_login_title">Inloggen overslaan?</string>
     <string name="dialog_skip_login_desc">Als je het inloggen overslaat, kun je alleen de offline data gebruiken
