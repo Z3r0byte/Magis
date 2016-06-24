@@ -25,6 +25,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.z3r0byte.magis.GUI.AppointmentDetailCard;
 import com.z3r0byte.magis.R;
+import com.z3r0byte.magis.Utils.DateUtils;
 
 import net.ilexiconn.magister.container.Appointment;
 
@@ -60,6 +61,12 @@ public class AppointmentDetails extends AppCompatActivity {
         AppointmentDetailCard mainCardContent = new AppointmentDetailCard(this);
         CardHeader cardHeader = new CardHeader(this);
         cardHeader.setTitle(getString(R.string.msg_details));
+        mainCardContent.setDescription(this, appointment.description);
+        mainCardContent.setLocation(this, appointment.location);
+        mainCardContent.setPeriod(this, appointment.periodFrom + "");
+        mainCardContent.setTeacher(this, appointment.teachers[0].name);
+        mainCardContent.setTime(this, DateUtils.formatDate(DateUtils.addHours(appointment.startDate, 2), "HH:mm") + " - "
+                + DateUtils.formatDate(DateUtils.addHours(appointment.endDate, 2), "HH:mm"));
         mainCardContent.addCardHeader(cardHeader);
         cardMain = (CardViewNative) findViewById(R.id.card_main_details);
         cardMain.setCard(mainCardContent);
