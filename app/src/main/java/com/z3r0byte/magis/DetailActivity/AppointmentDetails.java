@@ -19,15 +19,19 @@ package com.z3r0byte.magis.DetailActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.z3r0byte.magis.GUI.AppointmentContentCard;
 import com.z3r0byte.magis.GUI.AppointmentDetailCard;
 import com.z3r0byte.magis.R;
 import com.z3r0byte.magis.Utils.DateUtils;
 
 import net.ilexiconn.magister.container.Appointment;
+import net.ilexiconn.magister.container.type.InfoType;
 
 import it.gmariotti.cardslib.library.internal.CardHeader;
 import it.gmariotti.cardslib.library.view.CardViewNative;
@@ -70,5 +74,51 @@ public class AppointmentDetails extends AppCompatActivity {
         mainCardContent.addCardHeader(cardHeader);
         cardMain = (CardViewNative) findViewById(R.id.card_main_details);
         cardMain.setCard(mainCardContent);
+
+
+        cardHomeWork = (CardViewNative) findViewById(R.id.card_content);
+        if (appointment.infoType.getID() != 0 && !appointment.content.isEmpty()) {
+            String Type;
+
+            InfoType infoType = appointment.infoType;
+            int type = infoType.getID();
+            switch (type) {
+                case 1:
+                    Type = getString(R.string.msg_homework);
+                    break;
+                case 2:
+                    Type = getString(R.string.msg_test);
+                    break;
+                case 3:
+                    Type = getString(R.string.msg_exam);
+                    break;
+                case 4:
+                    Type = getString(R.string.msg_quiz);
+                    break;
+                case 5:
+                    Type = getString(R.string.msg_oral);
+                    break;
+                case 6:
+                    Type = getString(R.string.msg_info);
+                    break;
+                case 7:
+                    Type = getString(R.string.msg_annotation);
+                    break;
+                default:
+                    Type = getString(R.string.msg_homework);
+                    break;
+            }
+
+            AppointmentContentCard contentCard = new AppointmentContentCard(this);
+            CardHeader cardHeader2 = new CardHeader(this);
+            Log.d(TAG, "onCreate: Type: " + Type);
+            cardHeader2.setTitle(Type);
+            contentCard.addCardHeader(cardHeader2);
+            contentCard.setContent(Html.fromHtml(appointment.content).toString());
+
+            cardHomeWork.setCard(contentCard);
+        } else {
+            cardHomeWork.setVisibility(View.GONE);
+        }
     }
 }

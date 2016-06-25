@@ -70,6 +70,13 @@
     <string name="msg_teacher">Docent</string>
     <string name="msg_homework">Huiswerk</string>
     <string name="msg_duration">Duur</string>
+    <string name="msg_quiz">SO</string>
+    <string name="msg_test">Proefwerk</string>
+    <string name="msg_oral">Mondeling</string>
+    <string name="msg_exam">Examen</string>
+    <string name="msg_info">Informatie</string>
+    <string name="msg_annotation">Aantekening</string>
+    <string name="msg_finish">Afronden</string>
     <string name="err_invalid_session">Ongeldige sessie...</string>
     <string name="dialog_skip_login_title">Inloggen overslaan?</string>
     <string name="dialog_skip_login_desc">Als je het inloggen overslaat, kun je alleen de offline data gebruiken

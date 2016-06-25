@@ -29,6 +29,7 @@
         android:layout_marginLeft="30dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
         android:textStyle="bold" />
 
     <TextView
@@ -39,7 +40,8 @@
         android:id="@+id/card_details_textview_description_input"
         android:layout_below="@+id/card_details_textview_description"
         android:layout_alignLeft="@+id/card_details_textview_description"
-        android:layout_alignStart="@+id/card_details_textview_description" />
+        android:layout_alignStart="@+id/card_details_textview_description"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1" />
 
     <ImageView
         android:visibility="gone"
@@ -63,7 +65,8 @@
         android:textStyle="bold"
         android:layout_below="@+id/card_details_textview_description_input"
         android:layout_alignLeft="@+id/card_details_textview_description_input"
-        android:layout_alignStart="@+id/card_details_textview_description_input" />
+        android:layout_alignStart="@+id/card_details_textview_description_input"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1" />
 
     <TextView
         android:visibility="gone"
@@ -73,7 +76,8 @@
         android:id="@+id/card_details_textview_period_input"
         android:layout_below="@+id/card_details_textview_period"
         android:layout_alignLeft="@+id/card_details_textview_description_input"
-        android:layout_marginBottom="25dp" />
+        android:layout_marginBottom="25dp"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1" />
 
     <TextView
         android:visibility="gone"
@@ -83,7 +87,8 @@
         android:id="@+id/card_details_textview_location"
         android:textStyle="bold"
         android:layout_below="@+id/card_details_textview_duration_input"
-        android:layout_alignLeft="@+id/card_details_textview_duration_input" />
+        android:layout_alignLeft="@+id/card_details_textview_duration_input"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1" />
 
     <TextView
         android:visibility="gone"
@@ -93,7 +98,8 @@
         android:id="@+id/card_details_textview_location_input"
         android:layout_below="@+id/card_details_textview_location"
         android:layout_alignLeft="@+id/card_details_textview_duration_input"
-        android:layout_marginBottom="25dp" />
+        android:layout_marginBottom="25dp"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1" />
 
     <TextView
         android:visibility="gone"
@@ -103,7 +109,8 @@
         android:id="@+id/card_details_textview_teacher"
         android:textStyle="bold"
         android:layout_below="@+id/card_details_textview_location_input"
-        android:layout_alignLeft="@+id/card_details_textview_duration_input" />
+        android:layout_alignLeft="@+id/card_details_textview_duration_input"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1" />
 
     <TextView
         android:visibility="gone"
@@ -113,7 +120,8 @@
         android:id="@+id/card_details_textview_teacher_input"
         android:layout_below="@+id/card_details_textview_teacher"
         android:layout_alignLeft="@+id/card_details_textview_duration_input"
-        android:layout_marginBottom="25dp" />
+        android:layout_marginBottom="25dp"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1" />
 
     <TextView
         android:visibility="gone"
@@ -124,7 +132,8 @@
         android:layout_below="@+id/card_details_textview_period_input"
         android:layout_alignLeft="@+id/card_details_textview_period_input"
         android:layout_alignStart="@+id/card_details_textview_period_input"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1" />
 
     <TextView
         android:visibility="gone"
@@ -135,7 +144,8 @@
         android:layout_below="@+id/card_details_textview_duration"
         android:layout_alignLeft="@+id/card_details_textview_duration"
         android:layout_alignStart="@+id/card_details_textview_duration"
-        android:layout_marginBottom="25dp" />
+        android:layout_marginBottom="25dp"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1" />
 
     <ImageView
         android:visibility="gone"

@@ -52,7 +52,7 @@ public class AppointmentDetailCard extends Card {
     Boolean ready = false;
 
     public AppointmentDetailCard(Context context) {
-        this(context, R.layout.card_simple_appointments_details_layout);
+        this(context, R.layout.card_appointments_details_layout);
     }
 
     public AppointmentDetailCard(Context context, int innerLayout) {
