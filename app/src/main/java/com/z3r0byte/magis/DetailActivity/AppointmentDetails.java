@@ -28,6 +28,7 @@ import com.google.gson.Gson;
 import com.z3r0byte.magis.GUI.AppointmentContentCard;
 import com.z3r0byte.magis.GUI.AppointmentDetailCard;
 import com.z3r0byte.magis.R;
+import com.z3r0byte.magis.Utils.DB_Handlers.CalendarDB;
 import com.z3r0byte.magis.Utils.DateUtils;
 
 import net.ilexiconn.magister.ParcelableMagister;
@@ -41,9 +42,11 @@ public class AppointmentDetails extends AppCompatActivity {
     private static final String TAG = "AppointmentDetails";
 
     Appointment appointment;
+    String Type;
     ParcelableMagister mMagister;
     CardViewNative cardMain;
     CardViewNative cardHomeWork;
+    AppointmentContentCard contentCard;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,7 +84,6 @@ public class AppointmentDetails extends AppCompatActivity {
 
         cardHomeWork = (CardViewNative) findViewById(R.id.card_content);
         if (appointment.infoType.getID() != 0 && !appointment.content.isEmpty()) {
-            String Type;
 
             InfoType infoType = appointment.infoType;
             int type = infoType.getID();
@@ -112,16 +114,41 @@ public class AppointmentDetails extends AppCompatActivity {
                     break;
             }
 
-            AppointmentContentCard contentCard = new AppointmentContentCard(this);
+            contentCard = new AppointmentContentCard(this);
             CardHeader cardHeader2 = new CardHeader(this);
-            Log.d(TAG, "onCreate: Type: " + Type);
-            cardHeader2.setTitle(Type);
+            if (appointment.finished) {
+                cardHeader2.setTitle(Type + " (" + getString(R.string.msg_finished) + ")");
+            } else {
+                cardHeader2.setTitle(Type);
+            }
             contentCard.addCardHeader(cardHeader2);
-            contentCard.setContent(Html.fromHtml(appointment.content).toString());
-            contentCard.setClickListener(mMagister, appointment);
+            contentCard.setContent(Html.fromHtml(appointment.content).toString(), appointment.finished);
+            contentCard.setClickListener(mMagister, appointment, this);
             cardHomeWork.setCard(contentCard);
         } else {
             cardHomeWork.setVisibility(View.GONE);
         }
+    }
+
+    public void updateAppointment(final Appointment appointment) {
+        this.appointment = appointment;
+
+        final AppointmentDetails activity = this;
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (appointment.finished) {
+                    contentCard.getCardHeader().setTitle(Type + " (" + getString(R.string.msg_finished) + ")");
+                } else {
+                    contentCard.getCardHeader().setTitle(Type);
+                }
+                contentCard.notifyDataSetChanged();
+                cardHomeWork.refreshCard(contentCard);
+            }
+        });
+
+        CalendarDB dbHelper = new CalendarDB(this);
+        dbHelper.finishAppointment(appointment);
     }
 }

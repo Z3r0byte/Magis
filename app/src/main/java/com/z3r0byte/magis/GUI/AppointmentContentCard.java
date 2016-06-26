@@ -24,6 +24,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.z3r0byte.magis.DetailActivity.AppointmentDetails;
 import com.z3r0byte.magis.R;
 
 import net.ilexiconn.magister.Magister;
@@ -60,18 +61,28 @@ public class AppointmentContentCard extends Card {
     private void init() {
     }
 
-    public void setContent(final String description) {
+    public void setContent(final String description, final Boolean afgerond) {
         new Thread(new Runnable() {
             @Override
             public void run() {
                 while (ready != true) {
                 }
-                ContentTextView.setText(description);
+                setAfgerond(afgerond, description);
             }
         }).start();
     }
 
-    public void setClickListener(final Magister magister, final Appointment appointment) {
+    public void setAfgerond(final Boolean afgerond, final String description) {
+        if (afgerond) {
+            ContentTextView.setText(description);
+            ContentButton.setText(R.string.msg_undo);
+        } else {
+            ContentTextView.setText(description);
+            ContentButton.setText(R.string.msg_finish);
+        }
+    }
+
+    public void setClickListener(final Magister magister, final Appointment appointment, final AppointmentDetails activity) {
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -90,9 +101,10 @@ public class AppointmentContentCard extends Card {
                                     Boolean finished = appointmentHandler.finishAppointment(appointment);
                                     Log.d(TAG, "run: Gelukt: " + finished);
                                     if (finished) {
-                                        Toast.makeText(Context, "Jippie", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(activity, "Jippie", Toast.LENGTH_SHORT).show();
+                                        activity.updateAppointment(appointment);
                                     } else {
-                                        Toast.makeText(Context, "Crap!", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(activity, "Crap!", Toast.LENGTH_SHORT).show();
                                     }
                                 } catch (IOException e) {
                                     e.printStackTrace();

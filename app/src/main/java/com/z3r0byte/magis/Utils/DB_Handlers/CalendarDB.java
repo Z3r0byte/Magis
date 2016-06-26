@@ -167,6 +167,14 @@ public class CalendarDB extends SQLiteOpenHelper {
         String Query = "DELETE FROM " + TABLE_CALENDAR + " WHERE " + KEY_FULL_DATE + " LIKE '" + dateStr + "%'";
         db.execSQL(Query);
     }
+
+    public void finishAppointment(Appointment appointment) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(KEY_FINISHED, appointment.finished);
+
+        db.update(TABLE_CALENDAR, contentValues, KEY_CALENDAR_ID + "=" + appointment.id, null);
+    }
     
     public Appointment[] getAppointmentsByDate(Date date){
         SQLiteDatabase db = this.getWritableDatabase();

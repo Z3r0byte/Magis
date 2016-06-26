@@ -105,6 +105,10 @@ public class AppointmentsAdapter extends ArrayAdapter<Appointment> {
                 break;
         }
 
+        if (appointments[position].finished && appointments[position].infoType.getID() == 1) {
+            IconicsDrawable drawable = new IconicsDrawable(context, GoogleMaterial.Icon.gmd_check);
+            homework.setImageDrawable(drawable);
+        }
 
 
         return rowView;

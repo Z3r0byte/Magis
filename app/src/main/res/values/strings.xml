@@ -63,6 +63,8 @@
     <string name="msg_login_progress_2">Stap 2/2: opnieuw inloggen...</string>
     <string name="msg_refresh_session_short">Opn proberen</string>
     <string name="msg_patience">Even geduld aub</string>
+    <string name="msg_undo">Ongedaan maken</string>
+    <string name="msg_finished">Afgerond</string>
     <string name="msg_details">Details</string>
     <string name="msg_description">Beschrijving</string>
     <string name="msg_period">Lesuur</string>
