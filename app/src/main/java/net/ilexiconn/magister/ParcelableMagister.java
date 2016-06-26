@@ -19,8 +19,6 @@ package net.ilexiconn.magister;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.google.gson.reflect.TypeToken;
-
 import net.ilexiconn.magister.container.Profile;
 import net.ilexiconn.magister.container.School;
 import net.ilexiconn.magister.container.Session;
@@ -37,7 +35,6 @@ import java.io.IOException;
 import java.security.InvalidParameterException;
 import java.text.ParseException;
 import java.util.Date;
-import java.util.Map;
 
 /**
  * A special Magister class implementing Parcelable.
@@ -101,8 +98,6 @@ public class ParcelableMagister extends Magister implements Parcelable {
         magister.version = magister.gson.fromJson(HttpUtil.httpGet(url.getVersionUrl()), Version.class);
         magister.user = new User(username, password, true);
         magister.logout();
-        Map<String, String> nameValuePairMap = magister.gson.fromJson(magister.gson.toJson(magister.user), new TypeToken<Map<String, String>>() {
-        }.getType());
         String data = magister.gson.toJson(magister.user);
         magister.session = magister.gson.fromJson(HttpUtil.httpPost(url.getSessionUrl(), data), Session.class);
         if (!magister.session.state.equals("active")) {

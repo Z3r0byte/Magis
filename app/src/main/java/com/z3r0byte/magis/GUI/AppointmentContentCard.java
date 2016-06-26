@@ -17,6 +17,7 @@
 package com.z3r0byte.magis.GUI;
 
 import android.content.Context;
+import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +25,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.z3r0byte.magis.R;
+
+import net.ilexiconn.magister.Magister;
+import net.ilexiconn.magister.container.Appointment;
+import net.ilexiconn.magister.handler.AppointmentHandler;
+
+import org.json.JSONException;
+
+import java.io.IOException;
 
 import it.gmariotti.cardslib.library.internal.Card;
 
@@ -62,18 +71,51 @@ public class AppointmentContentCard extends Card {
         }).start();
     }
 
+    public void setClickListener(final Magister magister, final Appointment appointment) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (ready != true) {
+                }
+                ContentButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Looper.prepare();
+                                AppointmentHandler appointmentHandler = new AppointmentHandler(magister);
+                                try {
+                                    appointment.finished = !appointment.finished;
+                                    Boolean finished = appointmentHandler.finishAppointment(appointment);
+                                    Log.d(TAG, "run: Gelukt: " + finished);
+                                    if (finished) {
+                                        Toast.makeText(Context, "Jippie", Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        Toast.makeText(Context, "Crap!", Toast.LENGTH_SHORT).show();
+                                    }
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                    Toast.makeText(Context, R.string.err_no_connection, Toast.LENGTH_SHORT).show();
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                    Toast.makeText(Context, R.string.err_unknown, Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        }).start();
+
+                    }
+                });
+            }
+        }).start();
+
+    }
+
 
     @Override
     public void setupInnerViewElements(ViewGroup parent, View view) {
         ContentTextView = (TextView) view.findViewById(R.id.card_content_textview);
         ContentButton = (TextView) view.findViewById(R.id.card_content_button);
-        ContentButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.d(TAG, "onClick: Er is op de knop gedrukt.");
-                Toast.makeText(Context, "Dit werkt nog niet.", Toast.LENGTH_SHORT).show();
-            }
-        });
         ready = true;
         Log.d(TAG, "setupInnerViewElements: Done setting up");
     }

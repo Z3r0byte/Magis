@@ -120,8 +120,6 @@ public class Magister {
         magister.version = magister.gson.fromJson(HttpUtil.httpGet(url.getVersionUrl()), Version.class);
         magister.user = new User(username, password, true);
         magister.logout();
-        Map<String, String> nameValuePairMap = magister.gson.fromJson(magister.gson.toJson(magister.user), new TypeToken<Map<String, String>>() {
-        }.getType());
         String data = magister.gson.toJson(magister.user);
         magister.session = magister.gson.fromJson(HttpUtil.httpPost(url.getSessionUrl(), data), Session.class);
         if (!magister.session.state.equals("active")) {

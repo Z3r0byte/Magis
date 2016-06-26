@@ -33,7 +33,7 @@ import com.z3r0byte.magis.Utils.ErrorViewConfigs;
 import com.z3r0byte.magis.Utils.LoginUtils;
 import com.z3r0byte.magis.Utils.MagisActivity;
 
-import net.ilexiconn.magister.Magister;
+import net.ilexiconn.magister.ParcelableMagister;
 import net.ilexiconn.magister.container.Appointment;
 import net.ilexiconn.magister.container.School;
 import net.ilexiconn.magister.container.User;
@@ -48,7 +48,7 @@ import java.util.Date;
 /**
  * Created by bas on 6-6-16.
  */
-public class LoginTask extends AsyncTask<Void, Void, Magister> {
+public class LoginTask extends AsyncTask<Void, Void, ParcelableMagister> {
     private static final String TAG = "LoginTask";
 
     public MagisActivity activity;
@@ -91,11 +91,11 @@ public class LoginTask extends AsyncTask<Void, Void, Magister> {
     }
 
     @Override
-    protected Magister doInBackground(Void... params) {
+    protected ParcelableMagister doInBackground(Void... params) {
         try {
             SchoolUrl url = new SchoolUrl(school);
             HttpUtil.httpDelete(url.getCurrentSessionUrl());
-            return Magister.login(school, username, password);
+            return ParcelableMagister.login(school, username, password);
         } catch (IOException e) {
             Log.e(TAG, "Unable to login", e);
             error = activity.getString(R.string.err_no_connection);
@@ -112,7 +112,7 @@ public class LoginTask extends AsyncTask<Void, Void, Magister> {
     }
 
     @Override
-    protected void onPostExecute(Magister magister) {
+    protected void onPostExecute(ParcelableMagister magister) {
         CalendarActivity activity1 = (CalendarActivity) activity;
         if (magister != null) {
             activity.mMagister = magister;

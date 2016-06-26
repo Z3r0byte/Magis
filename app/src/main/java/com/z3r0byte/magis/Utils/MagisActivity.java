@@ -28,7 +28,7 @@ import com.z3r0byte.magis.R;
 import com.z3r0byte.magis.Tasks.AppointmentsTask;
 import com.z3r0byte.magis.Tasks.LoginTask;
 
-import net.ilexiconn.magister.Magister;
+import net.ilexiconn.magister.ParcelableMagister;
 import net.ilexiconn.magister.container.Appointment;
 import net.ilexiconn.magister.container.School;
 import net.ilexiconn.magister.container.User;
@@ -41,7 +41,7 @@ import tr.xip.errorview.ErrorView;
  * Created by bas on 7-6-16.
  */
 public class MagisActivity extends AppCompatActivity {
-    public Magister mMagister;
+    public ParcelableMagister mMagister;
     public School mSchool;
     public User mUser;
     public Appointment[] mAppointments;

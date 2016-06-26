@@ -30,6 +30,7 @@ import com.z3r0byte.magis.GUI.AppointmentDetailCard;
 import com.z3r0byte.magis.R;
 import com.z3r0byte.magis.Utils.DateUtils;
 
+import net.ilexiconn.magister.ParcelableMagister;
 import net.ilexiconn.magister.container.Appointment;
 import net.ilexiconn.magister.container.type.InfoType;
 
@@ -40,6 +41,7 @@ public class AppointmentDetails extends AppCompatActivity {
     private static final String TAG = "AppointmentDetails";
 
     Appointment appointment;
+    ParcelableMagister mMagister;
     CardViewNative cardMain;
     CardViewNative cardHomeWork;
 
@@ -51,6 +53,7 @@ public class AppointmentDetails extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             appointment = new Gson().fromJson(extras.getString("Appointment"), Appointment.class);
+            mMagister = extras.getParcelable("Magister");
         } else {
             Log.e(TAG, "onCreate: Impossible to show details of a null Appointment!", new IllegalArgumentException());
             Toast.makeText(AppointmentDetails.this, R.string.err_unknown, Toast.LENGTH_SHORT).show();
@@ -115,7 +118,7 @@ public class AppointmentDetails extends AppCompatActivity {
             cardHeader2.setTitle(Type);
             contentCard.addCardHeader(cardHeader2);
             contentCard.setContent(Html.fromHtml(appointment.content).toString());
-
+            contentCard.setClickListener(mMagister, appointment);
             cardHomeWork.setCard(contentCard);
         } else {
             cardHomeWork.setVisibility(View.GONE);

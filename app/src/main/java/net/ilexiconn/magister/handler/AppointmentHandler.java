@@ -16,6 +16,8 @@
 
 package net.ilexiconn.magister.handler;
 
+import android.util.Log;
+
 import com.google.gson.Gson;
 
 import net.ilexiconn.magister.Magister;
@@ -26,6 +28,9 @@ import net.ilexiconn.magister.container.PresencePeriod;
 import net.ilexiconn.magister.exeption.PrivilegeException;
 import net.ilexiconn.magister.util.GsonUtil;
 import net.ilexiconn.magister.util.HttpUtil;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -42,6 +47,8 @@ public class AppointmentHandler implements IHandler {
     public AppointmentHandler(Magister magister) {
         this.magister = magister;
     }
+
+    private static final String TAG = "AppointmentHandler";
 
     /**
      * Get an array with all the {@link Appointment}s of this {@link PresencePeriod}. If no appointments can be found,
@@ -106,6 +113,41 @@ public class AppointmentHandler implements IHandler {
         }
         String url = GsonUtil.getFromJson(responseBuilder.toString(), "Url").getAsString();
         return gson.fromJson(HttpUtil.httpGet(magister.school.url + url), Appointment.class);
+    }
+
+    public Boolean finishAppointment(Appointment appointment) throws IOException, JSONException {
+        String rawAppointment = getRawAppointment(appointment.id);
+        Log.d(TAG, "finishAppointment: " + rawAppointment);
+        JSONObject jsonObject = new JSONObject(rawAppointment);
+        jsonObject.put("Afgerond", appointment.finished);
+
+
+        String data = jsonObject.toString();
+        Log.d(TAG, "finishAppointment: data: " + data);
+        BufferedReader reader = new BufferedReader(HttpUtil.httpPut(magister.school.url + "/api/personen/" + magister.profile.id
+                + "/afspraken/" + appointment.id, data));
+        StringBuilder responseBuilder = new StringBuilder();
+        String line;
+        while ((line = reader.readLine()) != null) {
+            responseBuilder.append(line);
+        }
+        String result = responseBuilder.toString();
+        if (result.equals("{\"Url\":\"/api/personen/" + magister.profile.id + "/afspraken/" + appointment.id + "\",\"UriKind\":0}")) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public String getRawAppointment(int id) throws IOException {
+        BufferedReader reader = new BufferedReader(HttpUtil.httpGet(magister.school.url + "/api/personen/"
+                + magister.profile.id + "/afspraken/" + id));
+        StringBuilder responseBuilder = new StringBuilder();
+        String line;
+        while ((line = reader.readLine()) != null) {
+            responseBuilder.append(line);
+        }
+        return responseBuilder.toString();
     }
 
 

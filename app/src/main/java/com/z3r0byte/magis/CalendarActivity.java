@@ -259,6 +259,7 @@ public class CalendarActivity extends MagisActivity {
     private void showDetails(int i) {
         Intent intent = new Intent(this, AppointmentDetails.class);
         intent.putExtra("Appointment", new Gson().toJson(mAppointments[i]));
+        intent.putExtra("Magister", mMagister);
         startActivity(intent);
     }
 
