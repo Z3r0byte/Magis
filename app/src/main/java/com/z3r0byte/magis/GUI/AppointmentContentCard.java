@@ -75,7 +75,7 @@ public class AppointmentContentCard extends Card {
     public void setAfgerond(final Boolean afgerond, final String description) {
         if (afgerond) {
             ContentTextView.setText(description);
-            ContentButton.setText(R.string.msg_undo);
+            ContentButton.setText(R.string.msg_finish);
         } else {
             ContentTextView.setText(description);
             ContentButton.setText(R.string.msg_finish);
@@ -101,10 +101,7 @@ public class AppointmentContentCard extends Card {
                                     Boolean finished = appointmentHandler.finishAppointment(appointment);
                                     Log.d(TAG, "run: Gelukt: " + finished);
                                     if (finished) {
-                                        Toast.makeText(activity, "Jippie", Toast.LENGTH_SHORT).show();
                                         activity.updateAppointment(appointment);
-                                    } else {
-                                        Toast.makeText(activity, "Crap!", Toast.LENGTH_SHORT).show();
                                     }
                                 } catch (IOException e) {
                                     e.printStackTrace();
