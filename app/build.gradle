@@ -62,6 +62,5 @@ dependencies {
     compile 'com.github.gabrielemariotti.cards:cardslib-core:2.1.0'
     compile 'com.github.gabrielemariotti.cards:cardslib-cards:2.1.0'
 
-    compile 'com.github.clans:fab:1.6.4'
     compile 'com.wdullaer:materialdatetimepicker:2.3.0'
 }
