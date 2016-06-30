@@ -17,89 +17,96 @@
 <resources>
     <string name="app_name">Magis</string>
 
+    <string name="customactivityoncrash_error_activity_close_app">App sluiten</string>
+    <string name="customactivityoncrash_error_activity_error_details_clipboard_label">Fouten-informatie</string>
+    <string name="customactivityoncrash_error_activity_error_details_close">Sluiten</string>
+    <string name="customactivityoncrash_error_activity_error_details_copied">Gekopiëerd naar klembord</string>
+    <string name="customactivityoncrash_error_activity_error_details_copy">Kopiëren naar klembord</string>
+    <string name="customactivityoncrash_error_activity_error_details_title">Details fouten</string>
+    <string name="customactivityoncrash_error_activity_error_details">Fouten details</string>
+    <string name="customactivityoncrash_error_activity_error_occurred_explanation">Er is een onverwachte fout opgetreden.\nVerstuur a.u.b. de foutgegevens naar de ontwikkelaar. z3r0byte.apps@gmail.com</string>
+    <string name="customactivityoncrash_error_activity_restart_app">App opnieuw starten</string>
+    <string name="customactivityoncrash_error_activity_unknown_exception">Onbekende fout</string>
+
+    <string name="dialog_logout_desc">Als je uitlogt zul je opnieuw moeten inloggen en alle data wordt gewist.</string>
+    <string name="dialog_logout_title">Uitloggen?</string>
+    <string name="dialog_skip_login_desc">Als je het inloggen overslaat, kun je alleen de offline data gebruiken totdat je de sessie ververst.</string>
+    <string name="dialog_skip_login_title">Inloggen overslaan?</string>
+
+    <string name="drawer_logout">Log uit</string>
+    <string name="drawer_refresh_session">Sessie verversen</string>
+    <string name="drawer_tools">Tools</string>
+
+    <string name="err_invalid_session">Ongeldige sessie…</string>
+    <string name="err_no_connection">Geen verbinding…</string>
+    <string name="err_no_lessons">Er zijn geen lessen gevonden</string>
+    <string name="err_terrible_wrong_on_login">Er is iets vreselijk misgegaan met het inloggen, log aub helemaal opnieuw in. :(</string>
+    <string name="err_unknown">Er is een onbekende fout opgetreden, probeer het opnieuw.</string>
+    <string name="err_wrong_username_or_password">Verkeerde gebruikersnaam of wachtwoord</string>
+
+    <string name="hint_description">Beschrijving</string>
+    <string name="hint_location">Lokatie</string>
+    <string name="hint_password">Wachtwoord</string>
+    <string name="hint_search_school">Een deel van de naam/url van de school</string>
+    <string name="hint_title">Titel</string>
+    <string name="hint_username">Gebruikersnaam</string>
+
+    <string name="menu_add_appointment">Afspraak toevoegen</string>
+    <string name="menu_choose_date">Datum kiezen</string>
+    <string name="menu_to_today">Naar vandaag</string>
+
+    <string name="msg_amount_found_part_1">Er zijn </string>
+    <string name="msg_amount_found_part_2"> resultaten gevonden.</string>
+    <string name="msg_annotation">Aantekening</string>
+    <string name="msg_description">Beschrijving</string>
+    <string name="msg_details">Details</string>
+    <string name="msg_duration">Duur</string>
+    <string name="msg_end">einde</string>
+    <string name="msg_entire_day">Hele dag</string>
+    <string name="msg_exam">Examen</string>
+    <string name="msg_finish">Afronden</string>
+    <string name="msg_finished">Afgerond</string>
+    <string name="msg_homework">Huiswerk</string>
+    <string name="msg_info">Informatie</string>
+    <string name="msg_location">Lokatie</string>
+    <string name="msg_logged_in">Ingelogd</string>
+    <string name="msg_logging_in">Inloggen…</string>
+    <string name="msg_login_on_Magister">Log in op Magister</string>
+    <string name="msg_login_progress_1">Stap 1/2: oude sessie verwijderen...</string>
+    <string name="msg_login_progress_2">Stap 2/2: opnieuw inloggen...</string>
+    <string name="msg_login">Log in</string>
+    <string name="msg_no_results">Er zijn geen resultaten</string>
+    <string name="msg_old_version">De data-structuur van Magis is veranderd, we laten je daarom de login-stappen opnieuw doorlopen.</string>
+    <string name="msg_oral">Mondeling</string>
+    <string name="msg_patience">Even geduld aub</string>
+    <string name="msg_period">Lesuur</string>
+    <string name="msg_quiz">SO</string>
+    <string name="msg_refresh_session_short">Opn proberen</string>
+    <string name="msg_school_selected">Naam van geselcteerde school: </string>
+    <string name="msg_search_school">School zoeken</string>
+    <string name="msg_search">Zoek</string>
+    <string name="msg_searching">Zoeken…</string>
+    <string name="msg_start">start</string>
+    <string name="msg_teacher">Docent</string>
+    <string name="msg_test">Proefwerk</string>
+    <string name="msg_today">Vandaag</string>
+    <string name="msg_undo">Ongedaan maken</string>
+    <string name="msg_using_cache">Cache wordt gebruikt.</string>
+
+    <string name="setup_desc_1">Laten we beginnen...</string>
+    <string name="setup_desc_2">Magis heeft toegang nodig tot de sdkaart om logbestanden en dergelijken op te slaan.</string>
     <string name="setup_title_1">Welkom bij Magis</string>
     <string name="setup_title_2">Permissies</string>
     <string name="setup_title_3"></string>
     <string name="setup_title_4"></string>
     <string name="setup_title_5"></string>
 
-    <string name="setup_desc_1">Laten we beginnen...</string>
-    <string name="setup_desc_2">Magis heeft toegang nodig tot de sdkaart om logbestanden en dergelijken op te slaan.</string>
-
-
+    <string name="snackbar_login_error">De vorige keer is het inloggen mislukt.</string>
     <string name="snackbar_no_permissions">Geef Magis aub de benodigde permissies</string>
     <string name="snackbar_no_school_selected">Selecteer eerst een school</string>
     <string name="snackbar_not_logged_in">Log eerst in</string>
-    <string name="snackbar_login_error">De vorige keer is het inloggen mislukt.</string>
 
-    <string name="customactivityoncrash_error_activity_error_occurred_explanation">Er is een onverwachte fout opgetreden.\nVerstuur a.u.b. de foutgegevens naar de ontwikkelaar. z3r0byte.apps@gmail.com</string>
-    <string name="customactivityoncrash_error_activity_unknown_exception">Onbekende fout</string>
-    <string name="customactivityoncrash_error_activity_restart_app">App opnieuw starten</string>
-    <string name="customactivityoncrash_error_activity_close_app">App sluiten</string>
-    <string name="customactivityoncrash_error_activity_error_details">Fouten details</string>
-    <string name="customactivityoncrash_error_activity_error_details_title">Details fouten</string>
-    <string name="customactivityoncrash_error_activity_error_details_close">Sluiten</string>
-    <string name="customactivityoncrash_error_activity_error_details_copy">Kopiëren naar klembord</string>
-    <string name="customactivityoncrash_error_activity_error_details_copied">Gekopiëerd naar klembord</string>
-    <string name="customactivityoncrash_error_activity_error_details_clipboard_label">Fouten-informatie</string>
-
-    <string name="dialog_logout_title">Uitloggen?</string>
-    <string name="dialog_logout_desc">Als je uitlogt zul je opnieuw moeten inloggen en alle data wordt gewist.</string>
-    <string name="msg_searching">Zoeken...</string>
-    <string name="msg_old_version">De data-structuur van Magis is veranderd, we laten je daarom de login-stappen opnieuw doorlopen.</string>
-    <string name="msg_search">Zoek</string>
-    <string name="msg_search_school">School zoeken</string>
-    <string name="msg_login_on_Magister">Log in op Magister</string>
-    <string name="msg_amount_found_part_1">Er zijn </string>
-    <string name="msg_amount_found_part_2"> resultaten gevonden.</string>
-    <string name="msg_login">Log in</string>
-    <string name="msg_school_selected">Naam van geselcteerde school: </string>
-    <string name="msg_no_results">Er zijn geen resultaten</string>
-    <string name="msg_logging_in">Inloggen...</string>
-    <string name="msg_logged_in">Ingelogd</string>
-    <string name="msg_today">Vandaag</string>
-    <string name="msg_using_cache">Cache wordt gebruikt.</string>
-    <string name="msg_login_progress_1">Stap 1/2: oude sessie verwijderen...</string>
-    <string name="msg_login_progress_2">Stap 2/2: opnieuw inloggen...</string>
-    <string name="msg_refresh_session_short">Opn proberen</string>
-    <string name="msg_patience">Even geduld aub</string>
-    <string name="msg_undo">Ongedaan maken</string>
-    <string name="msg_finished">Afgerond</string>
-    <string name="msg_details">Details</string>
-    <string name="msg_description">Beschrijving</string>
-    <string name="msg_period">Lesuur</string>
-    <string name="msg_location">Lokatie</string>
-    <string name="msg_teacher">Docent</string>
-    <string name="msg_homework">Huiswerk</string>
-    <string name="msg_duration">Duur</string>
-    <string name="msg_quiz">SO</string>
-    <string name="msg_test">Proefwerk</string>
-    <string name="msg_oral">Mondeling</string>
-    <string name="msg_exam">Examen</string>
-    <string name="msg_info">Informatie</string>
-    <string name="msg_annotation">Aantekening</string>
-    <string name="msg_finish">Afronden</string>
-    <string name="menu_add_appointment">Afspraak toevoegen</string>
-    <string name="menu_to_today">Naar vandaag</string>
-    <string name="menu_choose_date">Datum kiezen</string>
-    <string name="title_new_appointment">Nieuwe afspraak</string>
-    <string name="hint_title">Titel</string>
-    <string name="hint_location">Lokatie</string>
-    <string name="hint_description">Beschrijving</string>
-    <string name="err_invalid_session">Ongeldige sessie...</string>
-    <string name="dialog_skip_login_title">Inloggen overslaan?</string>
-    <string name="dialog_skip_login_desc">Als je het inloggen overslaat, kun je alleen de offline data gebruiken
-        totdat je de sessie ververst.</string>
-    <string name="err_unknown">Er is een onbekende fout opgetreden, probeer het opnieuw.</string>
-    <string name="err_no_connection">Geen verbinding...</string>
-    <string name="err_no_lessons">Er zijn geen lessen gevonden</string>
-    <string name="err_wrong_username_or_password">Verkeerde gebruikersnaam of wachtwoord</string>
-    <string name="err_terrible_wrong_on_login">Er is iets vreselijk misgegaan met het inloggen, log aub helemaal opnieuw in. :(</string>
-    <string name="hint_search_school">Een deel van de naam/url van de school</string>
-    <string name="hint_username">Gebruikersnaam</string>
-    <string name="hint_password">Wachtwoord</string>
     <string name="title_calendar">Agenda</string>
-    <string name="drawer_refresh_session">Sessie verversen</string>
-    <string name="drawer_logout">Log uit</string>
-    <string name="drawer_tools">Tools</string>
+    <string name="title_new_appointment">Nieuwe afspraak</string>
+
 </resources>
