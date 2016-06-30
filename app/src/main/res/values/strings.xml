@@ -82,6 +82,10 @@
     <string name="menu_add_appointment">Afspraak toevoegen</string>
     <string name="menu_to_today">Naar vandaag</string>
     <string name="menu_choose_date">Datum kiezen</string>
+    <string name="title_new_appointment">Nieuwe afspraak</string>
+    <string name="hint_title">Titel</string>
+    <string name="hint_location">Lokatie</string>
+    <string name="hint_description">Beschrijving</string>
     <string name="err_invalid_session">Ongeldige sessie...</string>
     <string name="dialog_skip_login_title">Inloggen overslaan?</string>
     <string name="dialog_skip_login_desc">Als je het inloggen overslaat, kun je alleen de offline data gebruiken

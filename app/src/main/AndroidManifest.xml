@@ -13,7 +13,6 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.z3r0byte.magis">
 
@@ -39,12 +38,13 @@
             android:theme="@style/Theme.Intro" />
         <activity
             android:name=".CalendarActivity"
-            android:launchMode="singleTop"
-            android:configChanges="keyboardHidden|orientation|screenSize" />
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:launchMode="singleTop" />
         <activity
             android:name=".DetailActivity.AppointmentDetails"
-            android:parentActivityName=".CalendarActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize" />
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:parentActivityName=".CalendarActivity" />
+        <activity android:name=".AddAppointmentActivity"></activity>
     </application>
 
 </manifest>
