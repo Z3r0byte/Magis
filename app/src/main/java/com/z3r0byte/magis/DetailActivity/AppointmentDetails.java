@@ -74,7 +74,11 @@ public class AppointmentDetails extends AppCompatActivity {
         mainCardContent.setDescription(this, appointment.description);
         mainCardContent.setLocation(this, appointment.location);
         mainCardContent.setPeriod(this, appointment.periodFrom + "");
-        mainCardContent.setTeacher(this, appointment.teachers[0].name);
+        try {
+            mainCardContent.setTeacher(this, appointment.teachers[0].name);
+        } catch (ArrayIndexOutOfBoundsException e) {
+            e.printStackTrace();
+        }
         mainCardContent.setTime(this, DateUtils.formatDate(DateUtils.addHours(appointment.startDate, 2), "HH:mm") + " - "
                 + DateUtils.formatDate(DateUtils.addHours(appointment.endDate, 2), "HH:mm"));
         mainCardContent.addCardHeader(cardHeader);

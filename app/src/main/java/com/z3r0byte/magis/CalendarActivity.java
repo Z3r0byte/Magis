@@ -25,6 +25,8 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
@@ -34,6 +36,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
+import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.z3r0byte.magis.Adapters.AppointmentsAdapter;
 import com.z3r0byte.magis.DetailActivity.AppointmentDetails;
 import com.z3r0byte.magis.GUI.NavigationDrawer;
@@ -49,11 +52,12 @@ import net.ilexiconn.magister.container.Profile;
 import net.ilexiconn.magister.container.School;
 import net.ilexiconn.magister.container.User;
 
+import java.util.Calendar;
 import java.util.Date;
 
 import tr.xip.errorview.ErrorView;
 
-public class CalendarActivity extends MagisActivity {
+public class CalendarActivity extends MagisActivity implements DatePickerDialog.OnDateSetListener {
     private static final String TAG = "CalendarActivity";
 
 
@@ -198,24 +202,10 @@ public class CalendarActivity extends MagisActivity {
             }
 
         } else {
-            mAppointments = new CalendarDB(this).getAppointmentsByDate(date);
-
-            if (mAppointments.length == 0) {
-                errorView.setVisibility(View.VISIBLE);
-                errorView.setConfig(ErrorViewConfigs.NoLessonConfig);
-            } else {
-                errorView.setVisibility(View.GONE);
-            }
-
-            mAppointmentAdapter = new AppointmentsAdapter(this, mAppointments);
-            listView.setAdapter(mAppointmentAdapter);
+            getAppointmentsByDate(date);
         }
 
-        if (date.toString().substring(0, 10).equals(DateUtils.getToday().toString().substring(0, 10))) {
-            mToolbar.setTitle(R.string.msg_today);
-        } else {
-            mToolbar.setTitle(DateUtils.formatDate(date, "EEEE dd MMM"));
-        }
+        setToolbarTitle(date);
     }
 
     private void nextDay() {
@@ -236,19 +226,29 @@ public class CalendarActivity extends MagisActivity {
                 date = DateUtils.addDays(date, -1);
             }
         } else {
-            mAppointments = new CalendarDB(this).getAppointmentsByDate(date);
-
-            if (mAppointments.length == 0) {
-                errorView.setVisibility(View.VISIBLE);
-                errorView.setConfig(ErrorViewConfigs.NoLessonConfig);
-            } else {
-                errorView.setVisibility(View.GONE);
-            }
-
-            mAppointmentAdapter = new AppointmentsAdapter(this, mAppointments);
-            listView.setAdapter(mAppointmentAdapter);
+            getAppointmentsByDate(date);
         }
 
+        setToolbarTitle(date);
+    }
+
+    private void getAppointmentsByDate(Date date) {
+        mAppointments = new CalendarDB(this).getAppointmentsByDate(date);
+
+        if (mAppointments.length == 0) {
+            errorView.setVisibility(View.VISIBLE);
+            errorView.setConfig(ErrorViewConfigs.NoLessonConfig);
+        } else {
+            errorView.setVisibility(View.GONE);
+        }
+
+        mAppointmentAdapter = new AppointmentsAdapter(this, mAppointments);
+        listView.setAdapter(mAppointmentAdapter);
+
+        setToolbarTitle(date);
+    }
+
+    private void setToolbarTitle(Date date) {
         if (date.toString().substring(0, 10).equals(DateUtils.getToday().toString().substring(0, 10))) {
             mToolbar.setTitle(R.string.msg_today);
         } else {
@@ -256,11 +256,67 @@ public class CalendarActivity extends MagisActivity {
         }
     }
 
+    private void chooseDate() {
+        Calendar first = Calendar.getInstance();
+        first.setTime(firstDate);
+        Calendar last = Calendar.getInstance();
+        last.setTime(lastDate);
+        Calendar now = Calendar.getInstance();
+        DatePickerDialog datePicker = DatePickerDialog.newInstance(
+                this,
+                now.get(Calendar.YEAR),
+                now.get(Calendar.MONTH),
+                now.get(Calendar.DAY_OF_MONTH)
+        );
+        datePicker.setMinDate(first);
+        datePicker.setMaxDate(last);
+        datePicker.show(getFragmentManager(), "Picker");
+    }
+
     private void showDetails(int i) {
         Intent intent = new Intent(this, AppointmentDetails.class);
         intent.putExtra("Appointment", new Gson().toJson(mAppointments[i]));
         intent.putExtra("Magister", mMagister);
         startActivity(intent);
+    }
+
+    @Override
+    public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.clear();
+        calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+        calendar.set(Calendar.MONTH, monthOfYear);
+        calendar.set(Calendar.YEAR, year);
+        date = calendar.getTime();
+        getAppointmentsByDate(date);
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_calendar, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+        if (id == R.id.action_add) {
+            Toast.makeText(CalendarActivity.this, "Dit kan nog niet...", Toast.LENGTH_SHORT).show();
+            return true;
+        } else if (id == R.id.action_date) {
+            chooseDate();
+            return true;
+        } else if (id == R.id.action_today) {
+            date = DateUtils.getToday();
+            getAppointmentsByDate(date);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
