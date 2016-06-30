@@ -40,7 +40,7 @@ public class CalendarDB extends SQLiteOpenHelper {
 
     private static final String TAG = "CalendarDB";
 
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 11;
 
     private static final String DATABASE_NAME = "calendarDB";
 
@@ -54,7 +54,9 @@ public class CalendarDB extends SQLiteOpenHelper {
     private static final String KEY_CONTENT = "content";
     private static final String KEY_START = "start";
     private static final String KEY_END = "end";
-    private static final String KEY_FULL_DATE = "fullDate";
+    //private static final String KEY_FULL_DATE = "fullDate";
+    private static final String KEY_FORMATTED_END = "formatend";
+    private static final String KEY_FORMATTED_START = "formatstart";
     private static final String KEY_PERIOD_FROM = "periodFrom";
     private static final String KEY_PERIOD_TO = "periodTo";
     private static final String KEY_TAKES_ALL_DAY = "takesAllDay";
@@ -82,7 +84,8 @@ public class CalendarDB extends SQLiteOpenHelper {
                 + KEY_CONTENT + " TEXT,"
                 + KEY_END + " TEXT,"
                 + KEY_FINISHED + " BOOLEAN,"
-                + KEY_FULL_DATE + " TEXT,"
+                + KEY_FORMATTED_END + " INTEGER,"
+                + KEY_FORMATTED_START + " INTEGER,"
                 + KEY_INFO_TYPE + " TEXT,"
                 + KEY_LINKS + " TEXT,"
                 + KEY_LOCATION + " TEXT,"
@@ -101,10 +104,8 @@ public class CalendarDB extends SQLiteOpenHelper {
     // Upgrading database
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        // Drop older table if existed
+        Log.d(TAG, "onUpgrade: New Version!");
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_CALENDAR);
-
-        // Create tables again
         onCreate(db);
     }
 
@@ -133,7 +134,8 @@ public class CalendarDB extends SQLiteOpenHelper {
             contentValues.put(KEY_CONTENT, item.content);
             contentValues.put(KEY_END, item.endDateString);
             contentValues.put(KEY_FINISHED, item.finished);
-            contentValues.put(KEY_FULL_DATE, item.startDateString.replaceAll("[T:Z.-]", ""));
+            contentValues.put(KEY_FORMATTED_END, item.endDateString.replaceAll("-", "").substring(0, 8));
+            contentValues.put(KEY_FORMATTED_START, item.startDateString.replaceAll("-", "").substring(0, 8));
             contentValues.put(KEY_INFO_TYPE, item.infoType.getID());
             contentValues.put(KEY_LINKS, new Gson().toJson(item.links));
             contentValues.put(KEY_LOCATION, item.location);
@@ -155,16 +157,20 @@ public class CalendarDB extends SQLiteOpenHelper {
     }
 
     public void deleteAppointmentByDate(Date date) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        String dateStr = DateUtils.formatDate(date, "yyyyMMdd");
-        String Query = "DELETE FROM " + TABLE_CALENDAR + " WHERE " + KEY_FULL_DATE + " LIKE '" + dateStr + "%'";
-        db.execSQL(Query);
+        Integer dateInt = Integer.parseInt(DateUtils.formatDate(date, "yyyyMMdd"));
+        deleteAppointmentByDateInt(dateInt);
     }
 
     public void deleteAppointmentByDateString(String date) {
+        Integer dateInt = Integer.parseInt(date.replaceAll("[T:Z.-]", "").substring(0, 8));
+        deleteAppointmentByDateInt(dateInt);
+    }
+
+    private void deleteAppointmentByDateInt(Integer date) {
         SQLiteDatabase db = this.getWritableDatabase();
-        String dateStr = date.replaceAll("[T:Z.-]", "").substring(0, 8);
-        String Query = "DELETE FROM " + TABLE_CALENDAR + " WHERE " + KEY_FULL_DATE + " LIKE '" + dateStr + "%'";
+        String Query = "DELETE FROM " + TABLE_CALENDAR + " WHERE " + KEY_FORMATTED_START + " <= " + date + " AND "
+                + KEY_FORMATTED_END + " >= " + date;
+        Log.d(TAG, "deleteAppointmentByDateInt: Query: " + Query);
         db.execSQL(Query);
     }
 
@@ -177,9 +183,10 @@ public class CalendarDB extends SQLiteOpenHelper {
     }
     
     public Appointment[] getAppointmentsByDate(Date date){
-        SQLiteDatabase db = this.getWritableDatabase();
-        String dateStr = DateUtils.formatDate(date, "yyyyMMdd");
-        String Query = "SELECT * FROM " + TABLE_CALENDAR + " WHERE " + KEY_FULL_DATE + " LIKE '" + dateStr + "%'";
+        SQLiteDatabase db = this.getWritableDatabase(); //TODO add something for lessons wich last the entire day.
+        Integer dateInt = Integer.parseInt(DateUtils.formatDate(date, "yyyyMMdd")); //Adding 0's for ability to filter results.
+        String Query = "SELECT * FROM " + TABLE_CALENDAR + " WHERE " + KEY_FORMATTED_START + " <= " + dateInt + " AND "
+                + KEY_FORMATTED_END + " >= " + dateInt;
         Cursor cursor = db.rawQuery(Query, null);
         Log.d(TAG, "getAppointmentsByDate: Query: " + Query);
         Log.d(TAG, "getAppointmentsByDate: amount of items: " + cursor.getCount());
@@ -231,7 +238,11 @@ public class CalendarDB extends SQLiteOpenHelper {
     }
 
     public void removeAll() {
-        SQLiteDatabase db = this.getWritableDatabase(); // helper is object extends SQLiteOpenHelper
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_CALENDAR, null, null);
+    }
+
+    public void removeAll(SQLiteDatabase db) {
         db.delete(TABLE_CALENDAR, null, null);
     }
 }

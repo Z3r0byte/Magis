@@ -21,12 +21,23 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 
 public class AddAppointmentActivity extends AppCompatActivity {
-
+    private static final String TAG = "AddAppointmentActivity";
+    
+    
     Toolbar mToolbar;
     EditText mEditTitle;
+    EditText mEditLocation;
+    CheckBox mCheckEntireDay;
+    Button mButtonStart;
+    Button mButtonEnd;
+    EditText mEditDescription;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +65,14 @@ public class AddAppointmentActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable editable) {
+            }
+        });
+        
+        mButtonStart = (Button) findViewById(R.id.text_start);
+        mButtonStart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d(TAG, "onClick: Clicked");
             }
         });
     }
