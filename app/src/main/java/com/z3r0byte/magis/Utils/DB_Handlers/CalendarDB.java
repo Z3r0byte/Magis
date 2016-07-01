@@ -32,7 +32,9 @@ import net.ilexiconn.magister.container.sub.Link;
 import net.ilexiconn.magister.container.sub.SubSubject;
 import net.ilexiconn.magister.container.sub.Teacher;
 import net.ilexiconn.magister.container.type.InfoType;
+import net.ilexiconn.magister.util.DateUtil;
 
+import java.text.ParseException;
 import java.util.Date;
 
 
@@ -123,10 +125,33 @@ public class CalendarDB extends SQLiteOpenHelper {
         for (Appointment item :
                 appointments) {
             Integer id = item.id;
-            if (!day.equals(item.startDateString.substring(0, 10))) {
-                deleteAppointmentByDateString(item.startDateString);
+
+            /*
+            Fixing the Timezone Bug
+             */
+            String startDateString;
+            try {
+                startDateString = DateUtil.dateToString(DateUtils.addHours(item.startDate, 2));
+            } catch (ParseException e) {
+                startDateString = null;
+                e.printStackTrace();
             }
-            day = item.startDateString.substring(0, 10);
+            String endDateString;
+            try {
+                endDateString = DateUtil.dateToString(DateUtils.addHours(item.endDate, 1));
+                //Not adding 2 hours to prevent appointments from being showed one day too long.
+            } catch (ParseException e) {
+                endDateString = null;
+                e.printStackTrace();
+            }
+            /*
+             End of the bug fix
+             */
+
+            if (!day.equals(startDateString.replaceAll("-", "").substring(0, 8))) {
+                deleteAppointmentByDateString(startDateString);
+            }
+            day = startDateString.replaceAll("-", "").substring(0, 8);
 
             contentValues.put(KEY_CALENDAR_ID, id);
             contentValues.put(KEY_DESC, item.description);
@@ -134,8 +159,8 @@ public class CalendarDB extends SQLiteOpenHelper {
             contentValues.put(KEY_CONTENT, item.content);
             contentValues.put(KEY_END, item.endDateString);
             contentValues.put(KEY_FINISHED, item.finished);
-            contentValues.put(KEY_FORMATTED_END, item.endDateString.replaceAll("-", "").substring(0, 8));
-            contentValues.put(KEY_FORMATTED_START, item.startDateString.replaceAll("-", "").substring(0, 8));
+            contentValues.put(KEY_FORMATTED_END, endDateString.replaceAll("-", "").substring(0, 8));
+            contentValues.put(KEY_FORMATTED_START, startDateString.replaceAll("-", "").substring(0, 8));
             contentValues.put(KEY_INFO_TYPE, item.infoType.getID());
             contentValues.put(KEY_LINKS, new Gson().toJson(item.links));
             contentValues.put(KEY_LOCATION, item.location);
