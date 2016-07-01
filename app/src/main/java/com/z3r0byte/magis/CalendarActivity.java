@@ -306,8 +306,7 @@ public class CalendarActivity extends MagisActivity implements DatePickerDialog.
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_add) {
-            Toast.makeText(CalendarActivity.this, "Dit kan nog niet...", Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(getApplicationContext(), AddAppointmentActivity.class));
+            startActivity(new Intent(getApplicationContext(), AddAppointmentActivity.class).putExtra("Magister", mMagister));
             return true;
         } else if (id == R.id.action_date) {
             chooseDate();

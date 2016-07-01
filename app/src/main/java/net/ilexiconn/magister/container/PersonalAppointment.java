@@ -36,13 +36,13 @@ public class PersonalAppointment implements Serializable {
     public String endDate;
 
     @SerializedName("DuurtHeleDag")
-    public boolean takesAllDay = false;
+    public boolean takesAllDay;
 
     @SerializedName("Lokatie")
     public String location;
 
     @SerializedName("InfoType")
-    public int infoType = 1;
+    public int infoType = 6;
 
     @SerializedName("WeergaveType")
     public int displayType = 1;
@@ -65,7 +65,7 @@ public class PersonalAppointment implements Serializable {
     @SerializedName("OpdrachtId")
     public int asignmentId = 0;
 
-    public PersonalAppointment(String title, String content, String location, AppointmentType type, Date start, Date end) throws ParseException {
+    public PersonalAppointment(String title, String content, String location, AppointmentType type, Date start, Date end) throws ParseException, InvalidParameterException {
         this.location = location;
         this.content = content;
         if (title == null || "".equals(title)) {

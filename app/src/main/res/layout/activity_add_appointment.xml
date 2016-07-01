@@ -70,14 +70,26 @@
 
         </android.support.design.widget.TextInputLayout>
 
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/msg_date"
+            android:textColor="@color/colorAccent"
+            android:textSize="14sp"
+            android:id="@+id/button_date"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_below="@+id/input_layout_location"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
         <CheckBox
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/msg_entire_day"
             android:id="@+id/checkbox_entire_day"
-            android:layout_below="@+id/input_layout_location"
-            android:layout_toLeftOf="@+id/text_end"
-            android:layout_toStartOf="@+id/text_end"
+            android:layout_below="@+id/button_date"
+            android:layout_toLeftOf="@+id/button_end"
+            android:layout_toStartOf="@+id/button_end"
             android:layout_marginTop="15dp"/>
 
         <Button
@@ -87,7 +99,7 @@
             android:textColor="@color/colorAccent"
             style="@style/Widget.AppCompat.Button.Borderless"
             android:textSize="14sp"
-            android:id="@+id/text_start"
+            android:id="@+id/button_start"
             android:layout_below="@+id/checkbox_entire_day"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
@@ -99,15 +111,15 @@
             android:text="@string/msg_end"
             android:textColor="@color/colorAccent"
             android:textSize="14sp"
-            android:id="@+id/text_end"
+            android:id="@+id/button_end"
             style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_marginLeft="24dp"
-            android:layout_alignTop="@+id/text_start"
-            android:layout_toRightOf="@+id/text_start"/>
+            android:layout_alignTop="@+id/button_start"
+            android:layout_toRightOf="@+id/button_start" />
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/input_layout_description"
-            android:layout_below="@+id/text_start"
+            android:layout_below="@+id/button_start"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -118,6 +130,19 @@
                 android:hint="@string/hint_description"/>
 
         </android.support.design.widget.TextInputLayout>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/msg_create_appointment"
+            android:textColor="@color/colorAccent"
+            android:textSize="14sp"
+            android:id="@+id/button_create"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_marginBottom="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true" />
 
     </RelativeLayout>
 
