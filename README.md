@@ -4,7 +4,7 @@ Dit is de repository van de Magister-app Magis.
 
 ######[Website](http://magis-app.nl)
 
-####Current Branch: magis_0.5.0
+####Current Branch: magis_0.6.0
 
 ###Contributing: <br>
 Als je mee wilt helpen aan deze app is dat helemaal prima!
