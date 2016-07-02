@@ -182,8 +182,15 @@ public class AddAppointmentActivity extends AppCompatActivity
                         mButtonStart.setText(DateUtils.formatDate(startTime, "HH:mm"));
                     }
                 });
+                timePicker.show(getFragmentManager(), "TimePicker");
+            } else {
+                if (startTime != null) {
+                    timePicker.setMinTime(startTime.getHours(), startTime.getMinutes() + 1, 0);
+                    timePicker.show(getFragmentManager(), "TimePicker");
+                } else {
+                    Toast.makeText(AddAppointmentActivity.this, R.string.err_set_start_first, Toast.LENGTH_SHORT).show();
+                }
             }
-            timePicker.show(getFragmentManager(), "TimePicker");
         } else {
             Toast.makeText(AddAppointmentActivity.this, R.string.err_set_date_first, Toast.LENGTH_SHORT).show();
         }

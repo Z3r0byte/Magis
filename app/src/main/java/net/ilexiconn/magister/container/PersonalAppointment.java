@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package net.ilexiconn.magister.container;
 
 import com.google.gson.annotations.SerializedName;
@@ -67,6 +68,9 @@ public class PersonalAppointment implements Serializable {
 
     public PersonalAppointment(String title, String content, String location, AppointmentType type, Date start, Date end) throws ParseException, InvalidParameterException {
         this.location = location;
+        if (content == null || content == "") {
+            content = " ";
+        }
         this.content = content;
         if (title == null || "".equals(title)) {
             throw new InvalidParameterException("The appointment's title must be set!");

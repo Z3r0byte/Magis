@@ -80,7 +80,7 @@ public class LoginTask extends AsyncTask<Void, Void, ParcelableMagister> {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                         useCache();
-                        checkCahce((CalendarActivity) activity);
+
                         Snackbar.make(activity.coordinatorLayout, activity.getString(R.string.msg_using_cache), Snackbar.LENGTH_LONG).show();
                         cancel(true);
                     }
@@ -122,8 +122,7 @@ public class LoginTask extends AsyncTask<Void, Void, ParcelableMagister> {
         } else {
             useCache();
             checkCahce(activity1);
-            
-            LoginUtils.loginError(activity, true);
+
             Log.e(TAG, error);
             Snackbar.make(activity.coordinatorLayout, error + " " + activity1.getString(R.string.msg_using_cache), Snackbar.LENGTH_LONG).show();
         }

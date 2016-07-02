@@ -88,33 +88,42 @@ public class AppointmentContentCard extends Card {
             public void run() {
                 while (ready != true) {
                 }
-                ContentButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Looper.prepare();
-                                AppointmentHandler appointmentHandler = new AppointmentHandler(magister);
-                                try {
-                                    appointment.finished = !appointment.finished;
-                                    Boolean finished = appointmentHandler.finishAppointment(appointment);
-                                    Log.d(TAG, "run: Gelukt: " + finished);
-                                    if (finished) {
-                                        activity.updateAppointment(appointment);
+                if (magister != null) {
+                    ContentButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Looper.prepare();
+                                    AppointmentHandler appointmentHandler = new AppointmentHandler(magister);
+                                    try {
+                                        appointment.finished = !appointment.finished;
+                                        Boolean finished = appointmentHandler.finishAppointment(appointment);
+                                        Log.d(TAG, "run: Gelukt: " + finished);
+                                        if (finished) {
+                                            activity.updateAppointment(appointment);
+                                        }
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                        Toast.makeText(Context, R.string.err_no_connection, Toast.LENGTH_SHORT).show();
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                        Toast.makeText(Context, R.string.err_unknown, Toast.LENGTH_SHORT).show();
                                     }
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                    Toast.makeText(Context, R.string.err_no_connection, Toast.LENGTH_SHORT).show();
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                    Toast.makeText(Context, R.string.err_unknown, Toast.LENGTH_SHORT).show();
                                 }
-                            }
-                        }).start();
+                            }).start();
 
-                    }
-                });
+                        }
+                    });
+                } else {
+                    activity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(activity, R.string.err_not_logged_in, Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
             }
         }).start();
 

@@ -42,6 +42,8 @@
     <string name="err_invalid_session">Ongeldige sessie…</string>
     <string name="err_no_connection">Geen verbinding…</string>
     <string name="err_no_lessons">Er zijn geen lessen gevonden</string>
+    <string name="err_not_logged_in">Fout: je bent niet ingelogd.</string>
+    <string name="err_set_start_first">Stel eerst een begintijd in.</string>
     <string name="err_terrible_wrong_on_login">Er is iets vreselijk misgegaan met het inloggen, log aub helemaal opnieuw in. :(</string>
     <string name="err_unknown">Er is een onbekende fout opgetreden, probeer het opnieuw.</string>
     <string name="err_wrong_username_or_password">Verkeerde gebruikersnaam of wachtwoord</string>
@@ -54,6 +56,7 @@
     <string name="hint_username">Gebruikersnaam</string>
 
     <string name="menu_add_appointment">Afspraak toevoegen</string>
+    <string name="menu_delete">Verwijderen</string>
     <string name="menu_choose_date">Datum kiezen</string>
     <string name="menu_to_today">Naar vandaag</string>
 
@@ -63,6 +66,7 @@
     <string name="msg_appointment_created_successfully">Afspraak aangemaakt.</string>
     <string name="msg_create_appointment">Aanmaken</string>
     <string name="msg_date">Datum</string>
+    <string name="msg_deleted">Verwijderd</string>
     <string name="msg_description">Beschrijving</string>
     <string name="msg_details">Details</string>
     <string name="msg_duration">Duur</string>

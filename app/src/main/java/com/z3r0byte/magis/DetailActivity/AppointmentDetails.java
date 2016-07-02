@@ -17,10 +17,13 @@
 package com.z3r0byte.magis.DetailActivity;
 
 import android.os.Bundle;
+import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
@@ -34,6 +37,9 @@ import com.z3r0byte.magis.Utils.DateUtils;
 import net.ilexiconn.magister.ParcelableMagister;
 import net.ilexiconn.magister.container.Appointment;
 import net.ilexiconn.magister.container.type.InfoType;
+import net.ilexiconn.magister.handler.AppointmentHandler;
+
+import java.io.IOException;
 
 import it.gmariotti.cardslib.library.internal.CardHeader;
 import it.gmariotti.cardslib.library.view.CardViewNative;
@@ -67,6 +73,7 @@ public class AppointmentDetails extends AppCompatActivity {
         toolbar.setTitle(appointment.description);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
 
         AppointmentDetailCard mainCardContent = new AppointmentDetailCard(this);
         CardHeader cardHeader = new CardHeader(this);
@@ -154,5 +161,59 @@ public class AppointmentDetails extends AppCompatActivity {
 
         CalendarDB dbHelper = new CalendarDB(this);
         dbHelper.finishAppointment(appointment);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_appointment_details, menu);
+        MenuItem item = menu.findItem(R.id.action_delete);
+        if (appointment.type.getID() != 1) {
+            item.setVisible(false);
+        }
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+        if (id == R.id.action_delete) {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    Looper.prepare();
+                    AppointmentHandler appointmentHandler = new AppointmentHandler(mMagister);
+                    try {
+                        Log.d(TAG, "run: Deleting Appointment...");
+                        appointmentHandler.removeAppointment(appointment);
+
+                        CalendarDB db = new CalendarDB(getApplicationContext());
+                        db.deleteAppointment(appointment);
+
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(AppointmentDetails.this, R.string.msg_deleted, Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                        finish();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(AppointmentDetails.this, R.string.err_no_connection, Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                }
+            }).start();
+
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

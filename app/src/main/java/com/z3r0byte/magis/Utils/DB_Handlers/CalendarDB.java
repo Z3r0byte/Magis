@@ -31,6 +31,7 @@ import net.ilexiconn.magister.container.sub.Classroom;
 import net.ilexiconn.magister.container.sub.Link;
 import net.ilexiconn.magister.container.sub.SubSubject;
 import net.ilexiconn.magister.container.sub.Teacher;
+import net.ilexiconn.magister.container.type.AppointmentType;
 import net.ilexiconn.magister.container.type.InfoType;
 import net.ilexiconn.magister.util.DateUtil;
 
@@ -171,6 +172,7 @@ public class CalendarDB extends SQLiteOpenHelper {
             contentValues.put(KEY_SUBJECTS, new Gson().toJson(item.subjects));
             contentValues.put(KEY_TEACHER, new Gson().toJson(item.teachers));
             contentValues.put(KEY_TAKES_ALL_DAY, item.takesAllDay);
+            contentValues.put(KEY_TYPE, item.type.getID());
 
 
             db.insert(TABLE_CALENDAR, null, contentValues);
@@ -197,6 +199,8 @@ public class CalendarDB extends SQLiteOpenHelper {
                 + KEY_FORMATTED_END + " >= " + date;
         Log.d(TAG, "deleteAppointmentByDateInt: Query: " + Query);
         db.execSQL(Query);
+
+        db.close();
     }
 
     public void finishAppointment(Appointment appointment) {
@@ -205,6 +209,8 @@ public class CalendarDB extends SQLiteOpenHelper {
         contentValues.put(KEY_FINISHED, appointment.finished);
 
         db.update(TABLE_CALENDAR, contentValues, KEY_CALENDAR_ID + "=" + appointment.id, null);
+
+        db.close();
     }
     
     public Appointment[] getAppointmentsByDate(Date date){
@@ -237,6 +243,7 @@ public class CalendarDB extends SQLiteOpenHelper {
                     appointment.classState = cursor.getInt(cursor.getColumnIndex(KEY_STATE));
                     appointment.subjects = gson.fromJson(cursor.getString(cursor.getColumnIndex(KEY_SUBJECTS)), SubSubject[].class);
                     appointment.teachers = gson.fromJson(cursor.getString(cursor.getColumnIndex(KEY_TEACHER)), Teacher[].class);
+                    appointment.type = AppointmentType.getTypeById(cursor.getInt(cursor.getColumnIndex(KEY_TYPE)));
 
                     results[i] = appointment;
                     i++;
@@ -249,6 +256,20 @@ public class CalendarDB extends SQLiteOpenHelper {
         return results;
     }
 
+    public void deleteAppointment(Appointment appointment) {
+        deleteAppointment(appointment.id);
+    }
+
+    public void deleteAppointment(int id) {
+        Log.d(TAG, "deleteAppointment() called with: " + "id = [" + id + "]");
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        String Query = "DELETE FROM " + TABLE_CALENDAR + " WHERE " + KEY_ID + " = " + id + "";
+        Log.d(TAG, "deleteAppointment: " + Query);
+        db.execSQL(Query);
+        db.close();
+    }
+
     public boolean CheckInDB(String TableName, String dbfield, String fieldValue) {
 
         SQLiteDatabase db = this.getWritableDatabase();
@@ -259,6 +280,7 @@ public class CalendarDB extends SQLiteOpenHelper {
             return false;
         }
         cursor.close();
+        db.close();
         return true;
     }
 
