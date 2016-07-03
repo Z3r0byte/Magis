@@ -214,7 +214,7 @@ public class CalendarDB extends SQLiteOpenHelper {
     }
     
     public Appointment[] getAppointmentsByDate(Date date){
-        SQLiteDatabase db = this.getWritableDatabase(); //TODO add something for lessons wich last the entire day.
+        SQLiteDatabase db = this.getWritableDatabase();
         Integer dateInt = Integer.parseInt(DateUtils.formatDate(date, "yyyyMMdd")); //Adding 0's for ability to filter results.
         String Query = "SELECT * FROM " + TABLE_CALENDAR + " WHERE " + KEY_FORMATTED_START + " <= " + dateInt + " AND "
                 + KEY_FORMATTED_END + " >= " + dateInt;
