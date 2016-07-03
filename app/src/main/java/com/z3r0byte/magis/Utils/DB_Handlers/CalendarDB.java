@@ -264,7 +264,7 @@ public class CalendarDB extends SQLiteOpenHelper {
         Log.d(TAG, "deleteAppointment() called with: " + "id = [" + id + "]");
 
         SQLiteDatabase db = this.getWritableDatabase();
-        String Query = "DELETE FROM " + TABLE_CALENDAR + " WHERE " + KEY_ID + " = " + id + "";
+        String Query = "DELETE FROM " + TABLE_CALENDAR + " WHERE " + KEY_CALENDAR_ID + " = " + id + "";
         Log.d(TAG, "deleteAppointment: " + Query);
         db.execSQL(Query);
         db.close();
