@@ -179,8 +179,6 @@ public class CalendarDB extends SQLiteOpenHelper {
 
         }
 
-        db.close();
-
     }
 
     public void deleteAppointmentByDate(Date date) {
@@ -200,7 +198,6 @@ public class CalendarDB extends SQLiteOpenHelper {
         Log.d(TAG, "deleteAppointmentByDateInt: Query: " + Query);
         db.execSQL(Query);
 
-        db.close();
     }
 
     public void finishAppointment(Appointment appointment) {
@@ -210,7 +207,6 @@ public class CalendarDB extends SQLiteOpenHelper {
 
         db.update(TABLE_CALENDAR, contentValues, KEY_CALENDAR_ID + "=" + appointment.id, null);
 
-        db.close();
     }
     
     public Appointment[] getAppointmentsByDate(Date date){
@@ -251,7 +247,6 @@ public class CalendarDB extends SQLiteOpenHelper {
             }
         }
         cursor.close();
-        db.close();
 
         return results;
     }
@@ -267,7 +262,6 @@ public class CalendarDB extends SQLiteOpenHelper {
         String Query = "DELETE FROM " + TABLE_CALENDAR + " WHERE " + KEY_CALENDAR_ID + " = " + id + "";
         Log.d(TAG, "deleteAppointment: " + Query);
         db.execSQL(Query);
-        db.close();
     }
 
     public boolean CheckInDB(String TableName, String dbfield, String fieldValue) {
@@ -280,7 +274,6 @@ public class CalendarDB extends SQLiteOpenHelper {
             return false;
         }
         cursor.close();
-        db.close();
         return true;
     }
 
