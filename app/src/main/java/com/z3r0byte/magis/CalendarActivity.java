@@ -76,6 +76,7 @@ public class CalendarActivity extends MagisActivity implements DatePickerDialog.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calendar);
 
+
         coordinatorLayout = (CoordinatorLayout) findViewById(R.id.layout_calendar);
         listView = (ListView) findViewById(R.id.list_calendar);
         errorView = (ErrorView) findViewById(R.id.error_view_calendar);
@@ -138,7 +139,7 @@ public class CalendarActivity extends MagisActivity implements DatePickerDialog.
             mUser = new Gson().fromJson(getSharedPreferences("data", MODE_PRIVATE).getString("User", null), User.class);
             mSchool = new Gson().fromJson(getSharedPreferences("data", MODE_PRIVATE).getString("School", null), School.class);
             getMagister();
-            NavigationDrawer.SetupNavigationDrawer(this, coordinatorLayout, this, mToolbar, mProfile, mUser, "Agenda");
+            NavigationDrawer.SetupNavigationDrawer(this, mToolbar, mProfile, mUser, "Agenda");
         }
 
         date = DateUtils.getToday();
@@ -151,7 +152,7 @@ public class CalendarActivity extends MagisActivity implements DatePickerDialog.
 
 
     public void getMagister() {
-        if (LoginUtils.reLogin(this)) {
+        if (mMagister == null || mMagister.isExpired()) {
             new LoginTask(this, mSchool, mUser).execute();
         } else if (LoginUtils.loginError(this)) {
             final MagisActivity activity = this;
@@ -167,7 +168,7 @@ public class CalendarActivity extends MagisActivity implements DatePickerDialog.
     }
 
     public void getAppointments() {
-        if (mMagister != null) {
+        if (mMagister != null && !mMagister.isExpired()) {
             Date from = DateUtils.addDays(date, -7);
             Date until = DateUtils.addDays(date, 14);
             new AppointmentsTask(this, mMagister, from, until, 3).execute();

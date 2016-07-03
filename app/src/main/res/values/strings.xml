@@ -116,6 +116,7 @@
     <string name="snackbar_not_logged_in">Log eerst in</string>
 
     <string name="title_calendar">Agenda</string>
+    <string name="title_grades">Cijfers</string>
     <string name="title_new_appointment">Nieuwe afspraak</string>
 
 </resources>
