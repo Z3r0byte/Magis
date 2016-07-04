@@ -19,6 +19,7 @@
     android:layout_height="wrap_content">
 
     <RelativeLayout
+        android:visibility="gone"
         android:id="@+id/card_details_layout_description"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -57,6 +58,7 @@
 
 
     <RelativeLayout
+        android:visibility="gone"
         android:layout_marginTop="20dp"
         android:layout_below="@+id/card_details_layout_description"
         android:id="@+id/card_details_layout_period"
@@ -97,6 +99,7 @@
 
 
     <RelativeLayout
+        android:visibility="gone"
         android:layout_marginTop="20dp"
         android:layout_below="@+id/card_details_layout_period"
         android:id="@+id/card_details_layout_duration"
@@ -136,6 +139,7 @@
     </RelativeLayout>
 
     <RelativeLayout
+        android:visibility="gone"
         android:layout_marginTop="20dp"
         android:layout_below="@+id/card_details_layout_duration"
         android:id="@+id/card_details_layout_location"
@@ -175,6 +179,7 @@
     </RelativeLayout>
 
     <RelativeLayout
+        android:visibility="gone"
         android:layout_marginTop="20dp"
         android:layout_below="@+id/card_details_layout_location"
         android:id="@+id/card_details_layout_teacher"

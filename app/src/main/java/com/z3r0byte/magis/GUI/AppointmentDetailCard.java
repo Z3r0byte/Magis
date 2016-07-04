@@ -17,10 +17,10 @@
 package com.z3r0byte.magis.GUI;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
@@ -33,19 +33,19 @@ import it.gmariotti.cardslib.library.internal.Card;
 public class AppointmentDetailCard extends Card {
     private static final String TAG = "AppointmentDetailCard";
 
-    TextView descriptionTextView;
+    RelativeLayout descriptionLayout;
     TextView descriptionTextInput;
     ImageView descriptionImageView;
-    TextView periodTextView;
+    RelativeLayout periodLayout;
     TextView periodTextInput;
     ImageView periodImageView;
-    TextView teacherTextView;
+    RelativeLayout teacherLayout;
     TextView teacherTextInput;
     ImageView teacherImageView;
-    TextView durationTextView;
+    RelativeLayout durationLayout;
     TextView durationTextInput;
     ImageView durationImageView;
-    TextView locationTextView;
+    RelativeLayout locationLayout;
     TextView locationTextInput;
     ImageView locationImageView;
 
@@ -70,9 +70,7 @@ public class AppointmentDetailCard extends Card {
                 while (ready != true) {
                 }
                 IconicsDrawable drawable = new IconicsDrawable(context, GoogleMaterial.Icon.gmd_description);
-                descriptionImageView.setVisibility(View.VISIBLE);
-                descriptionTextView.setVisibility(View.VISIBLE);
-                descriptionTextInput.setVisibility(View.VISIBLE);
+                descriptionLayout.setVisibility(View.VISIBLE);
                 descriptionImageView.setImageDrawable(drawable);
                 descriptionTextInput.setText(description);
             }
@@ -86,9 +84,7 @@ public class AppointmentDetailCard extends Card {
                 while (ready != true) {
                 }
                 IconicsDrawable drawable = new IconicsDrawable(context, GoogleMaterial.Icon.gmd_info);
-                periodImageView.setVisibility(View.VISIBLE);
-                periodTextView.setVisibility(View.VISIBLE);
-                periodTextInput.setVisibility(View.VISIBLE);
+                periodLayout.setVisibility(View.VISIBLE);
                 periodImageView.setImageDrawable(drawable);
                 periodTextInput.setText(period);
             }
@@ -102,9 +98,7 @@ public class AppointmentDetailCard extends Card {
                 while (ready != true) {
                 }
                 IconicsDrawable drawable = new IconicsDrawable(context, GoogleMaterial.Icon.gmd_person);
-                teacherImageView.setVisibility(View.VISIBLE);
-                teacherTextView.setVisibility(View.VISIBLE);
-                teacherTextInput.setVisibility(View.VISIBLE);
+                teacherLayout.setVisibility(View.VISIBLE);
                 teacherImageView.setImageDrawable(drawable);
                 teacherTextInput.setText(teacher);
             }
@@ -118,9 +112,7 @@ public class AppointmentDetailCard extends Card {
                 while (ready != true) {
                 }
                 IconicsDrawable drawable = new IconicsDrawable(context, GoogleMaterial.Icon.gmd_today);
-                durationImageView.setVisibility(View.VISIBLE);
-                durationTextView.setVisibility(View.VISIBLE);
-                durationTextInput.setVisibility(View.VISIBLE);
+                durationLayout.setVisibility(View.VISIBLE);
                 durationImageView.setImageDrawable(drawable);
                 durationTextInput.setText(duration);
             }
@@ -134,9 +126,7 @@ public class AppointmentDetailCard extends Card {
                 while (ready != true) {
                 }
                 IconicsDrawable drawable = new IconicsDrawable(context, GoogleMaterial.Icon.gmd_location_on);
-                locationImageView.setVisibility(View.VISIBLE);
-                locationTextView.setVisibility(View.VISIBLE);
-                locationTextInput.setVisibility(View.VISIBLE);
+                locationLayout.setVisibility(View.VISIBLE);
                 locationImageView.setImageDrawable(drawable);
                 locationTextInput.setText(location);
             }
@@ -146,22 +136,25 @@ public class AppointmentDetailCard extends Card {
 
     @Override
     public void setupInnerViewElements(ViewGroup parent, View view) {
-        descriptionTextView = (TextView) view.findViewById(R.id.card_details_textview_description);
+        descriptionLayout = (RelativeLayout) view.findViewById(R.id.card_details_layout_description);
         descriptionTextInput = (TextView) view.findViewById(R.id.card_details_textview_description_input);
         descriptionImageView = (ImageView) view.findViewById(R.id.card_details_imageview_description);
-        periodTextView = (TextView) view.findViewById(R.id.card_details_textview_period);
+
+        periodLayout = (RelativeLayout) view.findViewById(R.id.card_details_layout_period);
         periodTextInput = (TextView) view.findViewById(R.id.card_details_textview_period_input);
         periodImageView = (ImageView) view.findViewById(R.id.card_details_imageview_period);
-        teacherTextView = (TextView) view.findViewById(R.id.card_details_textview_teacher);
+
+        teacherLayout = (RelativeLayout) view.findViewById(R.id.card_details_layout_teacher);
         teacherTextInput = (TextView) view.findViewById(R.id.card_details_textview_teacher_input);
         teacherImageView = (ImageView) view.findViewById(R.id.card_details_imageview_teacher);
-        durationTextView = (TextView) view.findViewById(R.id.card_details_textview_duration);
+
+        durationLayout = (RelativeLayout) view.findViewById(R.id.card_details_layout_duration);
         durationTextInput = (TextView) view.findViewById(R.id.card_details_textview_duration_input);
         durationImageView = (ImageView) view.findViewById(R.id.card_details_imageview_duration);
-        locationTextView = (TextView) view.findViewById(R.id.card_details_textview_location);
+
+        locationLayout = (RelativeLayout) view.findViewById(R.id.card_details_layout_location);
         locationTextInput = (TextView) view.findViewById(R.id.card_details_textview_location_input);
         locationImageView = (ImageView) view.findViewById(R.id.card_details_imageview_location);
         ready = true;
-        Log.d(TAG, "setupInnerViewElements: Done setting up");
     }
 }
