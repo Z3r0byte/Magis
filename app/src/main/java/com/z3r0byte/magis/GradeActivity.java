@@ -17,9 +17,16 @@
 package com.z3r0byte.magis;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 
 import com.google.gson.Gson;
+import com.z3r0byte.magis.Fragments.MainGradesFragment;
+import com.z3r0byte.magis.Fragments.NewGradesFragment;
 import com.z3r0byte.magis.GUI.NavigationDrawer;
 import com.z3r0byte.magis.Utils.MagisActivity;
 
@@ -27,7 +34,11 @@ import net.ilexiconn.magister.container.Profile;
 import net.ilexiconn.magister.container.School;
 import net.ilexiconn.magister.container.User;
 
-public class GradeActivity extends MagisActivity {
+import it.neokree.materialtabs.MaterialTab;
+import it.neokree.materialtabs.MaterialTabHost;
+import it.neokree.materialtabs.MaterialTabListener;
+
+public class GradeActivity extends MagisActivity implements MaterialTabListener {
     private static final String TAG = "GradeActivity";
 
 
@@ -37,6 +48,10 @@ public class GradeActivity extends MagisActivity {
 
     Toolbar mToolbar;
     NavigationDrawer navigationDrawer;
+
+    MaterialTabHost tabHost;
+    ViewPager viewPager;
+    PagerAdapter pagerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,5 +68,78 @@ public class GradeActivity extends MagisActivity {
 
         navigationDrawer = new NavigationDrawer(this, mToolbar, mProfile, mUser, "Cijfers");
         navigationDrawer.SetupNavigationDrawer();
+
+
+        //Setting up Tabs
+        tabHost = (MaterialTabHost) findViewById(R.id.materialTabHost);
+        viewPager = (ViewPager) findViewById(R.id.viewpager);
+
+        pagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
+        viewPager.setAdapter(pagerAdapter);
+        viewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+            @Override
+            public void onPageSelected(int position) {
+                tabHost.setSelectedNavigationItem(position);
+
+            }
+        });
+
+        for (int i = 0; i < pagerAdapter.getCount(); i++) {
+            tabHost.addTab(
+                    tabHost.newTab()
+                            .setText(pagerAdapter.getPageTitle(i))
+                            .setTabListener(this)
+            );
+
+        }
     }
+
+
+    @Override
+    public void onTabSelected(MaterialTab tab) {
+        viewPager.setCurrentItem(tab.getPosition());
+    }
+
+    @Override
+    public void onTabReselected(MaterialTab tab) {
+
+    }
+
+    @Override
+    public void onTabUnselected(MaterialTab tab) {
+
+    }
+
+    private class ViewPagerAdapter extends FragmentStatePagerAdapter {
+
+        public ViewPagerAdapter(FragmentManager fm) {
+            super(fm);
+
+        }
+
+        public Fragment getItem(int num) {
+            if (num == 0) {
+                return new NewGradesFragment();
+            } else {
+                return new MainGradesFragment();
+            }
+
+        }
+
+        @Override
+        public int getCount() {
+            return 2;
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            if (position == 0) {
+                return "Nieuwste Cijfers";
+            } else {
+                return "Cijfers";
+            }
+        }
+
+    }
+
 }

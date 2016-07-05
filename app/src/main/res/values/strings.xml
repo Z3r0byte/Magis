@@ -119,4 +119,7 @@
     <string name="title_grades">Cijfers</string>
     <string name="title_new_appointment">Nieuwe afspraak</string>
 
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 </resources>
