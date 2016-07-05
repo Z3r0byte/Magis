@@ -28,7 +28,6 @@ import com.z3r0byte.magis.Adapters.AppointmentsAdapter;
 import com.z3r0byte.magis.CalendarActivity;
 import com.z3r0byte.magis.R;
 import com.z3r0byte.magis.Utils.DB_Handlers.CalendarDB;
-import com.z3r0byte.magis.Utils.DateUtils;
 import com.z3r0byte.magis.Utils.ErrorViewConfigs;
 import com.z3r0byte.magis.Utils.LoginUtils;
 import com.z3r0byte.magis.Utils.MagisActivity;
@@ -43,7 +42,6 @@ import net.ilexiconn.magister.util.SchoolUrl;
 import java.io.IOException;
 import java.security.InvalidParameterException;
 import java.text.ParseException;
-import java.util.Date;
 
 /**
  * Created by bas on 6-6-16.
@@ -121,7 +119,6 @@ public class LoginTask extends AsyncTask<Void, Void, ParcelableMagister> {
             Snackbar.make(activity.coordinatorLayout, activity1.getString(R.string.msg_logged_in), Snackbar.LENGTH_LONG).show();
         } else {
             useCache();
-            checkCahce(activity1);
 
             Log.e(TAG, error);
             Snackbar.make(activity.coordinatorLayout, error + " " + activity1.getString(R.string.msg_using_cache), Snackbar.LENGTH_LONG).show();
@@ -141,16 +138,6 @@ public class LoginTask extends AsyncTask<Void, Void, ParcelableMagister> {
             activity.errorView.setConfig(ErrorViewConfigs.NoLessonConfig);
         } else {
             activity.errorView.setVisibility(View.GONE);
-        }
-    }
-
-    private void checkCahce(CalendarActivity activity1) {
-        Date date1 = DateUtils.addDays(DateUtils.getToday(), -7);
-        Date date2 = DateUtils.addDays(DateUtils.getToday(), 14);
-
-        if (date1.before(activity1.firstDate) || date2.after(activity1.lastDate)) {
-            activity.errorView.setConfig(ErrorViewConfigs.NoCacheConfig);
-            activity.errorView.setVisibility(View.VISIBLE);
         }
     }
 }
