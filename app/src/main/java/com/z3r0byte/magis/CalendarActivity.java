@@ -70,6 +70,8 @@ public class CalendarActivity extends MagisActivity implements DatePickerDialog.
 
     Boolean mError = false;
 
+    NavigationDrawer mNavigationDrawer;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -139,7 +141,8 @@ public class CalendarActivity extends MagisActivity implements DatePickerDialog.
             mUser = new Gson().fromJson(getSharedPreferences("data", MODE_PRIVATE).getString("User", null), User.class);
             mSchool = new Gson().fromJson(getSharedPreferences("data", MODE_PRIVATE).getString("School", null), School.class);
             getMagister();
-            NavigationDrawer.SetupNavigationDrawer(this, mToolbar, mProfile, mUser, "Agenda");
+            mNavigationDrawer = new NavigationDrawer(this, mToolbar, mProfile, mUser, "Agenda");
+            mNavigationDrawer.SetupNavigationDrawer();
         }
 
         date = DateUtils.getToday();
@@ -322,8 +325,8 @@ public class CalendarActivity extends MagisActivity implements DatePickerDialog.
 
     @Override
     public void onBackPressed() {
-        if (NavigationDrawer.isDrawerOpen()) {
-            NavigationDrawer.CloseDrawer();
+        if (mNavigationDrawer.isDrawerOpen()) {
+            mNavigationDrawer.CloseDrawer();
         } else {
             super.onBackPressed();
         }

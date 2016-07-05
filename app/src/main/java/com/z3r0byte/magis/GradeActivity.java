@@ -36,6 +36,7 @@ public class GradeActivity extends MagisActivity {
     School mSchool;
 
     Toolbar mToolbar;
+    NavigationDrawer navigationDrawer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +51,7 @@ public class GradeActivity extends MagisActivity {
         mUser = new Gson().fromJson(getSharedPreferences("data", MODE_PRIVATE).getString("User", null), User.class);
         mSchool = new Gson().fromJson(getSharedPreferences("data", MODE_PRIVATE).getString("School", null), School.class);
 
-        NavigationDrawer.SetupNavigationDrawer(this, mToolbar, mProfile, mUser, "Cijfers");
+        navigationDrawer = new NavigationDrawer(this, mToolbar, mProfile, mUser, "Cijfers");
+        navigationDrawer.SetupNavigationDrawer();
     }
 }

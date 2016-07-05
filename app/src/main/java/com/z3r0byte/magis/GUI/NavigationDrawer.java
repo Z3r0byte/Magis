@@ -51,7 +51,22 @@ public class NavigationDrawer {
 
     private static final String TAG = "NavigationDrawer";
 
-    static Drawer drawer;
+    Drawer drawer;
+
+    MagisActivity activity;
+    Toolbar toolbar;
+    Profile profile;
+    User user;
+    String selection;
+
+    public NavigationDrawer(MagisActivity activity, Toolbar toolbar, Profile profile, User user, String selection) {
+        this.activity = activity;
+        this.toolbar = toolbar;
+        this.profile = profile;
+        this.user = user;
+        this.selection = selection;
+    }
+
 
     static PrimaryDrawerItem calendarItem = new PrimaryDrawerItem().withName(R.string.title_calendar)
             .withIcon(GoogleMaterial.Icon.gmd_today);
@@ -62,8 +77,7 @@ public class NavigationDrawer {
     static PrimaryDrawerItem logoutItem = new SecondaryDrawerItem().withName(R.string.drawer_logout)
             .withIcon(GoogleMaterial.Icon.gmd_exit_to_app).withSelectable(false);
 
-    public static void SetupNavigationDrawer(final MagisActivity activity,
-                                             Toolbar toolbar, Profile profile, User user, final String selection) {
+    public void SetupNavigationDrawer() {
 
         AccountHeader accountHeader = new AccountHeaderBuilder()
                 .withActivity(activity)
@@ -126,7 +140,7 @@ public class NavigationDrawer {
         setSelection(selection);
     }
 
-    private static void setSelection(String selection) {
+    private void setSelection(String selection) {
         switch (selection) {
             case "Agenda":
                 drawer.setSelection(calendarItem);
@@ -140,11 +154,11 @@ public class NavigationDrawer {
         }
     }
 
-    public static void CloseDrawer() {
+    public void CloseDrawer() {
         drawer.closeDrawer();
     }
 
-    public static Boolean isDrawerOpen() {
+    public Boolean isDrawerOpen() {
         return drawer.isDrawerOpen();
     }
 
