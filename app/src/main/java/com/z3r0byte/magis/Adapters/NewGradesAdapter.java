@@ -17,14 +17,18 @@
 package com.z3r0byte.magis.Adapters;
 
 import android.content.Context;
-import android.util.Log;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.mikepenz.google_material_typeface_library.GoogleMaterial;
+import com.mikepenz.iconics.IconicsDrawable;
 import com.z3r0byte.magis.R;
+import com.z3r0byte.magis.Utils.DateUtils;
 
 import net.ilexiconn.magister.container.Grade;
 
@@ -49,10 +53,21 @@ public class NewGradesAdapter extends ArrayAdapter<Grade> {
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View rowView = inflater.inflate(R.layout.list_new_grades, parent, false);
 
+        IconicsDrawable emptyStar = new IconicsDrawable(context, GoogleMaterial.Icon.gmd_star).color(Color.LTGRAY).sizeDp(24);
+        IconicsDrawable fullStar = new IconicsDrawable(context, GoogleMaterial.Icon.gmd_star)
+                .color(context.getResources().getColor(R.color.accent)).sizeDp(24);
 
-        Log.d(TAG, "getView: Position: " + position);
-        TextView textView = (TextView) rowView.findViewById(R.id.list_text_subject);
-        textView.setText(grades[position].subject.name);
+
+        TextView subject = (TextView) rowView.findViewById(R.id.list_text_subject);
+        subject.setText(grades[position].subject.name);
+        TextView date = (TextView) rowView.findViewById(R.id.list_text_date);
+        date.setText(DateUtils.formatDate(grades[position].filledInDate, "dd-MM-yyyy"));
+        TextView grade = (TextView) rowView.findViewById(R.id.list_text_grade);
+        grade.setText(grades[position].grade);
+
+        ImageView newGrade = (ImageView) rowView.findViewById(R.id.list_imageview_grade_new);
+        newGrade.setImageDrawable(emptyStar);
+
 
 
         return rowView;

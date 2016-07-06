@@ -16,17 +16,63 @@
   -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:paddingBottom="8dp"
+                android:paddingTop="8dp"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceListItem"
-        android:text="Engels"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:layout_centerVertical="true"
-        android:id="@+id/list_text_subject"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="56dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Engels"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:layout_marginTop="10dp"
+            android:id="@+id/list_text_subject"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
+            android:singleLine="true"/>
+
+        <TextView
+            android:id="@+id/list_text_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/list_text_subject"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:text="2-4-2016"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
+            android:singleLine="true"/>
+
+        <TextView
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:text="9.5"
+            android:id="@+id/list_text_grade"
+            android:layout_marginRight="60dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="60dp"
+            android:singleLine="true"
+            android:gravity="right"
+            android:textColor="@color/md_black_1000"
+            android:textSize="30sp"/>
+
+        <ImageView
+            android:id="@+id/list_imageview_grade_new"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginRight="16dp"
+            android:src="@drawable/magis512"
+            android:layout_marginEnd="16dp"/>
+
+    </RelativeLayout>
 
 </RelativeLayout>
