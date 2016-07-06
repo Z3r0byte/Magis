@@ -18,27 +18,72 @@ package com.z3r0byte.magis.Fragments;
 
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 
+import com.z3r0byte.magis.Adapters.NewGradesAdapter;
 import com.z3r0byte.magis.R;
+import com.z3r0byte.magis.Tasks.NewGradesTask;
+import com.z3r0byte.magis.Utils.MagisFragment;
+
+import net.ilexiconn.magister.ParcelableMagister;
+import net.ilexiconn.magister.container.Grade;
 
 
-public class NewGradesFragment extends Fragment {
+public class NewGradesFragment extends MagisFragment {
+    private static final String TAG = "NewGradesFragment";
 
+    View view;
 
-    public NewGradesFragment() {
-        // Required empty public constructor
+    public static NewGradesFragment newInstance(ParcelableMagister magister) {
+        NewGradesFragment fragment = new NewGradesFragment();
+        Bundle args = new Bundle();
+        args.putParcelable("Magister", magister);
+        fragment.setArguments(args);
+        return fragment;
     }
 
+    public NewGradesFragment() {
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_new_grades, container, false);
+        view = inflater.inflate(R.layout.fragment_new_grades, container, false);
+        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.layout_refresh);
+        mSwipeRefreshLayout.setColorSchemeResources(
+                R.color.colorPrimary,
+                R.color.setup_color_3,
+                R.color.setup_color_5);
+        mSwipeRefreshLayout.setOnRefreshListener(
+                new SwipeRefreshLayout.OnRefreshListener() {
+                    @Override
+                    public void onRefresh() {
+                        Log.d(TAG, "onRefresh: Refreshing!");
+                        refresh();
+                    }
+                }
+        );
+
+        mMagister = getArguments().getParcelable("Magister");
+
+        grades = new Grade[0];
+
+        listView = (ListView) view.findViewById(R.id.list_new_grades);
+        mNewGradesAdapter = new NewGradesAdapter(getActivity(), grades);
+        listView.setAdapter(mNewGradesAdapter);
+
+        new NewGradesTask(this, mMagister).execute();
+
+        return view;
+    }
+
+    private void refresh() {
+        new NewGradesTask(this, mMagister).execute();
     }
 
 }

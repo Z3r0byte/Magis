@@ -109,7 +109,7 @@ public class ParcelableMagister extends Magister implements Parcelable {
         magister.studies = magister.gson.fromJson(HttpUtil.httpGet(url.getStudiesUrl(magister.profile.id)), Study[].class);
         Date now = new Date();
         for (Study study : magister.studies) {
-            if (study.endDate.before(now)) {
+            if (study.startDate.before(now) && study.endDate.after(now)) {
                 magister.currentStudy = study;
             }
         }

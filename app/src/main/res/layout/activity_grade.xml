@@ -46,13 +46,4 @@
         android:layout_below="@+id/materialTabHost"
         android:id="@+id/viewpager"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="@style/Base.TextAppearance.AppCompat.Display1"
-        android:text="Coming Soon!"
-        android:id="@+id/textView"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"/>
-
 </RelativeLayout>

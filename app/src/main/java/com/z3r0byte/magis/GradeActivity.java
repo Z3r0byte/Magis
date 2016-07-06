@@ -23,6 +23,8 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.z3r0byte.magis.Fragments.MainGradesFragment;
@@ -30,9 +32,12 @@ import com.z3r0byte.magis.Fragments.NewGradesFragment;
 import com.z3r0byte.magis.GUI.NavigationDrawer;
 import com.z3r0byte.magis.Utils.MagisActivity;
 
+import net.ilexiconn.magister.ParcelableMagister;
 import net.ilexiconn.magister.container.Profile;
 import net.ilexiconn.magister.container.School;
 import net.ilexiconn.magister.container.User;
+
+import java.security.InvalidParameterException;
 
 import it.neokree.materialtabs.MaterialTab;
 import it.neokree.materialtabs.MaterialTabHost;
@@ -45,6 +50,7 @@ public class GradeActivity extends MagisActivity implements MaterialTabListener 
     Profile mProfile;
     User mUser;
     School mSchool;
+    ParcelableMagister mMagister;
 
     Toolbar mToolbar;
     NavigationDrawer navigationDrawer;
@@ -57,6 +63,15 @@ public class GradeActivity extends MagisActivity implements MaterialTabListener 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_grade);
+
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            mMagister = extras.getParcelable("Magister");
+        } else {
+            Log.e(TAG, "onCreate: No valid Magister!", new InvalidParameterException());
+            Toast.makeText(this, R.string.err_unknown, Toast.LENGTH_SHORT).show();
+            finish();
+        }
 
         mToolbar = (Toolbar) findViewById(R.id.Toolbar);
         mToolbar.setTitle(R.string.title_grades);
@@ -92,6 +107,8 @@ public class GradeActivity extends MagisActivity implements MaterialTabListener 
             );
 
         }
+
+
     }
 
 
@@ -119,7 +136,8 @@ public class GradeActivity extends MagisActivity implements MaterialTabListener 
 
         public Fragment getItem(int num) {
             if (num == 0) {
-                return new NewGradesFragment();
+                NewGradesFragment newGradesFragment = NewGradesFragment.newInstance(mMagister);
+                return newGradesFragment;
             } else {
                 return new MainGradesFragment();
             }
