@@ -89,7 +89,7 @@ public class Grade implements Serializable {
                 ", gradeRow=" + gradeRow +
                 ", teacherAbbreviation='" + teacherAbbreviation + '\'' +
                 ", gradeRowIdOfElo='" + gradeRowIdOfElo + '\'' +
-                ", subject=" + subject +
+                ", subject=" + subject.toString() +
                 ", dispensationForCourse='" + dispensationForCourse + '\'' +
                 ", dispensationForCourse2='" + dispensationForCourse2 + '\'' +
                 '}';
