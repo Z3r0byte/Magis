@@ -20,15 +20,15 @@
                 android:layout_height="match_parent"
                 tools:context="com.z3r0byte.magis.Fragments.MainGradesFragment">
 
-    <!-- TODO: Update blank fragment layout -->
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/layout_refresh">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="Hier komen alle cijfers"
-        android:id="@+id/textView2"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"/>
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/list_grades"/>
+    </android.support.v4.widget.SwipeRefreshLayout>
 
 </RelativeLayout>

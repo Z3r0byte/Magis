@@ -18,15 +18,33 @@ package com.z3r0byte.magis.Fragments;
 
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 
+import com.z3r0byte.magis.Adapters.GradesAdapter;
 import com.z3r0byte.magis.R;
+import com.z3r0byte.magis.Tasks.GradesTask;
+import com.z3r0byte.magis.Utils.MagisFragment;
 
-public class MainGradesFragment extends Fragment {
+import net.ilexiconn.magister.ParcelableMagister;
+import net.ilexiconn.magister.container.Grade;
 
+public class MainGradesFragment extends MagisFragment {
+    private static final String TAG = "MainGradesFragment";
+
+    View view;
+
+    public static MainGradesFragment newInstance(ParcelableMagister magister) {
+        MainGradesFragment fragment = new MainGradesFragment();
+        Bundle args = new Bundle();
+        args.putParcelable("Magister", magister);
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     public MainGradesFragment() {
         // Required empty public constructor
@@ -37,7 +55,38 @@ public class MainGradesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_main_grades, container, false);
+        view = inflater.inflate(R.layout.fragment_main_grades, container, false);
+        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.layout_refresh);
+        mSwipeRefreshLayout.setColorSchemeResources(
+                R.color.colorPrimary,
+                R.color.setup_color_3,
+                R.color.setup_color_5);
+        mSwipeRefreshLayout.setOnRefreshListener(
+                new SwipeRefreshLayout.OnRefreshListener() {
+                    @Override
+                    public void onRefresh() {
+                        Log.d(TAG, "onRefresh: Refreshing!");
+                        refresh();
+                    }
+                }
+        );
+
+        mMagister = getArguments().getParcelable("Magister");
+
+        grades = new Grade[0];
+
+        listView = (ListView) view.findViewById(R.id.list_grades);
+        mGradesAdapter = new GradesAdapter(getActivity(), grades);
+        listView.setAdapter(mGradesAdapter);
+
+        new GradesTask(this, mMagister).execute();
+
+
+        return view;
     }
 
+
+    private void refresh() {
+        new GradesTask(this, mMagister).execute();
+    }
 }

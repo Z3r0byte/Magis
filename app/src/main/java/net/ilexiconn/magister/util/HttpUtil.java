@@ -16,6 +16,8 @@
 
 package net.ilexiconn.magister.util;
 
+import android.util.Log;
+
 import net.ilexiconn.magister.Magister;
 
 import java.io.BufferedReader;
@@ -146,6 +148,7 @@ public class HttpUtil {
     }
 
     public static InputStreamReader httpGet(String url) throws IOException {
+        Log.d("HTTPGet", "httpGet() called with: " + "url = [" + url + "]");
         HttpsURLConnection connection = (HttpsURLConnection) new URL(url).openConnection();
         connection.setRequestMethod("GET");
         connection.setRequestProperty("Cookie", getCurrentCookies());

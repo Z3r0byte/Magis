@@ -20,6 +20,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.widget.ListView;
 
+import com.z3r0byte.magis.Adapters.GradesAdapter;
 import com.z3r0byte.magis.Adapters.NewGradesAdapter;
 
 import net.ilexiconn.magister.ParcelableMagister;
@@ -36,5 +37,6 @@ public class MagisFragment extends Fragment {
     public ListView listView;
     public ErrorView errorView;
     public NewGradesAdapter mNewGradesAdapter;
+    public GradesAdapter mGradesAdapter;
     public Grade[] grades;
 }

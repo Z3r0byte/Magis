@@ -139,7 +139,8 @@ public class GradeActivity extends MagisActivity implements MaterialTabListener 
                 NewGradesFragment newGradesFragment = NewGradesFragment.newInstance(mMagister);
                 return newGradesFragment;
             } else {
-                return new MainGradesFragment();
+                MainGradesFragment mainGradesFragment = MainGradesFragment.newInstance(mMagister);
+                return mainGradesFragment;
             }
 
         }
