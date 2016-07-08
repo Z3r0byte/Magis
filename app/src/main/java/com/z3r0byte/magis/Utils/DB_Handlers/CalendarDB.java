@@ -46,7 +46,6 @@ public class CalendarDB extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 11;
 
     private static final String DATABASE_NAME = "calendarDB";
-
     private static final String TABLE_CALENDAR = "calendar";
 
     private static final String KEY_ID = "id";
@@ -57,7 +56,6 @@ public class CalendarDB extends SQLiteOpenHelper {
     private static final String KEY_CONTENT = "content";
     private static final String KEY_START = "start";
     private static final String KEY_END = "end";
-    //private static final String KEY_FULL_DATE = "fullDate";
     private static final String KEY_FORMATTED_END = "formatend";
     private static final String KEY_FORMATTED_START = "formatstart";
     private static final String KEY_PERIOD_FROM = "periodFrom";

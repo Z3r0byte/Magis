@@ -21,6 +21,7 @@ import android.util.Log;
 
 import com.z3r0byte.magis.Adapters.GradesAdapter;
 import com.z3r0byte.magis.R;
+import com.z3r0byte.magis.Utils.DB_Handlers.GradesDB;
 import com.z3r0byte.magis.Utils.MagisFragment;
 
 import net.ilexiconn.magister.Magister;
@@ -66,6 +67,9 @@ public class GradesTask extends AsyncTask<Void, Void, Grade[]> {
             GradeHandler gradeHandler = new GradeHandler(magister);
             Grade[] grades = gradeHandler.getGrades(true, false, true);
             Log.d(TAG, "doInBackground: Amount of new grades: " + grades.length);
+
+            GradesDB gradesDB = new GradesDB(fragment.getActivity());
+            gradesDB.addGrades(grades);
             return grades;
         } catch (IOException e) {
             Log.e(TAG, "Unable to retrieve data", e);

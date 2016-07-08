@@ -72,26 +72,4 @@ public class Grade implements Serializable {
 
     @SerializedName("VakVrijstelling")
     public String dispensationForCourse2;
-
-    @Override
-    public String toString() {
-        return "Grade{" +
-                "id=" + id +
-                ", grade='" + grade + '\'' +
-                ", isSufficient=" + isSufficient +
-                ", filledInBy='" + filledInBy + '\'' +
-                ", filledInDateString='" + filledInDateString + '\'' +
-                ", filledInDate=" + filledInDate +
-                ", gradePeriod=" + gradePeriod +
-                ", doAtLaterDate=" + doAtLaterDate +
-                ", dispensation=" + dispensation +
-                ", doesCount=" + doesCount +
-                ", gradeRow=" + gradeRow +
-                ", teacherAbbreviation='" + teacherAbbreviation + '\'' +
-                ", gradeRowIdOfElo='" + gradeRowIdOfElo + '\'' +
-                ", subject=" + subject.toString() +
-                ", dispensationForCourse='" + dispensationForCourse + '\'' +
-                ", dispensationForCourse2='" + dispensationForCourse2 + '\'' +
-                '}';
-    }
 }

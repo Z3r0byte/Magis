@@ -50,12 +50,7 @@ public class NewGradesTask extends AsyncTask<Void, Void, Grade[]> {
 
     @Override
     protected void onPreExecute() {
-        fragment.getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                fragment.mSwipeRefreshLayout.setRefreshing(true);
-            }
-        });
+        fragment.mSwipeRefreshLayout.setRefreshing(true);
     }
 
     @Override

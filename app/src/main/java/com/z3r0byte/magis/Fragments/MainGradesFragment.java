@@ -28,6 +28,7 @@ import android.widget.ListView;
 import com.z3r0byte.magis.Adapters.GradesAdapter;
 import com.z3r0byte.magis.R;
 import com.z3r0byte.magis.Tasks.GradesTask;
+import com.z3r0byte.magis.Utils.DB_Handlers.GradesDB;
 import com.z3r0byte.magis.Utils.MagisFragment;
 
 import net.ilexiconn.magister.ParcelableMagister;
@@ -37,6 +38,8 @@ public class MainGradesFragment extends MagisFragment {
     private static final String TAG = "MainGradesFragment";
 
     View view;
+
+    GradesDB gradesDB;
 
     public static MainGradesFragment newInstance(ParcelableMagister magister) {
         MainGradesFragment fragment = new MainGradesFragment();
