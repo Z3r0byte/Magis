@@ -18,6 +18,7 @@ package com.z3r0byte.magis.Utils.DB_Handlers;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
@@ -32,13 +33,13 @@ import net.ilexiconn.magister.container.Grade;
 public class GradesDB extends SQLiteOpenHelper {
     private static final String TAG = "GradesDB";
 
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     private static final String DATABASE_NAME = "gradesDB";
     private static final String TABLE_GRADES = "grades";
 
     private static final String KEY_DB_ID = "dbID";
-    private static final String KEY_CIJFER_ID = "id";
+    private static final String KEY_GRADE_ID = "id";
     private static final String KEY_GRADE = "grade";
     private static final String KEY_IS_SUFFICIENT = "isSufficient";
     private static final String KEY_FILLED_IN_BY = "filledInBy";
@@ -65,7 +66,7 @@ public class GradesDB extends SQLiteOpenHelper {
         String CREATE_GRADES_TABLE = "CREATE TABLE IF NOT EXISTS "
                 + TABLE_GRADES + "("
                 + KEY_DB_ID + " INTEGER PRIMARY KEY,"
-                + KEY_CIJFER_ID + " INTEGER,"
+                + KEY_GRADE_ID + " INTEGER,"
                 + KEY_DISPENSATION + " BOOLEAN,"
                 + KEY_DISPENSATION_FOR_COURSE + " STRING,"
                 + KEY_DISPENSATION_FOR_COURSE2 + " STRING,"
@@ -104,26 +105,61 @@ public class GradesDB extends SQLiteOpenHelper {
         ContentValues contentValues = new ContentValues();
         for (Grade grade :
                 grades) {
-            contentValues.put(KEY_CIJFER_ID, grade.id);
-            contentValues.put(KEY_DISPENSATION, grade.dispensation);
-            contentValues.put(KEY_DISPENSATION_FOR_COURSE, grade.dispensationForCourse);
-            contentValues.put(KEY_DISPENSATION_FOR_COURSE2, grade.dispensationForCourse2);
-            contentValues.put(KEY_DO_AT_LATER_DATE, grade.doAtLaterDate);
-            contentValues.put(KEY_DOES_COUNT, grade.doesCount);
-            contentValues.put(KEY_FILLED_IN_BY, grade.filledInBy);
-            contentValues.put(KEY_FILLED_IN_DATE, grade.filledInDateString);
-            contentValues.put(KEY_GRADE, grade.grade);
-            contentValues.put(KEY_GRADE_PERIOD, gson.toJson(grade.gradePeriod));
-            contentValues.put(KEY_GRADE_ROW, gson.toJson(grade.gradeRow));
-            contentValues.put(KEY_GRADE_ROW_ID_OF_ELO, gson.toJson(grade.gradeRowIdOfElo));
-            contentValues.put(KEY_IS_SUFFICIENT, grade.isSufficient);
-            contentValues.put(KEY_SUBJECT, gson.toJson(grade.subject));
-            contentValues.put(KEY_TEACHER_ABBRIVATION, gson.toJson(grade.teacherAbbreviation));
 
-            db.insert(TABLE_GRADES, null, contentValues);
+            if (!isInDataBase(grade, db)) {
+                contentValues.put(KEY_GRADE_ID, grade.id);
+                contentValues.put(KEY_DISPENSATION, grade.dispensation);
+                contentValues.put(KEY_DISPENSATION_FOR_COURSE, grade.dispensationForCourse);
+                contentValues.put(KEY_DISPENSATION_FOR_COURSE2, grade.dispensationForCourse2);
+                contentValues.put(KEY_DO_AT_LATER_DATE, grade.doAtLaterDate);
+                contentValues.put(KEY_DOES_COUNT, grade.doesCount);
+                contentValues.put(KEY_FILLED_IN_BY, grade.filledInBy);
+                contentValues.put(KEY_FILLED_IN_DATE, grade.filledInDateString);
+                contentValues.put(KEY_GRADE, grade.grade);
+                contentValues.put(KEY_GRADE_PERIOD, gson.toJson(grade.gradePeriod));
+                contentValues.put(KEY_GRADE_ROW, gson.toJson(grade.gradeRow));
+                contentValues.put(KEY_GRADE_ROW_ID_OF_ELO, gson.toJson(grade.gradeRowIdOfElo));
+                contentValues.put(KEY_IS_SUFFICIENT, grade.isSufficient);
+                contentValues.put(KEY_SUBJECT, gson.toJson(grade.subject));
+                contentValues.put(KEY_TEACHER_ABBRIVATION, gson.toJson(grade.teacherAbbreviation));
+
+                db.insert(TABLE_GRADES, null, contentValues);
+
+            } else {
+                contentValues.put(KEY_GRADE_ID, grade.id);
+                contentValues.put(KEY_DISPENSATION, grade.dispensation);
+                contentValues.put(KEY_DISPENSATION_FOR_COURSE, grade.dispensationForCourse);
+                contentValues.put(KEY_DISPENSATION_FOR_COURSE2, grade.dispensationForCourse2);
+                contentValues.put(KEY_DO_AT_LATER_DATE, grade.doAtLaterDate);
+                contentValues.put(KEY_DOES_COUNT, grade.doesCount);
+                contentValues.put(KEY_FILLED_IN_BY, grade.filledInBy);
+                contentValues.put(KEY_FILLED_IN_DATE, grade.filledInDateString);
+                contentValues.put(KEY_GRADE, grade.grade);
+                contentValues.put(KEY_GRADE_PERIOD, gson.toJson(grade.gradePeriod));
+                contentValues.put(KEY_GRADE_ROW, gson.toJson(grade.gradeRow));
+                contentValues.put(KEY_GRADE_ROW_ID_OF_ELO, gson.toJson(grade.gradeRowIdOfElo));
+                contentValues.put(KEY_IS_SUFFICIENT, grade.isSufficient);
+                contentValues.put(KEY_SUBJECT, gson.toJson(grade.subject));
+                contentValues.put(KEY_TEACHER_ABBRIVATION, gson.toJson(grade.teacherAbbreviation));
+
+                db.update(TABLE_GRADES, contentValues, KEY_GRADE_ID + " = " + grade.id, null);
+            }
         }
 
         db.close();
+    }
+
+
+    private Boolean isInDataBase(Grade grade, SQLiteDatabase db) {
+        String Query = "Select * from " + TABLE_GRADES + " where " + KEY_GRADE_ID + " = " + grade.id;
+        Cursor cursor = db.rawQuery(Query, null);
+        if (cursor.getCount() >= 1) {
+            cursor.close();
+            return true;
+        }
+        cursor.close();
+
+        return false;
     }
 
 }
