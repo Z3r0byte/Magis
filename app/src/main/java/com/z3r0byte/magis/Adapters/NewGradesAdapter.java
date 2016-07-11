@@ -62,8 +62,15 @@ public class NewGradesAdapter extends ArrayAdapter<Grade> {
         subject.setText(grades[position].subject.name);
         TextView date = (TextView) rowView.findViewById(R.id.list_text_date);
         date.setText(DateUtils.formatDate(grades[position].filledInDate, "dd-MM-yyyy"));
+
         TextView grade = (TextView) rowView.findViewById(R.id.list_text_grade);
         grade.setText(grades[position].grade);
+        try {
+            if (Double.parseDouble(grades[position].grade.replace(",", ".")) < 5.5) {
+                grade.setTextColor(Color.RED);
+            }
+        } catch (Exception e) {
+        }
 
         ImageView newGrade = (ImageView) rowView.findViewById(R.id.list_imageview_grade_new);
         newGrade.setImageDrawable(emptyStar);

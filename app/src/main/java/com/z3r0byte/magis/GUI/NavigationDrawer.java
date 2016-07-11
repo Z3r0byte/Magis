@@ -39,6 +39,7 @@ import com.z3r0byte.magis.R;
 import com.z3r0byte.magis.StartActivity;
 import com.z3r0byte.magis.Tasks.LoginTask;
 import com.z3r0byte.magis.Utils.DB_Handlers.CalendarDB;
+import com.z3r0byte.magis.Utils.DB_Handlers.GradesDB;
 import com.z3r0byte.magis.Utils.MagisActivity;
 
 import net.ilexiconn.magister.container.Profile;
@@ -79,7 +80,7 @@ public class NavigationDrawer {
 
     public void SetupNavigationDrawer() {
 
-        AccountHeader accountHeader = new AccountHeaderBuilder()
+        final AccountHeader accountHeader = new AccountHeaderBuilder()
                 .withActivity(activity)
                 .withHeaderBackground(R.drawable.header_bg)
                 .addProfiles(
@@ -115,6 +116,7 @@ public class NavigationDrawer {
                                         public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                                             activity.getSharedPreferences("data", Context.MODE_PRIVATE).edit().clear().apply();
                                             new CalendarDB(activity).removeAll();
+                                            new GradesDB(activity).removeAll();
                                             activity.startActivity(new Intent(activity, StartActivity.class));
                                             activity.finish();
                                         }

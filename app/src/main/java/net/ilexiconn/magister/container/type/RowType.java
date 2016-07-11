@@ -22,7 +22,8 @@ public enum RowType implements Serializable {
     NULL(0),
     UNKNOWN(1),
     AVERAGE(2),
-    NORMAL(3);
+    NORMAL(3),
+    ACTUAL(6);
 
     private int id;
 

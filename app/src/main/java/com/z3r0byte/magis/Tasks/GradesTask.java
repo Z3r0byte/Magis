@@ -70,6 +70,8 @@ public class GradesTask extends AsyncTask<Void, Void, Grade[]> {
 
             GradesDB gradesDB = new GradesDB(fragment.getActivity());
             gradesDB.addGrades(grades);
+
+            grades = gradesDB.getUniqueAverageGrades();
             return grades;
         } catch (IOException e) {
             Log.e(TAG, "Unable to retrieve data", e);
@@ -84,15 +86,18 @@ public class GradesTask extends AsyncTask<Void, Void, Grade[]> {
 
     @Override
     protected void onPostExecute(final Grade[] grades) {
-        Log.d(TAG, "onPostExecute: " + grades[0].toString());
-        fragment.getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                fragment.grades = grades;
-                fragment.mGradesAdapter = new GradesAdapter(fragment.getActivity(), fragment.grades);
-                fragment.listView.setAdapter(fragment.mGradesAdapter);
-                fragment.mSwipeRefreshLayout.setRefreshing(false);
-            }
-        });
+        if (grades == null || grades.length == 0) {
+            Log.e(TAG, "onPostExecute: No Grades!");
+        } else {
+            fragment.getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    fragment.grades = grades;
+                    fragment.mGradesAdapter = new GradesAdapter(fragment.getActivity(), fragment.grades);
+                    fragment.listView.setAdapter(fragment.mGradesAdapter);
+                    fragment.mSwipeRefreshLayout.setRefreshing(false);
+                }
+            });
+        }
     }
 }
