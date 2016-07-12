@@ -21,6 +21,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
+import com.z3r0byte.magis.Services.NewGradeService;
+
 import cat.ereza.customactivityoncrash.CustomActivityOnCrash;
 
 public class StartActivity extends AppCompatActivity {
@@ -46,6 +48,7 @@ public class StartActivity extends AppCompatActivity {
             startActivity(new Intent(this, SetupActivity.class));
             finish();
         } else if (!relogin) {
+            startService(new Intent(this, NewGradeService.class));
             startActivity(new Intent(this, CalendarActivity.class));
             finish();
         }

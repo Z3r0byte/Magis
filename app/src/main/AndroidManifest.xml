@@ -37,24 +37,26 @@
             android:name=".SetupActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:theme="@style/Theme.Intro"/>
-
         <activity
             android:name=".CalendarActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:launchMode="singleTop"/>
-
         <activity
             android:name=".DetailActivity.AppointmentDetails"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:parentActivityName=".CalendarActivity"/>
-
         <activity
             android:name=".AddAppointmentActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"/>
-
         <activity
             android:name=".GradeActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"/>
+
+        <service
+            android:name=".Services.NewGradeService"
+            android:enabled="true"
+            android:exported="true">
+        </service>
     </application>
 
 </manifest>
