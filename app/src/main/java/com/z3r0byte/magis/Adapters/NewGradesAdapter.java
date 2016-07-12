@@ -28,6 +28,7 @@ import android.widget.TextView;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.z3r0byte.magis.R;
+import com.z3r0byte.magis.Utils.DB_Handlers.NewGradesDB;
 import com.z3r0byte.magis.Utils.DateUtils;
 
 import net.ilexiconn.magister.container.Grade;
@@ -53,6 +54,8 @@ public class NewGradesAdapter extends ArrayAdapter<Grade> {
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View rowView = inflater.inflate(R.layout.list_new_grades, parent, false);
 
+        NewGradesDB newGradesDB = new NewGradesDB(context);
+
         IconicsDrawable emptyStar = new IconicsDrawable(context, GoogleMaterial.Icon.gmd_star).color(Color.LTGRAY).sizeDp(24);
         IconicsDrawable fullStar = new IconicsDrawable(context, GoogleMaterial.Icon.gmd_star)
                 .color(context.getResources().getColor(R.color.accent)).sizeDp(24);
@@ -73,7 +76,11 @@ public class NewGradesAdapter extends ArrayAdapter<Grade> {
         }
 
         ImageView newGrade = (ImageView) rowView.findViewById(R.id.list_imageview_grade_new);
-        newGrade.setImageDrawable(emptyStar);
+        if (newGradesDB.hasBeenSeen(grades[position])) {
+            newGrade.setImageDrawable(emptyStar);
+        } else {
+            newGrade.setImageDrawable(fullStar);
+        }
 
 
 

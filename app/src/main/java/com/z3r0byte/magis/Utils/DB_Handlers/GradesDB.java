@@ -35,7 +35,7 @@ import net.ilexiconn.magister.container.sub.SubSubject;
 public class GradesDB extends SQLiteOpenHelper {
     private static final String TAG = "GradesDB";
 
-    private static final int DATABASE_VERSION = 7;
+    private static final int DATABASE_VERSION = 8;
 
     private static final String DATABASE_NAME = "gradesDB";
     private static final String TABLE_GRADES = "grades";
