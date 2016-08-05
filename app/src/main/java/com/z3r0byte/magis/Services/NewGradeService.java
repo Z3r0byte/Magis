@@ -48,10 +48,11 @@ public class NewGradeService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        getData();
-        shedule_Notification();
+        //getData();
+        //shedule_Notification();
 
-        return Service.START_STICKY;
+        //return Service.START_STICKY;
+        return Service.START_NOT_STICKY;
     }
 
     @Override

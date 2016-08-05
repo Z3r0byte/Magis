@@ -46,4 +46,24 @@
         android:layout_below="@+id/materialTabHost"
         android:id="@+id/viewpager"/>
 
+    <RelativeLayout
+        android:id="@+id/layoutStudyPicker"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/primary">
+
+        <Spinner
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:id="@+id/studyPicker"
+            style="@style/AppThemeDark"
+            android:spinnerMode="dialog" />
+    </RelativeLayout>
+
 </RelativeLayout>

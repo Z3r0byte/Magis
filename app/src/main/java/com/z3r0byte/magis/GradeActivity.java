@@ -16,6 +16,7 @@
 
 package com.z3r0byte.magis;
 
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -24,20 +25,28 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.z3r0byte.magis.Adapters.StudyAdapter;
 import com.z3r0byte.magis.Fragments.MainGradesFragment;
 import com.z3r0byte.magis.Fragments.NewGradesFragment;
 import com.z3r0byte.magis.GUI.NavigationDrawer;
+import com.z3r0byte.magis.Utils.DateUtils;
 import com.z3r0byte.magis.Utils.MagisActivity;
 
 import net.ilexiconn.magister.ParcelableMagister;
 import net.ilexiconn.magister.container.Profile;
 import net.ilexiconn.magister.container.School;
+import net.ilexiconn.magister.container.Study;
 import net.ilexiconn.magister.container.User;
+import net.ilexiconn.magister.handler.StudyHandler;
 
+import java.io.IOException;
 import java.security.InvalidParameterException;
+import java.util.Arrays;
+import java.util.Collections;
 
 import it.neokree.materialtabs.MaterialTab;
 import it.neokree.materialtabs.MaterialTabHost;
@@ -58,6 +67,10 @@ public class GradeActivity extends MagisActivity implements MaterialTabListener 
     MaterialTabHost tabHost;
     ViewPager viewPager;
     PagerAdapter pagerAdapter;
+    Spinner spinner;
+    StudyAdapter studyAdapter;
+    Study[] studies = new Study[1];
+    public static Study selectedStudy;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +89,14 @@ public class GradeActivity extends MagisActivity implements MaterialTabListener 
         mToolbar = (Toolbar) findViewById(R.id.Toolbar);
         mToolbar.setTitle(R.string.title_grades);
         setSupportActionBar(mToolbar);
+
+
+        studies[0] = new Study();
+        studies[0].description = "Laden...";
+        studyAdapter = new StudyAdapter(this, studies);
+        spinner = (Spinner) findViewById(R.id.studyPicker);
+        spinner.getBackground().setColorFilter(getResources().getColor(R.color.md_white_1000), PorterDuff.Mode.SRC_ATOP);
+        spinner.setAdapter(studyAdapter);
 
         mProfile = new Gson().fromJson(getSharedPreferences("data", MODE_PRIVATE).getString("Profile", null), Profile.class);
         mUser = new Gson().fromJson(getSharedPreferences("data", MODE_PRIVATE).getString("User", null), User.class);
@@ -108,6 +129,25 @@ public class GradeActivity extends MagisActivity implements MaterialTabListener 
 
         }
 
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    String date = DateUtils.formatDate(DateUtils.getToday(), "yyyy-MM-dd");
+                    StudyHandler studyHandler = new StudyHandler(mMagister);
+                    studies = studyHandler.getStudies(true, date);
+                    Collections.reverse(Arrays.asList(studies)); //reversing so the newest Study moves to top
+                    studyAdapter = new StudyAdapter(getApplicationContext(), studies);
+                    spinner.setAdapter(studyAdapter);
+                    Log.d(TAG, "onCreate: Amount of studies: " + studies.length);
+                    for (Study study : studies) {
+                        Log.d(TAG, "onCreate: Study: " + study.description);
+                    }
+                } catch (IOException e) {
+                    Log.e(TAG, "onCreate: Geen verbinding");
+                }
+            }
+        }).start();
 
     }
 
