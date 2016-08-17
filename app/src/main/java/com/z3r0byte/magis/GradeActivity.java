@@ -25,6 +25,8 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -97,6 +99,18 @@ public class GradeActivity extends MagisActivity implements MaterialTabListener 
         spinner = (Spinner) findViewById(R.id.studyPicker);
         spinner.getBackground().setColorFilter(getResources().getColor(R.color.md_white_1000), PorterDuff.Mode.SRC_ATOP);
         spinner.setAdapter(studyAdapter);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                Log.d(TAG, "onItemSelected: Study: " + adapterView.getItemAtPosition(i).toString());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
 
         mProfile = new Gson().fromJson(getSharedPreferences("data", MODE_PRIVATE).getString("Profile", null), Profile.class);
         mUser = new Gson().fromJson(getSharedPreferences("data", MODE_PRIVATE).getString("User", null), User.class);
@@ -138,7 +152,12 @@ public class GradeActivity extends MagisActivity implements MaterialTabListener 
                     studies = studyHandler.getStudies(true, date);
                     Collections.reverse(Arrays.asList(studies)); //reversing so the newest Study moves to top
                     studyAdapter = new StudyAdapter(getApplicationContext(), studies);
-                    spinner.setAdapter(studyAdapter);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            spinner.setAdapter(studyAdapter);
+                        }
+                    });
                     Log.d(TAG, "onCreate: Amount of studies: " + studies.length);
                     for (Study study : studies) {
                         Log.d(TAG, "onCreate: Study: " + study.description);
@@ -200,5 +219,6 @@ public class GradeActivity extends MagisActivity implements MaterialTabListener 
         }
 
     }
+
 
 }
