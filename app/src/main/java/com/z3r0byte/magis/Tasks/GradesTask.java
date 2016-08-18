@@ -18,6 +18,7 @@ package com.z3r0byte.magis.Tasks;
 
 import android.os.AsyncTask;
 import android.util.Log;
+import android.view.View;
 
 import com.z3r0byte.magis.Adapters.GradesAdapter;
 import com.z3r0byte.magis.R;
@@ -26,6 +27,7 @@ import com.z3r0byte.magis.Utils.MagisFragment;
 
 import net.ilexiconn.magister.Magister;
 import net.ilexiconn.magister.container.Grade;
+import net.ilexiconn.magister.container.Study;
 import net.ilexiconn.magister.handler.GradeHandler;
 
 import java.io.IOException;
@@ -40,15 +42,16 @@ public class GradesTask extends AsyncTask<Void, Void, Grade[]> {
 
     public MagisFragment fragment;
     public Magister magister;
+    public Study study;
 
     public String error;
 
 
-    public GradesTask(MagisFragment fragment, Magister magister) {
-        Log.d(TAG, "GradesTask() called with: " + "fragment = [" + fragment + "], magister = [" + magister + "]");
+    public GradesTask(MagisFragment fragment, Magister magister, Study study) {
+        Log.d(TAG, "GradesTask() called with: fragment = [" + fragment + "], magister = [" + magister + "], study = [" + study + "]");
         this.fragment = fragment;
         this.magister = magister;
-
+        this.study = study;
     }
 
     @Override
@@ -65,13 +68,23 @@ public class GradesTask extends AsyncTask<Void, Void, Grade[]> {
     protected Grade[] doInBackground(Void... params) {
         try {
             GradeHandler gradeHandler = new GradeHandler(magister);
-            Grade[] grades = gradeHandler.getGrades(true, false, true);
+            Grade[] grades;
+
+
+            if (study == null) {
+                study = magister.currentStudy;
+                grades = gradeHandler.getGrades(true, false, true);
+            } else {
+                grades = gradeHandler.getGradesFromStudy(study, true, false);
+            }
             Log.d(TAG, "doInBackground: Amount of new grades: " + grades.length);
 
-            GradesDB gradesDB = new GradesDB(fragment.getActivity());
-            gradesDB.addGrades(grades);
 
-            grades = gradesDB.getUniqueAverageGrades();
+            //TODO make this work again.
+            GradesDB gradesDB = new GradesDB(fragment.getActivity());
+            gradesDB.addGrades(grades, study.id);
+
+            grades = gradesDB.getUniqueAverageGrades(study);
             return grades;
         } catch (IOException e) {
             Log.e(TAG, "Unable to retrieve data", e);
@@ -88,13 +101,22 @@ public class GradesTask extends AsyncTask<Void, Void, Grade[]> {
     protected void onPostExecute(final Grade[] grades) {
         if (grades == null || grades.length == 0) {
             Log.e(TAG, "onPostExecute: No Grades!");
+            fragment.getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    fragment.listView.setVisibility(View.GONE);
+                    fragment.mSwipeRefreshLayout.setRefreshing(false);
+                }
+            });
         } else {
             fragment.getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     fragment.grades = grades;
                     fragment.mGradesAdapter = new GradesAdapter(fragment.getActivity(), fragment.grades);
+                    fragment.mGradesAdapter.notifyDataSetChanged();
                     fragment.listView.setAdapter(fragment.mGradesAdapter);
+                    fragment.listView.setVisibility(View.VISIBLE);
                     fragment.mSwipeRefreshLayout.setRefreshing(false);
                 }
             });

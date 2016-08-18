@@ -72,7 +72,7 @@ public class GradeActivity extends MagisActivity implements MaterialTabListener 
     Spinner spinner;
     StudyAdapter studyAdapter;
     Study[] studies = new Study[1];
-    public static Study selectedStudy;
+    MainGradesFragment mainGradesFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,6 +103,8 @@ public class GradeActivity extends MagisActivity implements MaterialTabListener 
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 Log.d(TAG, "onItemSelected: Study: " + adapterView.getItemAtPosition(i).toString());
+                mainGradesFragment.study = (Study) adapterView.getItemAtPosition(i);
+                mainGradesFragment.loadGrades();
             }
 
             @Override
@@ -198,7 +200,7 @@ public class GradeActivity extends MagisActivity implements MaterialTabListener 
                 NewGradesFragment newGradesFragment = NewGradesFragment.newInstance(mMagister);
                 return newGradesFragment;
             } else {
-                MainGradesFragment mainGradesFragment = MainGradesFragment.newInstance(mMagister);
+                mainGradesFragment = MainGradesFragment.newInstance(mMagister);
                 return mainGradesFragment;
             }
 

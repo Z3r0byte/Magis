@@ -44,6 +44,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/materialTabHost"
+        android:layout_above="@+id/layoutStudyPicker"
         android:id="@+id/viewpager"/>
 
     <RelativeLayout

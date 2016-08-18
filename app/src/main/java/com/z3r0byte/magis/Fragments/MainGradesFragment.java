@@ -33,9 +33,11 @@ import com.z3r0byte.magis.Utils.MagisFragment;
 
 import net.ilexiconn.magister.ParcelableMagister;
 import net.ilexiconn.magister.container.Grade;
+import net.ilexiconn.magister.container.Study;
 
 public class MainGradesFragment extends MagisFragment {
     private static final String TAG = "MainGradesFragment";
+    public static Study study = null;
 
     View view;
 
@@ -69,7 +71,7 @@ public class MainGradesFragment extends MagisFragment {
                     @Override
                     public void onRefresh() {
                         Log.d(TAG, "onRefresh: Refreshing!");
-                        refresh();
+                        loadGrades();
                     }
                 }
         );
@@ -82,14 +84,14 @@ public class MainGradesFragment extends MagisFragment {
         mGradesAdapter = new GradesAdapter(getActivity(), grades);
         listView.setAdapter(mGradesAdapter);
 
-        new GradesTask(this, mMagister).execute();
+        loadGrades();
 
 
         return view;
     }
 
 
-    private void refresh() {
-        new GradesTask(this, mMagister).execute();
+    public void loadGrades() {
+        new GradesTask(this, mMagister, study).execute();
     }
 }

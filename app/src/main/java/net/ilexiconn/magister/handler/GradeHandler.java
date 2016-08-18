@@ -22,6 +22,7 @@ import net.ilexiconn.magister.Magister;
 import net.ilexiconn.magister.adapter.GradeAdapter;
 import net.ilexiconn.magister.container.Grade;
 import net.ilexiconn.magister.container.SingleGrade;
+import net.ilexiconn.magister.container.Study;
 import net.ilexiconn.magister.container.Subject;
 import net.ilexiconn.magister.container.sub.SubSubject;
 import net.ilexiconn.magister.util.GsonUtil;
@@ -61,6 +62,11 @@ public class GradeHandler implements IHandler {
      */
     public Grade[] getAllGrades() throws IOException {
         return getGrades(false, false, false);
+    }
+
+
+    public Grade[] getGradesFromStudy(Study study, boolean onlyAverage, boolean onlyPTA) throws IOException {
+        return gson.fromJson(HttpUtil.httpGet(magister.schoolUrl.getApiUrl() + "personen/" + magister.profile.id + "/aanmeldingen/" + study.id + "/cijfers/cijferoverzichtvooraanmelding?alleenBerekendeKolommen=" + onlyAverage + "&alleenPTAKolommen=" + onlyPTA + "&actievePerioden=false&peildatum=" + study.endDateString), Grade[].class);
     }
 
     /**

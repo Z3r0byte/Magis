@@ -37,7 +37,7 @@ public class StartActivity extends AppCompatActivity {
         CustomActivityOnCrash.install(this);
         setContentView(R.layout.activity_start);
 
-        if (getSharedPreferences("data", MODE_PRIVATE).getInt("DataVersion", 1) != 2 && getSharedPreferences("data", MODE_PRIVATE).getBoolean("LoggedIn", false)) {
+        if (getSharedPreferences("data", MODE_PRIVATE).getInt("DataVersion", 1) != 3 && getSharedPreferences("data", MODE_PRIVATE).getBoolean("LoggedIn", false)) {
             relogin = true;
             Toast.makeText(StartActivity.this, getString(R.string.msg_old_version), Toast.LENGTH_LONG).show();
             startActivity(new Intent(this, SetupActivity.class));
