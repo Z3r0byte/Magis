@@ -17,15 +17,20 @@
 package com.z3r0byte.magis.Fragments;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.z3r0byte.magis.Adapters.GradesAdapter;
+import com.z3r0byte.magis.GradesSubjectActivity;
 import com.z3r0byte.magis.R;
 import com.z3r0byte.magis.Tasks.GradesTask;
 import com.z3r0byte.magis.Utils.DB_Handlers.GradesDB;
@@ -83,6 +88,12 @@ public class MainGradesFragment extends MagisFragment {
         listView = (ListView) view.findViewById(R.id.list_grades);
         mGradesAdapter = new GradesAdapter(getActivity(), grades);
         listView.setAdapter(mGradesAdapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                showStudyGrades(i);
+            }
+        });
 
         loadGrades();
 
@@ -94,4 +105,23 @@ public class MainGradesFragment extends MagisFragment {
     public void loadGrades() {
         new GradesTask(this, mMagister, study).execute();
     }
+
+    private void showStudyGrades(int index) {
+        Grade grade = grades[index];
+        try {
+            if (grade.gradeRow.rowSort.getID() == 2) {
+                Gson gson = new Gson();
+                Intent intent = new Intent(getActivity(), GradesSubjectActivity.class);
+                intent.putExtra("Magister", mMagister);
+                intent.putExtra("Study", gson.toJson(study));
+                intent.putExtra("Subject", gson.toJson(grade.subject));
+                startActivity(intent);
+            } else if (grade.gradeRow.rowSort.getID() == 6) {
+                Toast.makeText(getActivity(), R.string.msg_no_subject, Toast.LENGTH_SHORT).show();
+            }
+        } catch (NullPointerException e) {
+            Log.e(TAG, "showStudyGrades: Ongeldig cijfer!", e);
+        }
+    }
+    
 }

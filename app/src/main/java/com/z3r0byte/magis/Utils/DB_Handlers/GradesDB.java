@@ -28,10 +28,14 @@ import com.z3r0byte.magis.Utils.DateUtils;
 
 import net.ilexiconn.magister.container.Grade;
 import net.ilexiconn.magister.container.Study;
+import net.ilexiconn.magister.container.sub.GradeRow;
 import net.ilexiconn.magister.container.sub.SubSubject;
+import net.ilexiconn.magister.container.type.RowType;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 /**
  * Created by bas on 8-7-16.
@@ -202,6 +206,9 @@ public class GradesDB extends SQLiteOpenHelper {
                     grade.grade = cursor.getString(cursor.getColumnIndex(KEY_GRADE));
                     grade.subject = gson.fromJson(cursor.getString(cursor.getColumnIndex(KEY_SUBJECT)), SubSubject.class);
                     grade.filledInDate = DateUtils.parseDate(cursor.getString(cursor.getColumnIndex(KEY_FILLED_IN_DATE)), "yyyy-MM-dd'T'HH:mm:ss");
+                    grade.gradeRow = new GradeRow();
+                    Log.d(TAG, "getUniqueAverageGrades: rowtype: " + cursor.getInt(cursor.getColumnIndex(KEY_GRADE_ROW_TYPE)));
+                    grade.gradeRow.rowSort = RowType.getTypeById(cursor.getInt(cursor.getColumnIndex(KEY_GRADE_ROW_TYPE)));
                     grades[i] = grade;
                     i++;
                 } while (cursor.moveToNext());
@@ -209,11 +216,16 @@ public class GradesDB extends SQLiteOpenHelper {
         }
         cursor.close();
 
-        for (Grade grade :
-                grades) {
-
-
+        List<Grade> gradeList = new ArrayList<Grade>();
+        for (Grade grade : grades) {
+            try {
+                if (grade.gradeRow.rowSort.getID() == 2 || grade.gradeRow.rowSort.getID() == 6) {
+                    gradeList.add(grade);
+                }
+            } catch (NullPointerException e) {
+            }
         }
+        grades = gradeList.toArray(new Grade[gradeList.size()]);
 
         Collections.reverse(Arrays.asList(grades));
         return grades;

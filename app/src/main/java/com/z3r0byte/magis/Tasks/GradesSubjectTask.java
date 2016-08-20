@@ -22,44 +22,48 @@ import android.view.View;
 
 import com.z3r0byte.magis.Adapters.GradesAdapter;
 import com.z3r0byte.magis.R;
-import com.z3r0byte.magis.Utils.DB_Handlers.GradesDB;
-import com.z3r0byte.magis.Utils.MagisFragment;
+import com.z3r0byte.magis.Utils.MagisActivity;
 
 import net.ilexiconn.magister.Magister;
 import net.ilexiconn.magister.container.Grade;
 import net.ilexiconn.magister.container.Study;
+import net.ilexiconn.magister.container.sub.SubSubject;
 import net.ilexiconn.magister.handler.GradeHandler;
 
 import java.io.IOException;
 import java.security.InvalidParameterException;
 
 /**
- * Created by bas on 7-7-16.
+ * Created by z3r0byte on 19-8-16.
  */
-public class GradesTask extends AsyncTask<Void, Void, Grade[]> {
+
+public class GradesSubjectTask extends AsyncTask<Void, Void, Grade[]> {
+
     private static final String TAG = "GradesTask";
 
 
-    public MagisFragment fragment;
+    public MagisActivity activity;
     public Magister magister;
     public Study study;
+    public SubSubject subject;
 
     public String error;
 
 
-    public GradesTask(MagisFragment fragment, Magister magister, Study study) {
-        Log.d(TAG, "GradesTask() called with: fragment = [" + fragment + "], magister = [" + magister + "], study = [" + study + "]");
-        this.fragment = fragment;
+    public GradesSubjectTask(MagisActivity activity, Magister magister, Study study, SubSubject subject) {
+        Log.d(TAG, "GradesSubjectTask() called with: activity = [" + activity + "], magister = [" + magister + "], study = [" + study + "], subject = [" + subject + "]");
+        this.activity = activity;
         this.magister = magister;
         this.study = study;
+        this.subject = subject;
     }
 
     @Override
     protected void onPreExecute() {
-        fragment.getActivity().runOnUiThread(new Runnable() {
+        activity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                fragment.mSwipeRefreshLayout.setRefreshing(true);
+                activity.mSwipeRefreshLayout.setRefreshing(true);
             }
         });
     }
@@ -73,25 +77,26 @@ public class GradesTask extends AsyncTask<Void, Void, Grade[]> {
 
             if (study == null) {
                 study = magister.currentStudy;
-                grades = gradeHandler.getGrades(true, false, true);
+                grades = gradeHandler.getGradesFromSubject(subject, false, false, true);
             } else {
-                grades = gradeHandler.getGradesFromStudy(study, true, false);
+                grades = gradeHandler.getGradesFromSubject(subject, false, false, study);
             }
             Log.d(TAG, "doInBackground: Amount of new grades: " + grades.length);
 
-
-            GradesDB gradesDB = new GradesDB(fragment.getActivity());
+            /*
+            GradesDB gradesDB = new GradesDB(activity);
             gradesDB.addGrades(grades, study.id);
 
-            grades = gradesDB.getUniqueAverageGrades(study);
+            grades = gradesDB.getUniqueAverageGrades(study)*/
+            ;
             return grades;
         } catch (IOException e) {
             Log.e(TAG, "Unable to retrieve data", e);
-            error = fragment.getString(R.string.err_no_connection);
+            error = activity.getString(R.string.err_no_connection);
             return null;
         } catch (InvalidParameterException e) {
             Log.e(TAG, "Invalid Parameters", e);
-            error = fragment.getString(R.string.err_unknown);
+            error = activity.getString(R.string.err_unknown);
             return null;
         }
     }
@@ -100,23 +105,23 @@ public class GradesTask extends AsyncTask<Void, Void, Grade[]> {
     protected void onPostExecute(final Grade[] grades) {
         if (grades == null || grades.length == 0) {
             Log.e(TAG, "onPostExecute: No Grades!");
-            fragment.getActivity().runOnUiThread(new Runnable() {
+            activity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    fragment.listView.setVisibility(View.GONE);
-                    fragment.mSwipeRefreshLayout.setRefreshing(false);
+                    activity.listView.setVisibility(View.GONE);
+                    activity.mSwipeRefreshLayout.setRefreshing(false);
                 }
             });
         } else {
-            fragment.getActivity().runOnUiThread(new Runnable() {
+            activity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    fragment.grades = grades;
-                    fragment.mGradesAdapter = new GradesAdapter(fragment.getActivity(), fragment.grades);
-                    fragment.mGradesAdapter.notifyDataSetChanged();
-                    fragment.listView.setAdapter(fragment.mGradesAdapter);
-                    fragment.listView.setVisibility(View.VISIBLE);
-                    fragment.mSwipeRefreshLayout.setRefreshing(false);
+                    activity.grades = grades;
+                    activity.mGradesAdapter = new GradesAdapter(activity, activity.grades);
+                    activity.mGradesAdapter.notifyDataSetChanged();
+                    activity.listView.setAdapter(activity.mGradesAdapter);
+                    activity.listView.setVisibility(View.VISIBLE);
+                    activity.mSwipeRefreshLayout.setRefreshing(false);
                 }
             });
         }

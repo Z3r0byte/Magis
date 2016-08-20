@@ -84,6 +84,7 @@
     <string name="msg_login_progress_1">Stap 1/2: oude sessie verwijderen...</string>
     <string name="msg_login_progress_2">Stap 2/2: opnieuw inloggen...</string>
     <string name="msg_login">Log in</string>
+    <string name="msg_no_subject">Dit is geen vak!</string>
     <string name="msg_no_results">Er zijn geen resultaten</string>
     <string name="msg_old_version">De data-structuur van Magis is veranderd, we laten je daarom de login-stappen opnieuw doorlopen.</string>
     <string name="msg_oral">Mondeling</string>

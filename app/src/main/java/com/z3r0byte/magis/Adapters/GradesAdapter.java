@@ -54,8 +54,6 @@ public class GradesAdapter extends ArrayAdapter<Grade> {
         View rowView = inflater.inflate(R.layout.list_new_grades, parent, false);
 
         IconicsDrawable emptyStar = new IconicsDrawable(context, GoogleMaterial.Icon.gmd_star).color(Color.LTGRAY).sizeDp(24);
-        IconicsDrawable fullStar = new IconicsDrawable(context, GoogleMaterial.Icon.gmd_star)
-                .color(context.getResources().getColor(R.color.accent)).sizeDp(24);
 
 
         TextView subject = (TextView) rowView.findViewById(R.id.list_text_subject);

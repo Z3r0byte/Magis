@@ -97,9 +97,23 @@ public class GradeHandler implements IHandler {
         return getGradesFromSubjectID(subject.id, onlyAverage, onlyPTA, onlyActiveStudy);
     }
 
+    public Grade[] getGradesFromSubject(SubSubject subject, boolean onlyAverage, boolean onlyPTA, Study study) throws IOException {
+        return getGradesFromSubjectID(subject.id, onlyAverage, onlyPTA, study);
+    }
+
     public Grade[] getGradesFromSubjectID(int subjectID, boolean onlyAverage, boolean onlyPTA, boolean onlyActiveStudy) throws IOException {
         List<Grade> gradeList = new ArrayList<Grade>();
         for (Grade grade : getGrades(onlyAverage, onlyPTA, onlyActiveStudy)) {
+            if (grade.subject.id == subjectID) {
+                gradeList.add(grade);
+            }
+        }
+        return gradeList.toArray(new Grade[gradeList.size()]);
+    }
+
+    public Grade[] getGradesFromSubjectID(int subjectID, boolean onlyAverage, boolean onlyPTA, Study study) throws IOException {
+        List<Grade> gradeList = new ArrayList<Grade>();
+        for (Grade grade : getGradesFromStudy(study, onlyAverage, onlyPTA)) {
             if (grade.subject.id == subjectID) {
                 gradeList.add(grade);
             }
