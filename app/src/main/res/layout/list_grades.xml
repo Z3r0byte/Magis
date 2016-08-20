@@ -28,7 +28,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Engels"
+            android:text="Belangrijke Toets"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
             android:layout_marginTop="10dp"
@@ -64,18 +64,17 @@
 
         <TextView
             android:id="@+id/list_multiplier_grade"
-            android:text="× 2.0"
-            android:layout_width="24dp"
+            android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
+            android:singleLine="true"
+            android:gravity="start"
+            android:textColor="@color/mdtp_done_text_color_dark_disabled"
+            android:textSize="18sp"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
-            android:layout_marginRight="16dp"
-            android:layout_marginEnd="16dp"
-            android:singleLine="true"
-            android:gravity="right"
-            android:textColor="@color/md_black_500"
-            android:textSize="25sp/>
+            android:textAlignment="viewStart"
+            android:text="× 3.0" />
 
     </RelativeLayout>
 

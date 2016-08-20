@@ -91,11 +91,4 @@
         android:singleLine="true"
         android:textSize="12sp" />
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="#B6B6B6"
-        android:layout_marginLeft="66dp"
-        android:layout_alignParentBottom="true" />
-
 </RelativeLayout>
