@@ -105,6 +105,10 @@ public class GradeHandler implements IHandler {
         List<Grade> gradeList = new ArrayList<Grade>();
         for (Grade grade : getGrades(onlyAverage, onlyPTA, onlyActiveStudy)) {
             if (grade.subject.id == subjectID) {
+                try {
+                    grade.singleGrade = getSingleGrade(grade);
+                } catch (IOException e) {
+                }
                 gradeList.add(grade);
             }
         }
@@ -115,6 +119,10 @@ public class GradeHandler implements IHandler {
         List<Grade> gradeList = new ArrayList<Grade>();
         for (Grade grade : getGradesFromStudy(study, onlyAverage, onlyPTA)) {
             if (grade.subject.id == subjectID) {
+                try {
+                    grade.singleGrade = getSingleGrade(grade, study);
+                } catch (IOException e) {
+                }
                 gradeList.add(grade);
             }
         }
@@ -154,7 +162,11 @@ public class GradeHandler implements IHandler {
      * @throws IOException if there is no active internet connection.
      */
     public SingleGrade getSingleGrade(Grade grade) throws IOException {
-        return gson.fromJson(HttpUtil.httpGet(magister.schoolUrl.getApiUrl() + "personen/" + magister.profile.id + "/aanmeldingen/" + magister.currentStudy.id + "/cijfers/extracijferkolominfo/" + grade.id), SingleGrade.class);
+        return gson.fromJson(HttpUtil.httpGet(magister.schoolUrl.getApiUrl() + "personen/" + magister.profile.id + "/aanmeldingen/" + magister.currentStudy.id + "/cijfers/extracijferkolominfo/" + grade.gradeRow.id), SingleGrade.class);
+    }
+
+    public SingleGrade getSingleGrade(Grade grade, Study study) throws IOException {
+        return gson.fromJson(HttpUtil.httpGet(magister.schoolUrl.getApiUrl() + "personen/" + magister.profile.id + "/aanmeldingen/" + study.id + "/cijfers/extracijferkolominfo/" + grade.gradeRow.id), SingleGrade.class);
     }
 
     /**

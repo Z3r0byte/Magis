@@ -86,7 +86,7 @@ public class MainGradesFragment extends MagisFragment {
         grades = new Grade[0];
 
         listView = (ListView) view.findViewById(R.id.list_grades);
-        mGradesAdapter = new GradesAdapter(getActivity(), grades);
+        mGradesAdapter = new GradesAdapter(getActivity(), grades, true);
         listView.setAdapter(mGradesAdapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

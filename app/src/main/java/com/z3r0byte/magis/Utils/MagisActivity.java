@@ -22,6 +22,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 
 import com.z3r0byte.magis.Adapters.AppointmentsAdapter;
 import com.z3r0byte.magis.Adapters.GradesAdapter;
@@ -55,6 +56,7 @@ public class MagisActivity extends AppCompatActivity {
     public AppointmentsAdapter mAppointmentAdapter;
     public ListView listView;
     public ErrorView errorView;
+    public ProgressBar mProgressBar;
 
     public Date date;
 

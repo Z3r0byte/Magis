@@ -110,6 +110,7 @@ public class GradesSubjectTask extends AsyncTask<Void, Void, Grade[]> {
                 public void run() {
                     activity.listView.setVisibility(View.GONE);
                     activity.mSwipeRefreshLayout.setRefreshing(false);
+                    activity.mProgressBar.setVisibility(View.GONE);
                 }
             });
         } else {
@@ -117,11 +118,12 @@ public class GradesSubjectTask extends AsyncTask<Void, Void, Grade[]> {
                 @Override
                 public void run() {
                     activity.grades = grades;
-                    activity.mGradesAdapter = new GradesAdapter(activity, activity.grades);
+                    activity.mGradesAdapter = new GradesAdapter(activity, activity.grades, false);
                     activity.mGradesAdapter.notifyDataSetChanged();
                     activity.listView.setAdapter(activity.mGradesAdapter);
                     activity.listView.setVisibility(View.VISIBLE);
                     activity.mSwipeRefreshLayout.setRefreshing(false);
+                    activity.mProgressBar.setVisibility(View.GONE);
                 }
             });
         }

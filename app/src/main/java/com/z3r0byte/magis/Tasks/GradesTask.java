@@ -112,7 +112,7 @@ public class GradesTask extends AsyncTask<Void, Void, Grade[]> {
                 @Override
                 public void run() {
                     fragment.grades = grades;
-                    fragment.mGradesAdapter = new GradesAdapter(fragment.getActivity(), fragment.grades);
+                    fragment.mGradesAdapter = new GradesAdapter(fragment.getActivity(), fragment.grades, true);
                     fragment.mGradesAdapter.notifyDataSetChanged();
                     fragment.listView.setAdapter(fragment.mGradesAdapter);
                     fragment.listView.setVisibility(View.VISIBLE);

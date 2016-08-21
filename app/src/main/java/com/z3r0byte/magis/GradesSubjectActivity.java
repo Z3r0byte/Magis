@@ -21,6 +21,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -61,7 +62,9 @@ public class GradesSubjectActivity extends MagisActivity {
         mToolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.Toolbar);
         mToolbar.setTitle(subject.name);
         setSupportActionBar(mToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.layout_refresh);
         mSwipeRefreshLayout.setColorSchemeResources(
@@ -82,7 +85,7 @@ public class GradesSubjectActivity extends MagisActivity {
         grades = new Grade[0];
 
         listView = (ListView) findViewById(R.id.list_grades);
-        mGradesAdapter = new GradesAdapter(this, grades);
+        mGradesAdapter = new GradesAdapter(this, grades, false);
         listView.setAdapter(mGradesAdapter);
 
         loadGrades();

@@ -49,14 +49,19 @@
             android:configChanges="keyboardHidden|orientation|screenSize" />
         <activity
             android:name=".GradeActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize" />
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:launchMode="singleTop" />
 
         <service
             android:name=".Services.NewGradeService"
             android:enabled="true"
-            android:exported="true"></service>
+            android:exported="true" />
 
-        <activity android:name=".GradesSubjectActivity"></activity>
+        <activity
+            android:name=".GradesSubjectActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:parentActivityName=".GradeActivity" />
+        <activity android:name=".SettingsActivity"></activity>
     </application>
 
 </manifest>
