@@ -22,7 +22,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
@@ -40,26 +39,34 @@ public class GradesAdapter extends ArrayAdapter<Grade> {
 
     private final Context context;
     private final Grade[] grades;
+    private final Boolean onlyAverage;
 
-    public GradesAdapter(Context context, Grade[] grades) {
+    public GradesAdapter(Context context, Grade[] grades, Boolean onlyAverage) {
         super(context, -1, grades);
         this.context = context;
         this.grades = grades;
+        this.onlyAverage = onlyAverage;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View rowView = inflater.inflate(R.layout.list_new_grades, parent, false);
+        View rowView = inflater.inflate(R.layout.list_grades, parent, false);
 
         IconicsDrawable emptyStar = new IconicsDrawable(context, GoogleMaterial.Icon.gmd_star).color(Color.LTGRAY).sizeDp(24);
-        IconicsDrawable fullStar = new IconicsDrawable(context, GoogleMaterial.Icon.gmd_star)
-                .color(context.getResources().getColor(R.color.accent)).sizeDp(24);
-
 
         TextView subject = (TextView) rowView.findViewById(R.id.list_text_subject);
-        subject.setText(grades[position].subject.name);
+        if (onlyAverage) {
+            subject.setText(grades[position].subject.name);
+        } else {
+            try {
+                subject.setText(grades[position].singleGrade.description);
+            } catch (NullPointerException e) {
+                subject.setText(R.string.err_unknown);
+            }
+
+        }
         try {
             TextView date = (TextView) rowView.findViewById(R.id.list_text_date);
             date.setText(DateUtils.formatDate(grades[position].filledInDate, "dd-MM-yyyy"));
@@ -75,12 +82,19 @@ public class GradesAdapter extends ArrayAdapter<Grade> {
         } catch (Exception e) {
         }
 
-        ImageView newGrade = (ImageView) rowView.findViewById(R.id.list_imageview_grade_new);
-        newGrade.setImageDrawable(emptyStar);
+        TextView multiplier = (TextView) rowView.findViewById(R.id.list_multiplier_grade);
+        if (onlyAverage) {
+            multiplier.setVisibility(View.GONE);
+        } else {
+            try {
+                multiplier.setText("× " + grades[position].singleGrade.wage);
+            } catch (NullPointerException e) {
+                multiplier.setText("× 0.0");
+            }
+        }
 
 
         return rowView;
     }
 
-    ;
 }

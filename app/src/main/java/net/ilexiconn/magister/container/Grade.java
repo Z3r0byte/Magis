@@ -72,4 +72,6 @@ public class Grade implements Serializable {
 
     @SerializedName("VakVrijstelling")
     public String dispensationForCourse2;
+
+    public SingleGrade singleGrade;
 }

@@ -22,14 +22,17 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 
 import com.z3r0byte.magis.Adapters.AppointmentsAdapter;
+import com.z3r0byte.magis.Adapters.GradesAdapter;
 import com.z3r0byte.magis.R;
 import com.z3r0byte.magis.Tasks.AppointmentsTask;
 import com.z3r0byte.magis.Tasks.LoginTask;
 
 import net.ilexiconn.magister.ParcelableMagister;
 import net.ilexiconn.magister.container.Appointment;
+import net.ilexiconn.magister.container.Grade;
 import net.ilexiconn.magister.container.School;
 import net.ilexiconn.magister.container.User;
 
@@ -45,12 +48,15 @@ public class MagisActivity extends AppCompatActivity {
     public School mSchool;
     public User mUser;
     public Appointment[] mAppointments;
+    public Grade[] grades;
+    public GradesAdapter mGradesAdapter;
 
     public SwipeRefreshLayout mSwipeRefreshLayout;
     public CoordinatorLayout coordinatorLayout;
     public AppointmentsAdapter mAppointmentAdapter;
     public ListView listView;
     public ErrorView errorView;
+    public ProgressBar mProgressBar;
 
     public Date date;
 

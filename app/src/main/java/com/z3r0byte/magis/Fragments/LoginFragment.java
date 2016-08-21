@@ -237,7 +237,7 @@ public class LoginFragment extends SlideFragment {
                             editor.putString("Profile", Account);
                             editor.putString("User", User);
                             editor.putBoolean("LoggedIn", true);
-                            editor.putInt("DataVersion", 2);
+                            editor.putInt("DataVersion", 3);
                             editor.apply();
 
                             mSuccessfulLogin = true;

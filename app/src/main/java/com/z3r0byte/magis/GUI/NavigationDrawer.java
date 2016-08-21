@@ -36,6 +36,7 @@ import com.mikepenz.materialdrawer.model.SectionDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.z3r0byte.magis.GradeActivity;
 import com.z3r0byte.magis.R;
+import com.z3r0byte.magis.SettingsActivity;
 import com.z3r0byte.magis.StartActivity;
 import com.z3r0byte.magis.Tasks.LoginTask;
 import com.z3r0byte.magis.Utils.DB_Handlers.CalendarDB;
@@ -77,6 +78,8 @@ public class NavigationDrawer {
             .withIcon(GoogleMaterial.Icon.gmd_refresh).withSelectable(false);
     static PrimaryDrawerItem logoutItem = new SecondaryDrawerItem().withName(R.string.drawer_logout)
             .withIcon(GoogleMaterial.Icon.gmd_exit_to_app).withSelectable(false);
+    static PrimaryDrawerItem settingsItem = new SecondaryDrawerItem().withName(R.string.drawer_settings)
+            .withIcon(GoogleMaterial.Icon.gmd_settings).withSelectable(false);
 
     public void SetupNavigationDrawer() {
 
@@ -99,6 +102,7 @@ public class NavigationDrawer {
                         gradeItem,
                         new SectionDrawerItem().withName(R.string.drawer_tools),
                         //refreshSessionItem,
+                        settingsItem,
                         logoutItem
                 )
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
@@ -124,6 +128,8 @@ public class NavigationDrawer {
                                     .negativeText(android.R.string.cancel)
                                     .show();
 
+                        } else if (drawerItem == settingsItem) {
+                            activity.startActivity(new Intent(activity, SettingsActivity.class));
                         } else if (drawerItem == calendarItem && selection != "Agenda") {
                             activity.finish();
                             drawer.closeDrawer();

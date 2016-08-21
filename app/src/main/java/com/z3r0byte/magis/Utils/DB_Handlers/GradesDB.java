@@ -27,7 +27,15 @@ import com.google.gson.Gson;
 import com.z3r0byte.magis.Utils.DateUtils;
 
 import net.ilexiconn.magister.container.Grade;
+import net.ilexiconn.magister.container.Study;
+import net.ilexiconn.magister.container.sub.GradeRow;
 import net.ilexiconn.magister.container.sub.SubSubject;
+import net.ilexiconn.magister.container.type.RowType;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Created by bas on 8-7-16.
@@ -35,7 +43,7 @@ import net.ilexiconn.magister.container.sub.SubSubject;
 public class GradesDB extends SQLiteOpenHelper {
     private static final String TAG = "GradesDB";
 
-    private static final int DATABASE_VERSION = 8;
+    private static final int DATABASE_VERSION = 11;
 
     private static final String DATABASE_NAME = "gradesDB";
     private static final String TABLE_GRADES = "grades";
@@ -56,6 +64,7 @@ public class GradesDB extends SQLiteOpenHelper {
     private static final String KEY_GRADE_ROW_ID_OF_ELO = "gradeRowIdOfElo";
     private static final String KEY_SUBJECT = "subject";
     private static final String KEY_SORTABLE_DATE = "sortableDate";
+    private static final String KEY_STUDY_ID = "studyId";
     private static final String KEY_DISPENSATION_FOR_COURSE = "dispensationOfCourse";
     private static final String KEY_DISPENSATION_FOR_COURSE2 = "dispensationOfCourse2";
 
@@ -85,6 +94,7 @@ public class GradesDB extends SQLiteOpenHelper {
                 + KEY_GRADE_ROW_TYPE + " INTEGER,"
                 + KEY_IS_SUFFICIENT + " BOOLEAN,"
                 + KEY_SORTABLE_DATE + " TEXT,"
+                + KEY_STUDY_ID + " INTEGER,"
                 + KEY_SUBJECT + " TEXT,"
                 + KEY_TEACHER_ABBRIVATION + " TEXT"
                 + ")";
@@ -99,7 +109,7 @@ public class GradesDB extends SQLiteOpenHelper {
     }
 
 
-    public void addGrades(Grade[] grades) {
+    public void addGrades(Grade[] grades, int studyId) {
         if (grades == null || grades.length == 0) {
             Log.d(TAG, "addGrades: No Grades!");
             return;
@@ -136,6 +146,7 @@ public class GradesDB extends SQLiteOpenHelper {
                 } catch (Exception e) {
                 }
                 contentValues.put(KEY_SUBJECT, gson.toJson(grade.subject));
+                contentValues.put(KEY_STUDY_ID, studyId);
                 contentValues.put(KEY_TEACHER_ABBRIVATION, gson.toJson(grade.teacherAbbreviation));
 
                 db.insert(TABLE_GRADES, null, contentValues);
@@ -164,6 +175,7 @@ public class GradesDB extends SQLiteOpenHelper {
                 } catch (Exception e) {
                 }
                 contentValues.put(KEY_SUBJECT, gson.toJson(grade.subject));
+                contentValues.put(KEY_STUDY_ID, studyId);
                 contentValues.put(KEY_TEACHER_ABBRIVATION, gson.toJson(grade.teacherAbbreviation));
 
                 db.update(TABLE_GRADES, contentValues, KEY_GRADE_ID + " = " + grade.id, null);
@@ -173,13 +185,13 @@ public class GradesDB extends SQLiteOpenHelper {
         db.close();
     }
 
-    public Grade[] getUniqueAverageGrades() {
+    public Grade[] getUniqueAverageGrades(Study study) {
         SQLiteDatabase db = this.getWritableDatabase();
-        String Query = "SELECT * FROM " + TABLE_GRADES + " WHERE " + KEY_GRADE_ID
+        String Query = "SELECT * FROM " + TABLE_GRADES + " WHERE " + KEY_STUDY_ID + " = " + study.id + " AND " + KEY_GRADE_ID
                 + " != 0 AND " + KEY_SORTABLE_DATE + " IN (SELECT MAX(" + KEY_SORTABLE_DATE
                 + ") FROM " + TABLE_GRADES + " WHERE " + KEY_GRADE_ROW_TYPE + " = 2 OR "
                 + KEY_GRADE_ROW_TYPE + " = 6"
-                + " GROUP BY " + KEY_SUBJECT + ")";
+                + " GROUP BY " + KEY_SUBJECT + ") ORDER BY " + KEY_GRADE_ROW_TYPE + " DESC";
         Cursor cursor = db.rawQuery(Query, null);
         Log.d(TAG, "getAppointmentsByDate: Query: " + Query);
         Log.d(TAG, "getAppointmentsByDate: amount of items: " + cursor.getCount());
@@ -194,6 +206,9 @@ public class GradesDB extends SQLiteOpenHelper {
                     grade.grade = cursor.getString(cursor.getColumnIndex(KEY_GRADE));
                     grade.subject = gson.fromJson(cursor.getString(cursor.getColumnIndex(KEY_SUBJECT)), SubSubject.class);
                     grade.filledInDate = DateUtils.parseDate(cursor.getString(cursor.getColumnIndex(KEY_FILLED_IN_DATE)), "yyyy-MM-dd'T'HH:mm:ss");
+                    grade.gradeRow = new GradeRow();
+                    Log.d(TAG, "getUniqueAverageGrades: rowtype: " + cursor.getInt(cursor.getColumnIndex(KEY_GRADE_ROW_TYPE)));
+                    grade.gradeRow.rowSort = RowType.getTypeById(cursor.getInt(cursor.getColumnIndex(KEY_GRADE_ROW_TYPE)));
                     grades[i] = grade;
                     i++;
                 } while (cursor.moveToNext());
@@ -201,12 +216,18 @@ public class GradesDB extends SQLiteOpenHelper {
         }
         cursor.close();
 
-        for (Grade grade :
-                grades) {
-
-
+        List<Grade> gradeList = new ArrayList<Grade>();
+        for (Grade grade : grades) {
+            try {
+                if (grade.gradeRow.rowSort.getID() == 2 || grade.gradeRow.rowSort.getID() == 6) {
+                    gradeList.add(grade);
+                }
+            } catch (NullPointerException e) {
+            }
         }
+        grades = gradeList.toArray(new Grade[gradeList.size()]);
 
+        Collections.reverse(Arrays.asList(grades));
         return grades;
     }
 

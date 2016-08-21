@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright 2016 Bas van den Boom 'Z3r0byte'
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,12 +12,12 @@
   ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
-  -->
-<manifest package="com.z3r0byte.magis"
-          xmlns:android="http://schemas.android.com/apk/res/android">
+-->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.z3r0byte.magis">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -28,35 +27,41 @@
         android:theme="@style/AppTheme">
         <activity android:name=".StartActivity">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".SetupActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:theme="@style/Theme.Intro"/>
+            android:theme="@style/Theme.Intro" />
         <activity
             android:name=".CalendarActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:launchMode="singleTop"/>
+            android:launchMode="singleTop" />
         <activity
             android:name=".DetailActivity.AppointmentDetails"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:parentActivityName=".CalendarActivity"/>
+            android:parentActivityName=".CalendarActivity" />
         <activity
             android:name=".AddAppointmentActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"/>
+            android:configChanges="keyboardHidden|orientation|screenSize" />
         <activity
             android:name=".GradeActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"/>
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:launchMode="singleTop" />
 
         <service
             android:name=".Services.NewGradeService"
             android:enabled="true"
-            android:exported="true">
-        </service>
+            android:exported="true" />
+
+        <activity
+            android:name=".GradesSubjectActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:parentActivityName=".GradeActivity" />
+        <activity android:name=".SettingsActivity"></activity>
     </application>
 
 </manifest>
