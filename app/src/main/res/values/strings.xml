@@ -124,6 +124,6 @@
 
     <string name="aboutLibraries_description_showIcon">true</string>
     <string name="aboutLibraries_description_showVersion">true</string>
-    <string name="aboutLibraries_description_text">De eerste open-source Magister app. Magis maakt gebruik van de volgende libraries:</string>
+    <string name="aboutLibraries_description_text">De eerste open-source Magister app. Magis maakt gebruik van de volgende libraries (De magister.java library is aangepast):</string>
 
 </resources>

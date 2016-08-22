@@ -12,7 +12,7 @@
   ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
--->
+  -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.z3r0byte.magis">
 
@@ -61,7 +61,12 @@
             android:name=".GradesSubjectActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:parentActivityName=".GradeActivity" />
-        <activity android:name=".SettingsActivity"></activity>
+        <activity android:name=".SettingsActivity" />
+
+        <service
+            android:name=".Services.AppointmentService"
+            android:enabled="true"
+            android:exported="true"></service>
     </application>
 
 </manifest>
