@@ -25,6 +25,8 @@ import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.mikepenz.google_material_typeface_library.GoogleMaterial;
+import com.mikepenz.iconics.IconicsDrawable;
 import com.z3r0byte.magis.R;
 import com.z3r0byte.magis.Utils.ConfigUtil;
 import com.z3r0byte.magis.Utils.DB_Handlers.CalendarDB;
@@ -40,8 +42,10 @@ public class AppointmentService extends Service {
     CalendarDB calendarDB;
     Boolean showNotification;
     Appointment[] appointments;
-    Timer timer;
+    Timer timer = new Timer();
     String previousAppointment = "";
+
+    IconicsDrawable small;
 
     private static final String TAG = "AgendaNotification";
 
@@ -53,6 +57,7 @@ public class AppointmentService extends Service {
         calendarDB = new CalendarDB(getApplicationContext());
         configUtil = new ConfigUtil(getApplicationContext());
         showNotification = configUtil.getBoolean("notification");
+        small = new IconicsDrawable(this, GoogleMaterial.Icon.gmd_event_note);
         setup();
         return START_STICKY;
     }
@@ -64,11 +69,12 @@ public class AppointmentService extends Service {
                 public void run() {
                     Gson gson = new Gson();
                     appointments = calendarDB.getNotificationAppointments();
+                    Log.d(TAG, "run: amount " + appointments.length);
                     if (appointments.length >= 1) {
                         Appointment appointment = appointments[0];
                         if (gson.toJson(appointment) != previousAppointment) {
                             NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(getApplicationContext());
-                            mBuilder.setSmallIcon(R.drawable.magis512);
+                            mBuilder.setSmallIcon(R.drawable.ic_date);
 
                             /*Intent resultIntent = new Intent(getApplicationContext(), MainActivity.class);
                             TaskStackBuilder stackBuilder = TaskStackBuilder.create(getApplicationContext());
@@ -77,7 +83,11 @@ public class AppointmentService extends Service {
                             PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
                             mBuilder.setContentIntent(resultPendingIntent);*/
 
-                            mBuilder.setContentTitle("Volgende les (" + appointment.startDateString + ")");
+                            if (appointment.startDateString != null) {
+                                mBuilder.setContentTitle("Volgende les (" + appointment.startDateString + ")");
+                            } else {
+                                mBuilder.setContentTitle("Volgende afspraak:");
+                            }
                             mBuilder.setContentText(appointment.description + " in " + appointment.location);
                             mBuilder.setAutoCancel(true);
                             mBuilder.setVisibility(NotificationCompat.VISIBILITY_PUBLIC);
@@ -85,6 +95,8 @@ public class AppointmentService extends Service {
                             NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
                             mNotificationManager.notify(9992, mBuilder.build());
                         }
+                    } else {
+
                     }
                 }
             };
