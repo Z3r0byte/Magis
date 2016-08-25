@@ -43,6 +43,7 @@ import net.ilexiconn.magister.container.User;
 
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.Arrays;
 
 public class LoginFragment extends SlideFragment {
 
@@ -162,15 +163,16 @@ public class LoginFragment extends SlideFragment {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
                                     Intent intent = new Intent(Intent.ACTION_SEND);
-                                    intent.setType("text/plain");
+                                    intent.setType("message/rfc822");
                                     intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"z3r0byte.apps@gmail.com"});
                                     intent.putExtra(Intent.EXTRA_SUBJECT, "Login foutrapport");
-                                    intent.putExtra(Intent.EXTRA_TEXT, "Foutrapport: " + e.getMessage());
+                                    intent.putExtra(Intent.EXTRA_TEXT, "Foutrapport: " + e + " Stacktrace: " + Arrays.toString(e.getStackTrace()));
                                     try {
                                         startActivity(Intent.createChooser(intent, "Verzend mail..."));
                                     } catch (ActivityNotFoundException ex) {
                                         Toast.makeText(getActivity(), "Geen email programma gevonden", Toast.LENGTH_SHORT).show();
                                     }
+                                    Toast.makeText(getActivity(), "Bedankt!", Toast.LENGTH_SHORT).show();
                                 }
                             });
                             alertDialogBuilder.setNegativeButton("Nee", new DialogInterface.OnClickListener() {
