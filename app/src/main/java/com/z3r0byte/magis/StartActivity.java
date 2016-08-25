@@ -21,7 +21,9 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
-import com.z3r0byte.magis.Services.NewGradeService;
+import com.z3r0byte.magis.Services.AppointmentService;
+import com.z3r0byte.magis.Utils.ConfigUtil;
+import com.z3r0byte.magis.Utils.ServiceUtil;
 
 import cat.ereza.customactivityoncrash.CustomActivityOnCrash;
 
@@ -48,7 +50,11 @@ public class StartActivity extends AppCompatActivity {
             startActivity(new Intent(this, SetupActivity.class));
             finish();
         } else if (!relogin) {
-            startService(new Intent(this, NewGradeService.class));
+            ConfigUtil configUtil = new ConfigUtil(getApplicationContext());
+            if (!ServiceUtil.isMyServiceRunning(AppointmentService.class, this) && configUtil.getBoolean("notification")) {
+                startService(new Intent(this, AppointmentService.class));
+            }
+            //startService(new Intent(this, NewGradeService.class));
             startActivity(new Intent(this, CalendarActivity.class));
             finish();
         }

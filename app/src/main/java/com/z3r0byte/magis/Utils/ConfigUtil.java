@@ -36,4 +36,9 @@ public class ConfigUtil {
         editor.remove(value);
         editor.apply();
     }
+
+    public Boolean getBoolean(String name) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences("com.z3r0byte.magis_preferences", Context.MODE_PRIVATE);
+        return sharedPreferences.getBoolean(name, false);
+    }
 }

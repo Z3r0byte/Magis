@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright 2016 Bas van den Boom 'Z3r0byte'
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~  you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_list_calendar"
+    android:layout_centerInParent="true"
+    android:paddingRight="16dp"
+    android:paddingLeft="16dp"
+    android:paddingTop="16dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:minHeight="72dp">
+
+    <RelativeLayout
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Dinsdag 1 januari"
+            android:textColor="@color/accent" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_below="@+id/header"
+        android:id="@+id/main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+        <RelativeLayout
+            android:id="@+id/layout_list_calendar_period"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/circle_blue"
+            android:gravity="center">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.AppCompat.Title.Inverse"
+                android:text="8"
+                android:gravity="center"
+                android:id="@+id/text_list_period"
+                android:layout_centerHorizontal="true"
+                android:layout_centerInParent="true" />
+        </RelativeLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle=""
+            android:text="Geen gegevens"
+            android:id="@+id/text_lesson"
+            android:paddingLeft="50dp"
+            android:paddingRight="32dp"
+            android:layout_alignTop="@+id/layout_list_calendar_period"
+            android:layout_toRightOf="@+id/layout_list_calendar_period"
+            android:singleLine="true"
+            android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            android:text="Geen gegevens"
+            android:id="@+id/text_homework"
+            android:paddingLeft="50dp"
+            android:paddingRight="16dp"
+            android:maxLines="10"
+            android:textColor="@color/mi_text_color_secondary_light"
+            android:layout_below="@+id/text_lesson"
+            android:layout_toRightOf="@+id/layout_list_calendar_period"
+            android:layout_toEndOf="@+id/layout_list_calendar_period" />
+
+    </RelativeLayout>
+
+</RelativeLayout>

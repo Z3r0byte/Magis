@@ -26,6 +26,7 @@ import android.widget.ProgressBar;
 
 import com.z3r0byte.magis.Adapters.AppointmentsAdapter;
 import com.z3r0byte.magis.Adapters.GradesAdapter;
+import com.z3r0byte.magis.Adapters.HomeworkAdapter;
 import com.z3r0byte.magis.R;
 import com.z3r0byte.magis.Tasks.AppointmentsTask;
 import com.z3r0byte.magis.Tasks.LoginTask;
@@ -50,6 +51,7 @@ public class MagisActivity extends AppCompatActivity {
     public Appointment[] mAppointments;
     public Grade[] grades;
     public GradesAdapter mGradesAdapter;
+    public HomeworkAdapter mHomeworkAdapter;
 
     public SwipeRefreshLayout mSwipeRefreshLayout;
     public CoordinatorLayout coordinatorLayout;

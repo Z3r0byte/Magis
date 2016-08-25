@@ -38,12 +38,17 @@ import net.ilexiconn.magister.util.DateUtil;
 import java.text.ParseException;
 import java.util.Date;
 
+import static com.z3r0byte.magis.Utils.DateUtils.addMinutes;
+import static com.z3r0byte.magis.Utils.DateUtils.formatDate;
+import static com.z3r0byte.magis.Utils.DateUtils.getToday;
+import static java.lang.Integer.parseInt;
+
 
 public class CalendarDB extends SQLiteOpenHelper {
 
     private static final String TAG = "CalendarDB";
 
-    private static final int DATABASE_VERSION = 11;
+    private static final int DATABASE_VERSION = 12;
 
     private static final String DATABASE_NAME = "calendarDB";
     private static final String TABLE_CALENDAR = "calendar";
@@ -58,6 +63,8 @@ public class CalendarDB extends SQLiteOpenHelper {
     private static final String KEY_END = "end";
     private static final String KEY_FORMATTED_END = "formatend";
     private static final String KEY_FORMATTED_START = "formatstart";
+    private static final String KEY_FORMATTED_END_2 = "formatend2";
+    private static final String KEY_FORMATTED_START_2 = "formatstart2";
     private static final String KEY_PERIOD_FROM = "periodFrom";
     private static final String KEY_PERIOD_TO = "periodTo";
     private static final String KEY_TAKES_ALL_DAY = "takesAllDay";
@@ -87,6 +94,8 @@ public class CalendarDB extends SQLiteOpenHelper {
                 + KEY_FINISHED + " BOOLEAN,"
                 + KEY_FORMATTED_END + " INTEGER,"
                 + KEY_FORMATTED_START + " INTEGER,"
+                + KEY_FORMATTED_END_2 + " INTEGER,"
+                + KEY_FORMATTED_START_2 + " INTEGER,"
                 + KEY_INFO_TYPE + " TEXT,"
                 + KEY_LINKS + " TEXT,"
                 + KEY_LOCATION + " TEXT,"
@@ -160,6 +169,8 @@ public class CalendarDB extends SQLiteOpenHelper {
             contentValues.put(KEY_FINISHED, item.finished);
             contentValues.put(KEY_FORMATTED_END, endDateString.replaceAll("-", "").substring(0, 8));
             contentValues.put(KEY_FORMATTED_START, startDateString.replaceAll("-", "").substring(0, 8));
+            contentValues.put(KEY_FORMATTED_END_2, endDateString.replaceAll("[T:-]", "").substring(4, 12));
+            contentValues.put(KEY_FORMATTED_START_2, startDateString.replaceAll("[T:-]", "").substring(4, 12));
             contentValues.put(KEY_INFO_TYPE, item.infoType.getID());
             contentValues.put(KEY_LINKS, new Gson().toJson(item.links));
             contentValues.put(KEY_LOCATION, item.location);
@@ -180,12 +191,12 @@ public class CalendarDB extends SQLiteOpenHelper {
     }
 
     public void deleteAppointmentByDate(Date date) {
-        Integer dateInt = Integer.parseInt(DateUtils.formatDate(date, "yyyyMMdd"));
+        Integer dateInt = parseInt(formatDate(date, "yyyyMMdd"));
         deleteAppointmentByDateInt(dateInt);
     }
 
     public void deleteAppointmentByDateString(String date) {
-        Integer dateInt = Integer.parseInt(date.replaceAll("[T:Z.-]", "").substring(0, 8));
+        Integer dateInt = parseInt(date.replaceAll("[T:Z.-]", "").substring(0, 8));
         deleteAppointmentByDateInt(dateInt);
     }
 
@@ -209,12 +220,102 @@ public class CalendarDB extends SQLiteOpenHelper {
     
     public Appointment[] getAppointmentsByDate(Date date){
         SQLiteDatabase db = this.getWritableDatabase();
-        Integer dateInt = Integer.parseInt(DateUtils.formatDate(date, "yyyyMMdd")); //Adding 0's for ability to filter results.
+        Integer dateInt = parseInt(formatDate(date, "yyyyMMdd"));
         String Query = "SELECT * FROM " + TABLE_CALENDAR + " WHERE " + KEY_FORMATTED_START + " <= " + dateInt + " AND "
                 + KEY_FORMATTED_END + " >= " + dateInt;
         Cursor cursor = db.rawQuery(Query, null);
         Log.d(TAG, "getAppointmentsByDate: Query: " + Query);
         Log.d(TAG, "getAppointmentsByDate: amount of items: " + cursor.getCount());
+        Appointment[] results = new Appointment[cursor.getCount()];
+        int i = 0;
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
+                do {
+                    Gson gson = new Gson();
+                    Appointment appointment = new Appointment();
+                    appointment.id = cursor.getInt(cursor.getColumnIndex(KEY_CALENDAR_ID));
+                    appointment.startDate = DateUtils.parseDate(cursor.getString(cursor.getColumnIndex(KEY_START)), "yyyy-MM-dd'T'HH:mm:ss.0000000'Z'");
+                    appointment.classrooms = gson.fromJson(cursor.getString(cursor.getColumnIndex(KEY_CLASS_ROOMS)), Classroom[].class);
+                    appointment.content = cursor.getString(cursor.getColumnIndex(KEY_CONTENT));
+                    appointment.endDate = DateUtils.parseDate(cursor.getString(cursor.getColumnIndex(KEY_END)), "yyyy-MM-dd'T'HH:mm:ss.0000000'Z'");
+                    appointment.finished = cursor.getInt(cursor.getColumnIndex(KEY_FINISHED)) > 0;
+                    appointment.infoType = InfoType.getTypeById(cursor.getInt(cursor.getColumnIndex(KEY_INFO_TYPE)));
+                    appointment.links = gson.fromJson(cursor.getString(cursor.getColumnIndex(KEY_LINKS)), Link[].class);
+                    appointment.location = cursor.getString(cursor.getColumnIndex(KEY_LOCATION));
+                    appointment.periodFrom = cursor.getInt(cursor.getColumnIndex(KEY_PERIOD_FROM));
+                    appointment.periodUpToAndIncluding = cursor.getInt(cursor.getColumnIndex(KEY_PERIOD_TO));
+                    appointment.description = cursor.getString(cursor.getColumnIndex(KEY_DESC));
+                    appointment.classState = cursor.getInt(cursor.getColumnIndex(KEY_STATE));
+                    appointment.subjects = gson.fromJson(cursor.getString(cursor.getColumnIndex(KEY_SUBJECTS)), SubSubject[].class);
+                    appointment.teachers = gson.fromJson(cursor.getString(cursor.getColumnIndex(KEY_TEACHER)), Teacher[].class);
+                    appointment.type = AppointmentType.getTypeById(cursor.getInt(cursor.getColumnIndex(KEY_TYPE)));
+
+                    results[i] = appointment;
+                    i++;
+                } while (cursor.moveToNext());
+            }
+        }
+        cursor.close();
+
+        return results;
+    }
+
+    public Appointment[] getHomework(Date now) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        Integer dateInt = Integer.parseInt(formatDate(now, "yyyyMMdd"));
+        String Query = "SELECT * FROM " + TABLE_CALENDAR + " WHERE " + KEY_FORMATTED_START + " <= " + dateInt + " AND "
+                + KEY_FORMATTED_END + " >= " + dateInt + " AND " + KEY_CONTENT + " IS NOT NULL";
+
+        Cursor cursor = db.rawQuery(Query, null);
+        Log.d(TAG, "getAppointmentsByDate: Query: " + Query);
+        Log.d(TAG, "getAppointmentsByDate: amount of items: " + cursor.getCount());
+        Appointment[] results = new Appointment[cursor.getCount()];
+        int i = 0;
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
+                do {
+                    Gson gson = new Gson();
+                    Appointment appointment = new Appointment();
+                    appointment.id = cursor.getInt(cursor.getColumnIndex(KEY_CALENDAR_ID));
+                    appointment.startDate = DateUtils.parseDate(cursor.getString(cursor.getColumnIndex(KEY_START)), "yyyy-MM-dd'T'HH:mm:ss.0000000'Z'");
+                    appointment.classrooms = gson.fromJson(cursor.getString(cursor.getColumnIndex(KEY_CLASS_ROOMS)), Classroom[].class);
+                    appointment.content = cursor.getString(cursor.getColumnIndex(KEY_CONTENT));
+                    appointment.endDate = DateUtils.parseDate(cursor.getString(cursor.getColumnIndex(KEY_END)), "yyyy-MM-dd'T'HH:mm:ss.0000000'Z'");
+                    appointment.finished = cursor.getInt(cursor.getColumnIndex(KEY_FINISHED)) > 0;
+                    appointment.infoType = InfoType.getTypeById(cursor.getInt(cursor.getColumnIndex(KEY_INFO_TYPE)));
+                    appointment.links = gson.fromJson(cursor.getString(cursor.getColumnIndex(KEY_LINKS)), Link[].class);
+                    appointment.location = cursor.getString(cursor.getColumnIndex(KEY_LOCATION));
+                    appointment.periodFrom = cursor.getInt(cursor.getColumnIndex(KEY_PERIOD_FROM));
+                    appointment.periodUpToAndIncluding = cursor.getInt(cursor.getColumnIndex(KEY_PERIOD_TO));
+                    appointment.description = cursor.getString(cursor.getColumnIndex(KEY_DESC));
+                    appointment.classState = cursor.getInt(cursor.getColumnIndex(KEY_STATE));
+                    appointment.subjects = gson.fromJson(cursor.getString(cursor.getColumnIndex(KEY_SUBJECTS)), SubSubject[].class);
+                    appointment.teachers = gson.fromJson(cursor.getString(cursor.getColumnIndex(KEY_TEACHER)), Teacher[].class);
+                    appointment.type = AppointmentType.getTypeById(cursor.getInt(cursor.getColumnIndex(KEY_TYPE)));
+
+                    results[i] = appointment;
+                    i++;
+                } while (cursor.moveToNext());
+            }
+        }
+        cursor.close();
+
+        return results;
+    }
+
+    public Appointment[] getNotificationAppointments() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        Date now = getToday();
+        Date start = addMinutes(now, 25);
+        Date end = addMinutes(now, -45);
+
+        Integer startdateInt = parseInt(formatDate(start, "MMddHHmm"));
+        Integer enddateInt = parseInt(formatDate(end, "MMddHHmm"));
+        String Query = "SELECT * FROM " + TABLE_CALENDAR + " WHERE " + KEY_FORMATTED_START_2 + " <= " + startdateInt + " AND "
+                + KEY_FORMATTED_END_2 + " >= " + enddateInt;
+        Log.d(TAG, "getNotificationAppointments: Query: " + Query);
+        Cursor cursor = db.rawQuery(Query, null);
+
         Appointment[] results = new Appointment[cursor.getCount()];
         int i = 0;
         if (cursor != null) {

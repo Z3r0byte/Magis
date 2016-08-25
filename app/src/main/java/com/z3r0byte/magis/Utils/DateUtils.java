@@ -64,6 +64,13 @@ public class DateUtils {
         return new Date(calendar.getTimeInMillis());
     }
 
+    public static Date addMinutes(Date date, int minutes) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.add(Calendar.MINUTE, minutes);
+        return new Date(calendar.getTimeInMillis());
+    }
+
     public static void lastLogin(Context context, String date) {
         context.getSharedPreferences("data", Context.MODE_PRIVATE).edit().putString("LastLogin", date).apply();
     }

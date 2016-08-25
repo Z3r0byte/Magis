@@ -35,6 +35,7 @@ import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.SectionDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.z3r0byte.magis.GradeActivity;
+import com.z3r0byte.magis.HomeworkActivity;
 import com.z3r0byte.magis.R;
 import com.z3r0byte.magis.SettingsActivity;
 import com.z3r0byte.magis.StartActivity;
@@ -74,6 +75,8 @@ public class NavigationDrawer {
             .withIcon(GoogleMaterial.Icon.gmd_today);
     static PrimaryDrawerItem gradeItem = new PrimaryDrawerItem().withName(R.string.title_grades)
             .withIcon(GoogleMaterial.Icon.gmd_timeline).withSelectable(false);
+    static PrimaryDrawerItem homeworkItem = new PrimaryDrawerItem().withName(R.string.title_homework)
+            .withIcon(GoogleMaterial.Icon.gmd_assignment).withSelectable(false);
     static PrimaryDrawerItem refreshSessionItem = new SecondaryDrawerItem().withName(R.string.drawer_refresh_session)
             .withIcon(GoogleMaterial.Icon.gmd_refresh).withSelectable(false);
     static PrimaryDrawerItem logoutItem = new SecondaryDrawerItem().withName(R.string.drawer_logout)
@@ -100,6 +103,7 @@ public class NavigationDrawer {
                 .addDrawerItems(
                         calendarItem,
                         gradeItem,
+                        homeworkItem,
                         new SectionDrawerItem().withName(R.string.drawer_tools),
                         //refreshSessionItem,
                         settingsItem,
@@ -133,7 +137,11 @@ public class NavigationDrawer {
                         } else if (drawerItem == calendarItem && selection != "Agenda") {
                             activity.finish();
                             drawer.closeDrawer();
-
+                        } else if (drawerItem == homeworkItem && selection != "Huiswerk") {
+                            drawer.closeDrawer();
+                            Intent intent = new Intent(activity, HomeworkActivity.class);
+                            intent.putExtra("Magister", activity.mMagister);
+                            activity.startActivity(intent);
                         } else if (drawerItem == gradeItem && selection != "Cijfers") {
                             CloseDrawer();
                             Intent intent = new Intent(activity, GradeActivity.class);
@@ -155,6 +163,9 @@ public class NavigationDrawer {
                 break;
             case "Cijfers":
                 drawer.setSelection(gradeItem);
+                break;
+            case "Huiswerk":
+                drawer.setSelection(homeworkItem);
                 break;
             case "":
                 drawer.setSelection(-1);
