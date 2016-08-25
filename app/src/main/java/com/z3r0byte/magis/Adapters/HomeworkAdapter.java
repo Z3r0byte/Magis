@@ -18,6 +18,7 @@ package com.z3r0byte.magis.Adapters;
 
 import android.content.Context;
 import android.graphics.Paint;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,7 +63,8 @@ public class HomeworkAdapter extends ArrayAdapter<Appointment> {
             rowView.findViewById(R.id.layout_list_calendar_period).setBackgroundResource(0);
         }
         lesson.setText(appointments[position].description);
-        homework.setText(appointments[position].description);
+        CharSequence content = Html.fromHtml(appointments[position].content);
+        homework.setText(content);
 
 
         if (appointments[position].finished && appointments[position].infoType.getID() == 1) {

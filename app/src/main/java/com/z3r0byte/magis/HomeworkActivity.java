@@ -16,16 +16,20 @@
 
 package com.z3r0byte.magis;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.z3r0byte.magis.Adapters.HomeworkAdapter;
+import com.z3r0byte.magis.DetailActivity.HomeworkDetails;
 import com.z3r0byte.magis.GUI.NavigationDrawer;
 import com.z3r0byte.magis.Tasks.HomeworkTask;
 import com.z3r0byte.magis.Utils.DateUtils;
@@ -94,7 +98,22 @@ public class HomeworkActivity extends MagisActivity {
         mHomeworkAdapter = new HomeworkAdapter(this, mAppointments);
         listView.setAdapter(mHomeworkAdapter);
 
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Appointment appointment = mAppointments[i];
+                finishAppointment(appointment);
+            }
+        });
+
         loadHomework();
+    }
+
+    private void finishAppointment(final Appointment appointment) {
+        Intent intent = new Intent(this, HomeworkDetails.class);
+        intent.putExtra("Magister", mMagister);
+        intent.putExtra("Appointment", new Gson().toJson(appointment));
+        startActivity(intent);
     }
 
 

@@ -68,7 +68,14 @@
             android:enabled="true"
             android:exported="true" />
 
-        <activity android:name=".HomeworkActivity"></activity>
+        <activity
+            android:name=".HomeworkActivity"
+            android:launchMode="singleTop"
+            android:configChanges="keyboardHidden|orientation|screenSize" />
+        <activity
+            android:name=".DetailActivity.HomeworkDetails"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:parentActivityName=".HomeworkActivity" />
     </application>
 
 </manifest>

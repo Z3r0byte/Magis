@@ -74,8 +74,10 @@
     <string name="msg_end">einde</string>
     <string name="msg_entire_day">Hele dag</string>
     <string name="msg_exam">Examen</string>
+    <string name="msg_final_preparations">Laatste voorbereidingen...</string>
     <string name="msg_finish">Afronden</string>
     <string name="msg_finished">Afgerond</string>
+    <string name="msg_get_user_data">Gebruikersdata opvragen...</string>
     <string name="msg_homework">Huiswerk</string>
     <string name="msg_info">Informatie</string>
     <string name="msg_location">Lokatie</string>
@@ -91,6 +93,7 @@
     <string name="msg_oral">Mondeling</string>
     <string name="msg_patience">Even geduld aub</string>
     <string name="msg_period">Lesuur</string>
+    <string name="msg_preparing_databases">Databases voorbereiden...</string>
     <string name="msg_quiz">SO</string>
     <string name="msg_refresh_session_short">Opn proberen</string>
     <string name="msg_restart_to_apply">Herstart de app om de wijzigingen door te voeren.</string>

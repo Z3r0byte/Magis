@@ -25,6 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.z3r0byte.magis.DetailActivity.AppointmentDetails;
+import com.z3r0byte.magis.DetailActivity.HomeworkDetails;
 import com.z3r0byte.magis.R;
 
 import net.ilexiconn.magister.Magister;
@@ -83,6 +84,53 @@ public class AppointmentContentCard extends Card {
     }
 
     public void setClickListener(final Magister magister, final Appointment appointment, final AppointmentDetails activity) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (ready != true) {
+                }
+                if (magister != null) {
+                    ContentButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Looper.prepare();
+                                    AppointmentHandler appointmentHandler = new AppointmentHandler(magister);
+                                    try {
+                                        appointment.finished = !appointment.finished;
+                                        Boolean finished = appointmentHandler.finishAppointment(appointment);
+                                        Log.d(TAG, "run: Gelukt: " + finished);
+                                        if (finished) {
+                                            activity.updateAppointment(appointment);
+                                        }
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                        Toast.makeText(Context, R.string.err_no_connection, Toast.LENGTH_SHORT).show();
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                        Toast.makeText(Context, R.string.err_unknown, Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            }).start();
+
+                        }
+                    });
+                } else {
+                    activity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(activity, R.string.err_not_logged_in, Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+            }
+        }).start();
+
+    }
+
+    public void setClickListener(final Magister magister, final Appointment appointment, final HomeworkDetails activity) {
         new Thread(new Runnable() {
             @Override
             public void run() {
