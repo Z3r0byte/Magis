@@ -16,6 +16,8 @@
 
 package net.ilexiconn.magister;
 
+import android.util.Log;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -64,6 +66,7 @@ import javax.net.ssl.HttpsURLConnection;
  * @since 0.1.0
  */
 public class Magister {
+    private static final String TAG = "Magister";
     public static final String VERSION = "0.1.2";
 
     public static final int SESSION_TIMEOUT = 1200000;
@@ -121,13 +124,17 @@ public class Magister {
         magister.user = new User(username, password, true);
         magister.logout();
         String data = magister.gson.toJson(magister.user);
-        magister.session = magister.gson.fromJson(HttpUtil.httpPost(url.getSessionUrl(), data), Session.class);
+        String session = LogUtil.getStringFromInputStream(HttpUtil.httpPost(url.getSessionUrl(), data)); //logging
+        Log.d(TAG, "login: onLogin (session): " + session);
+        magister.session = magister.gson.fromJson(session, Session.class);
         if (!magister.session.state.equals("active")) {
             LogUtil.printError("Invalid credentials", new InvalidParameterException());
             return null;
         }
         magister.loginTime = System.currentTimeMillis();
-        magister.profile = magister.gson.fromJson(HttpUtil.httpGet(url.getAccountUrl()), Profile.class);
+        String profile = LogUtil.getStringFromInputStream(HttpUtil.httpGet(url.getAccountUrl())); //Logging
+        Log.d(TAG, "login: Profile: " + profile);
+        magister.profile = magister.gson.fromJson(profile, Profile.class);
         magister.studies = magister.gson.fromJson(HttpUtil.httpGet(url.getStudiesUrl(magister.profile.id)), Study[].class);
         Date now = new Date();
         for (Study study : magister.studies) {
