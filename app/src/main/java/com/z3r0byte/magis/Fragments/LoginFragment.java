@@ -40,6 +40,7 @@ import net.ilexiconn.magister.Magister;
 import net.ilexiconn.magister.container.Profile;
 import net.ilexiconn.magister.container.School;
 import net.ilexiconn.magister.container.User;
+import net.ilexiconn.magister.util.LogUtil;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -166,7 +167,8 @@ public class LoginFragment extends SlideFragment {
                                     intent.setType("message/rfc822");
                                     intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"z3r0byte.apps@gmail.com"});
                                     intent.putExtra(Intent.EXTRA_SUBJECT, "Login foutrapport");
-                                    intent.putExtra(Intent.EXTRA_TEXT, "Foutrapport: " + e + " Stacktrace: " + Arrays.toString(e.getStackTrace()));
+                                    intent.putExtra(Intent.EXTRA_TEXT, "Foutrapport: " + e + " Stacktrace: " + Arrays.toString(e.getStackTrace())
+                                            + " \n--------LOGCAT--------\n " + LogUtil.getLogCat());
                                     try {
                                         startActivity(Intent.createChooser(intent, "Verzend mail..."));
                                     } catch (ActivityNotFoundException ex) {
