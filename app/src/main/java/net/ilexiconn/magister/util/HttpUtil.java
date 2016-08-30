@@ -18,7 +18,16 @@ package net.ilexiconn.magister.util;
 
 import android.util.Log;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import net.ilexiconn.magister.Magister;
+import net.ilexiconn.magister.adapter.ProfileAdapter;
+import net.ilexiconn.magister.adapter.StudyAdapter;
+import net.ilexiconn.magister.adapter.SubjectAdapter;
+import net.ilexiconn.magister.container.Profile;
+import net.ilexiconn.magister.container.Study;
+import net.ilexiconn.magister.container.Subject;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -42,6 +51,12 @@ import java.util.Map;
 import javax.net.ssl.HttpsURLConnection;
 
 public class HttpUtil {
+    public Gson gson = new GsonBuilder()
+            .registerTypeAdapter(Profile.class, new ProfileAdapter())
+            .registerTypeAdapter(Study[].class, new StudyAdapter())
+            .registerTypeAdapter(Subject[].class, new SubjectAdapter())
+            .create();
+    private static final String TAG = "HttpUtil";
     private static CookieManager cookieManager = new CookieManager();
 
     public static InputStreamReader httpDelete(String url) throws IOException {

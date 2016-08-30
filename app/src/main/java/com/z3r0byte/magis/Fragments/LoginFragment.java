@@ -40,6 +40,7 @@ import net.ilexiconn.magister.Magister;
 import net.ilexiconn.magister.container.Profile;
 import net.ilexiconn.magister.container.School;
 import net.ilexiconn.magister.container.User;
+import net.ilexiconn.magister.util.LogUtil;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -166,7 +167,8 @@ public class LoginFragment extends SlideFragment {
                                     intent.setType("message/rfc822");
                                     intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"z3r0byte.apps@gmail.com"});
                                     intent.putExtra(Intent.EXTRA_SUBJECT, "Login foutrapport");
-                                    intent.putExtra(Intent.EXTRA_TEXT, "Foutrapport: " + e + " Stacktrace: " + Arrays.toString(e.getStackTrace()));
+                                    intent.putExtra(Intent.EXTRA_TEXT, "Foutrapport: " + e + " Stacktrace: " + Arrays.toString(e.getStackTrace())
+                                            + " \n--------LOGCAT--------\n " + LogUtil.getLogCat());
                                     try {
                                         startActivity(Intent.createChooser(intent, "Verzend mail..."));
                                     } catch (ActivityNotFoundException ex) {
@@ -234,45 +236,15 @@ public class LoginFragment extends SlideFragment {
                         }
                     });
                 }
-                //Adding timout to prevent session conflicts
                 try {
-                    Thread.sleep(3000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        mLogin.setText(R.string.msg_get_user_data);
-                    }
-                });
-                try {
-                    Thread.sleep(2800);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        mLogin.setText(R.string.msg_preparing_databases);
-                    }
-                });
-
-                try {
-                    Thread.sleep(3500);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        mLogin.setText(R.string.msg_final_preparations);
-                    }
-                });
-                try {
-                    Thread.sleep(1500);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    magister.logout();
+                } catch (IOException e) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(c, R.string.err_no_connection, Toast.LENGTH_SHORT).show();
+                        }
+                    });
                 }
                 ResetButton();
             }

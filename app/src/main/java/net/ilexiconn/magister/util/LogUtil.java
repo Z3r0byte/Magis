@@ -16,7 +16,11 @@
 
 package net.ilexiconn.magister.util;
 
+import android.util.Log;
+
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
@@ -72,5 +76,53 @@ public class LogUtil {
      */
     public static void setAndroidTag(String tag) {
         TAG = tag;
+    }
+
+    public static String getLogCat() {
+        try {
+            Process process = Runtime.getRuntime().exec("logcat -d");
+            BufferedReader bufferedReader = new BufferedReader(
+                    new InputStreamReader(process.getInputStream()));
+
+            StringBuilder log = new StringBuilder();
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                log.append(line);
+            }
+            Log.d(TAG, "run: Logcat: " + log.toString());
+            return log.toString();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            return null;
+        }
+    }
+
+    public static String getStringFromInputStream(InputStreamReader is) {
+
+        BufferedReader br = null;
+        StringBuilder sb = new StringBuilder();
+
+        String line;
+        try {
+
+            br = new BufferedReader(is);
+            while ((line = br.readLine()) != null) {
+                sb.append(line);
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (br != null) {
+                try {
+                    br.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        return sb.toString();
+
     }
 }
