@@ -126,6 +126,9 @@ public class Magister {
         String data = magister.gson.toJson(magister.user);
         String session = LogUtil.getStringFromInputStream(HttpUtil.httpPost(url.getSessionUrl(), data)); //logging
         Log.d(TAG, "login: onLogin (session): " + session);
+        if (session.startsWith("{\"message\"")) {
+            throw new InvalidParameterException(session);
+        }
         magister.session = magister.gson.fromJson(session, Session.class);
         if (!magister.session.state.equals("active")) {
             LogUtil.printError("Invalid credentials", new InvalidParameterException());

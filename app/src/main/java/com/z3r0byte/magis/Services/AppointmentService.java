@@ -17,16 +17,19 @@
 package com.z3r0byte.magis.Services;
 
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
+import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 
 import com.google.gson.Gson;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
+import com.z3r0byte.magis.CalendarActivity;
 import com.z3r0byte.magis.R;
 import com.z3r0byte.magis.Utils.ConfigUtil;
 import com.z3r0byte.magis.Utils.DB_Handlers.CalendarDB;
@@ -72,16 +75,16 @@ public class AppointmentService extends Service {
                     Log.d(TAG, "run: amount " + appointments.length);
                     if (appointments.length >= 1) {
                         Appointment appointment = appointments[0];
-                        if (gson.toJson(appointment) != previousAppointment) {
+                        if (!gson.toJson(appointment).equals(previousAppointment)) {
                             NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(getApplicationContext());
                             mBuilder.setSmallIcon(R.drawable.ic_date);
 
-                            /*Intent resultIntent = new Intent(getApplicationContext(), MainActivity.class);
+                            Intent resultIntent = new Intent(getApplicationContext(), CalendarActivity.class);
                             TaskStackBuilder stackBuilder = TaskStackBuilder.create(getApplicationContext());
-                            stackBuilder.addParentStack(MainActivity.class);
+                            stackBuilder.addParentStack(CalendarActivity.class);
                             stackBuilder.addNextIntent(resultIntent);
                             PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
-                            mBuilder.setContentIntent(resultPendingIntent);*/
+                            mBuilder.setContentIntent(resultPendingIntent);
 
                             if (appointment.startDateString != null) {
                                 mBuilder.setContentTitle("Volgende les (" + appointment.startDateString + ")");
@@ -94,9 +97,11 @@ public class AppointmentService extends Service {
 
                             NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
                             mNotificationManager.notify(9992, mBuilder.build());
+                            previousAppointment = gson.toJson(appointment);
                         }
                     } else {
-
+                        NotificationManager notifManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+                        notifManager.cancel(9992);
                     }
                 }
             };

@@ -85,6 +85,7 @@ public class HttpUtil {
     }
 
     public static InputStreamReader httpPost(String url, String data) throws IOException {
+        Log.d(TAG, "httpPost() called with: url = [" + url + "], data = [" + data + "]");//Sorry, but this is really nescessary for debugging TODO remove this when #25 is fixed
         HttpsURLConnection connection = (HttpsURLConnection) new URL(url).openConnection();
         connection.setDoOutput(true);
         connection.setRequestMethod("POST");
@@ -101,7 +102,11 @@ public class HttpUtil {
         //outputStream.flush();
         //outputStream.close();
         storeCookies(connection);
-        return new InputStreamReader(connection.getInputStream());
+        if (connection.getResponseCode() >= 200 && connection.getResponseCode() < 400) {
+            return new InputStreamReader(connection.getInputStream());
+        } else {
+            return new InputStreamReader(connection.getErrorStream());
+        }
     }
 
     public static InputStreamReader httpPostRaw(String url, String json) throws IOException {
