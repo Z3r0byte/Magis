@@ -34,6 +34,7 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.heinrichreimersoftware.materialintro.app.SlideFragment;
+import com.z3r0byte.magis.BuildConfig;
 import com.z3r0byte.magis.R;
 
 import net.ilexiconn.magister.Magister;
@@ -204,6 +205,8 @@ public class LoginFragment extends SlideFragment {
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
+                            final int versionCode = BuildConfig.VERSION_CODE;
+
                             AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
                             alertDialogBuilder.setTitle("Problemen met inloggen?");
                             alertDialogBuilder.setMessage("Zegt de app dat je geen verbinding hebt, maar heb je dat wel? Klik dan op \"Mail mij\" om " +
@@ -214,8 +217,8 @@ public class LoginFragment extends SlideFragment {
                                     Intent intent = new Intent(Intent.ACTION_SEND);
                                     intent.setType("message/rfc822");
                                     intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"z3r0byte.apps@gmail.com"});
-                                    intent.putExtra(Intent.EXTRA_SUBJECT, "Login foutrapport");
-                                    intent.putExtra(Intent.EXTRA_TEXT, "Foutrapport: " + e + " Stacktrace: " + Arrays.toString(e.getStackTrace())
+                                    intent.putExtra(Intent.EXTRA_SUBJECT, "Login foutrapport Magis " + versionCode);
+                                    intent.putExtra(Intent.EXTRA_TEXT, "Stacktrace: " + Arrays.toString(e.getStackTrace())
                                             + " \n--------LOGCAT--------\n " + LogUtil.getLogCat());
                                     try {
                                         startActivity(Intent.createChooser(intent, "Verzend mail..."));

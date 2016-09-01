@@ -117,7 +117,7 @@ public class NavigationDrawer {
                         } else if (drawerItem == logoutItem) {
                             new MaterialDialog.Builder(activity)
                                     .title(R.string.dialog_logout_title)
-                                    .content(R.string.dialog_skip_login_desc)
+                                    .content(R.string.dialog_logout_desc)
                                     .positiveText(android.R.string.ok)
                                     .onPositive(new MaterialDialog.SingleButtonCallback() {
                                         @Override

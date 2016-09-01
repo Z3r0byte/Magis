@@ -100,7 +100,7 @@ public class AppointmentService extends Service {
                             previousAppointment = gson.toJson(appointment);
                         }
                     } else {
-                        NotificationManager notifManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+                        NotificationManager notifManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
                         notifManager.cancel(9992);
                     }
                 }
