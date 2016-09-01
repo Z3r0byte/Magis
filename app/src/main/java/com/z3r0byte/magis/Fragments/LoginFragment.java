@@ -279,6 +279,7 @@ public class LoginFragment extends SlideFragment {
                         }
                     });
                 }
+                if(magister != null){
                 try {
                     magister.logout();
                 } catch (IOException e) {
@@ -288,6 +289,7 @@ public class LoginFragment extends SlideFragment {
                             Toast.makeText(c, R.string.err_no_connection, Toast.LENGTH_SHORT).show();
                         }
                     });
+                }
                 }
                 ResetButton();
             }
