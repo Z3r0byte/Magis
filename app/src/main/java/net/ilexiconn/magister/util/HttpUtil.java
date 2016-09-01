@@ -85,9 +85,11 @@ public class HttpUtil {
     }
 
     public static InputStreamReader httpPost(String url, String data) throws IOException {
+        Log.d(TAG, "httpPost() called with: url = [" + url + "], data = [" + data + "]");  //Sorry, but this is really nescessary for debugging TODO remove this when #25 is fixed
         HttpsURLConnection connection = (HttpsURLConnection) new URL(url).openConnection();
         connection.setDoOutput(true);
         connection.setRequestMethod("POST");
+        connection.setRequestProperty("Accept", "application/json");
         connection.setRequestProperty("Cookie", getCurrentCookies());
         connection.setRequestProperty("Content-Type", "application/json");
 
@@ -100,8 +102,15 @@ public class HttpUtil {
         //outputStream.write(data);
         //outputStream.flush();
         //outputStream.close();
+
+        Log.d(TAG, "httpPost: connection: " + connection.toString());
+
         storeCookies(connection);
-        return new InputStreamReader(connection.getInputStream());
+        if (connection.getResponseCode() >= 200 && connection.getResponseCode() < 400) {
+            return new InputStreamReader(connection.getInputStream());
+        } else {
+            return new InputStreamReader(connection.getErrorStream());
+        }
     }
 
     public static InputStreamReader httpPostRaw(String url, String json) throws IOException {
@@ -159,7 +168,11 @@ public class HttpUtil {
         fis.close();
         dos.flush();
         dos.close();
-        return new InputStreamReader(connection.getInputStream());
+        if (connection.getResponseCode() >= 200 && connection.getResponseCode() < 400) {
+            return new InputStreamReader(connection.getInputStream());
+        } else {
+            return new InputStreamReader(connection.getErrorStream());
+        }
     }
 
     public static InputStreamReader httpGet(String url) throws IOException {
@@ -214,10 +227,14 @@ public class HttpUtil {
     private static void storeCookies(HttpURLConnection connection) {
         Map<String, List<String>> headers = connection.getHeaderFields();
         List<String> cookies = headers.get("Set-Cookie");
-        if (cookies != null) {
+        /*if (cookies != null) {
             for (String cookie : cookies) {
                 cookieManager.getCookieStore().add(null, HttpCookie.parse(cookie).get(0));
             }
+        }*/
+        if (cookies != null) {
+            cookieManager.getCookieStore().removeAll();
+            cookieManager.getCookieStore().add(null, HttpCookie.parse(cookies.get(cookies.size() - 1)).get(0));
         }
     }
 

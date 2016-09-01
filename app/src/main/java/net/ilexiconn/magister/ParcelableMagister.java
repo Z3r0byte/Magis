@@ -99,7 +99,11 @@ public class ParcelableMagister extends Magister implements Parcelable {
         magister.user = new User(username, password, true);
         magister.logout();
         String data = magister.gson.toJson(magister.user);
-        magister.session = magister.gson.fromJson(HttpUtil.httpPost(url.getSessionUrl(), data), Session.class);
+        String session = LogUtil.getStringFromInputStream(HttpUtil.httpPost(url.getSessionUrl(), data)); //logging
+        if (session.startsWith("{\"message\"")) {
+            return null;
+        }
+        magister.session = magister.gson.fromJson(session, Session.class);
         if (!magister.session.state.equals("active")) {
             LogUtil.printError("Invalid credentials", new InvalidParameterException());
             return null;
