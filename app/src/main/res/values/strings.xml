@@ -108,7 +108,7 @@
     <string name="msg_undo">Ongedaan maken</string>
     <string name="msg_using_cache">Cache wordt gebruikt.</string>
 
-    <string name="setup_desc_1">Laten we beginnen...</string>
+    <string name="setup_desc_1">Let op: Ouder-accounts zijn op dit moment nog niet ondersteund.</string>
     <string name="setup_desc_2">Magis heeft toegang nodig tot de sdkaart om logbestanden en dergelijken op te slaan.</string>
     <string name="setup_title_1">Welkom bij Magis</string>
     <string name="setup_title_2">Permissies</string>
