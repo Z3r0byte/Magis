@@ -109,7 +109,8 @@ public class HttpUtil {
         if (connection.getResponseCode() >= 200 && connection.getResponseCode() < 400) {
             return new InputStreamReader(connection.getInputStream());
         } else {
-            return new InputStreamReader(connection.getErrorStream());
+            Log.d(TAG, "httpPost: " + LogUtil.getStringFromInputStream(new InputStreamReader(connection.getErrorStream())));
+            throw new IOException("Http Error: " + connection.getResponseCode());
         }
     }
 
@@ -185,7 +186,14 @@ public class HttpUtil {
         }
         connection.connect();
         storeCookies(connection);
-        return new InputStreamReader(connection.getInputStream());
+
+
+        if (connection.getResponseCode() >= 200 && connection.getResponseCode() < 400) {
+            return new InputStreamReader(connection.getInputStream());
+        } else {
+            Log.d(TAG, "httpGet: " + LogUtil.getStringFromInputStream(new InputStreamReader(connection.getErrorStream())));
+            throw new IOException("Http Error: " + connection.getResponseCode());
+        }
     }
 
     public static File httpGetFile(String url, File downloadDir) throws IOException {
