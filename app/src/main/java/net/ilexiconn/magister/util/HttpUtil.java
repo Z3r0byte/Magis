@@ -103,7 +103,8 @@ public class HttpUtil {
         //outputStream.flush();
         //outputStream.close();
 
-        Log.d(TAG, "httpPost: connection: " + connection.toString());
+        Log.d(TAG, "httpPost: connection: Cookie: " + connection.getRequestProperty("Cookie"));
+        Log.d(TAG, "httpPost: connection: Cookie-Set: " + connection.getHeaderField("Set-Cookie"));
 
         storeCookies(connection);
         if (connection.getResponseCode() >= 200 && connection.getResponseCode() < 400) {
@@ -185,7 +186,16 @@ public class HttpUtil {
         }
         connection.connect();
         storeCookies(connection);
-        return new InputStreamReader(connection.getInputStream());
+
+        Log.d(TAG, "httpPost: connection: Cookie: " + connection.getRequestProperty("Cookie"));
+        Log.d(TAG, "httpPost: connection: Cookie-Set: " + connection.getHeaderField("Set-Cookie"));
+
+
+        if (connection.getResponseCode() >= 200 && connection.getResponseCode() < 400) {
+            return new InputStreamReader(connection.getInputStream());
+        } else {
+            return new InputStreamReader(connection.getErrorStream());
+        }
     }
 
     public static File httpGetFile(String url, File downloadDir) throws IOException {

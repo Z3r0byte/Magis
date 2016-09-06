@@ -13,13 +13,22 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
+
 <android.support.v7.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <com.codevscolor.materialpreference.widget.MaterialPreferenceCategory android:title="Experimentele functies">
+    <com.codevscolor.materialpreference.widget.MaterialPreferenceCategory android:title="Notificaties">
         <android.support.v7.preference.CheckBoxPreference
-            android:defaultValue="false"
+            android:defaultValue="true"
             android:key="notification"
             android:summary="Krijg een melding voor de volgende les"
             android:title="Melding" />
+        <android.support.v7.preference.SwitchPreferenceCompat
+            android:defaultValue="false"
+            android:key="show_own_appointments"
+            android:summary="Geeft ook een notificatie bij eigen afspraken"
+            android:title="Eigen afspraken" />
+    </com.codevscolor.materialpreference.widget.MaterialPreferenceCategory>
+
+    <com.codevscolor.materialpreference.widget.MaterialPreferenceCategory android:title="Experimentele functies">
         <android.support.v7.preference.CheckBoxPreference
             android:defaultValue="false"
             android:key="auto-silent"

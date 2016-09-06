@@ -119,8 +119,7 @@ public class LoginTask extends AsyncTask<Void, Void, ParcelableMagister> {
             Snackbar.make(activity.coordinatorLayout, activity1.getString(R.string.msg_logged_in), Snackbar.LENGTH_LONG).show();
         } else {
             useCache();
-
-            Log.e(TAG, error);
+            Log.e(TAG, "" + error);
             Snackbar.make(activity.coordinatorLayout, error + " " + activity1.getString(R.string.msg_using_cache), Snackbar.LENGTH_LONG).show();
         }
         dialog.dismiss();
