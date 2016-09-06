@@ -158,6 +158,7 @@ public class LoginFragment extends SlideFragment {
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
+                            final int buildnumber = BuildConfig.VERSION_CODE;
                             AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
                             alertDialogBuilder.setTitle("Problemen met inloggen?");
                             alertDialogBuilder.setMessage("Zegt de app dat je geen verbinding hebt, maar heb je dat wel? Klik dan op \"Mail mij\" om " +
@@ -168,7 +169,7 @@ public class LoginFragment extends SlideFragment {
                                     Intent intent = new Intent(Intent.ACTION_SEND);
                                     intent.setType("message/rfc822");
                                     intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"z3r0byte.apps@gmail.com"});
-                                    intent.putExtra(Intent.EXTRA_SUBJECT, "Login foutrapport");
+                                    intent.putExtra(Intent.EXTRA_SUBJECT, "Login foutrapport " + buildnumber);
                                     intent.putExtra(Intent.EXTRA_TEXT, "Foutrapport: " + e + " Stacktrace: " + Arrays.toString(e.getStackTrace())
                                             + " \n--------LOGCAT--------\n " + LogUtil.getLogCat());
                                     try {
@@ -205,39 +206,8 @@ public class LoginFragment extends SlideFragment {
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            final int versionCode = BuildConfig.VERSION_CODE;
-
-                            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
-                            alertDialogBuilder.setTitle("Problemen met inloggen?");
-                            alertDialogBuilder.setMessage("Zegt de app dat je geen verbinding hebt, maar heb je dat wel? Klik dan op \"Mail mij\" om " +
-                                    "een error rapport naar mij te sturen. Zo help je mij met het oplossen van deze fout. Bedankt!");
-                            alertDialogBuilder.setPositiveButton("Mail mij", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    Intent intent = new Intent(Intent.ACTION_SEND);
-                                    intent.setType("message/rfc822");
-                                    intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"z3r0byte.apps@gmail.com"});
-                                    intent.putExtra(Intent.EXTRA_SUBJECT, "Login foutrapport Magis " + versionCode);
-                                    intent.putExtra(Intent.EXTRA_TEXT, "Stacktrace: " + Arrays.toString(e.getStackTrace())
-                                            + " \n--------LOGCAT--------\n " + LogUtil.getLogCat());
-                                    try {
-                                        startActivity(Intent.createChooser(intent, "Verzend mail..."));
-                                    } catch (ActivityNotFoundException ex) {
-                                        Toast.makeText(getActivity(), "Geen email programma gevonden", Toast.LENGTH_SHORT).show();
-                                    }
-                                    Toast.makeText(getActivity(), "Bedankt!", Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                            alertDialogBuilder.setNegativeButton("Nee", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                }
-                            });
-                            AlertDialog alertDialog = alertDialogBuilder.create();
-                            alertDialog.show();
                             e.printStackTrace();
-
-                            Toast.makeText(c, getResources().getString(R.string.err_no_connection), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(c, getResources().getString(R.string.err_wrong_username_or_password), Toast.LENGTH_SHORT).show();
                         }
                     });
                     ResetButton();

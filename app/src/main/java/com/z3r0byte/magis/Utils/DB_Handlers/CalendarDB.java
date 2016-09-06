@@ -38,6 +38,7 @@ import net.ilexiconn.magister.util.DateUtil;
 import java.text.ParseException;
 import java.util.Date;
 
+import static com.z3r0byte.magis.Utils.DateUtils.addDays;
 import static com.z3r0byte.magis.Utils.DateUtils.addMinutes;
 import static com.z3r0byte.magis.Utils.DateUtils.formatDate;
 import static com.z3r0byte.magis.Utils.DateUtils.getToday;
@@ -262,9 +263,10 @@ public class CalendarDB extends SQLiteOpenHelper {
 
     public Appointment[] getHomework(Date now) {
         SQLiteDatabase db = this.getWritableDatabase();
-        Integer dateInt = Integer.parseInt(formatDate(now, "yyyyMMdd"));
-        String Query = "SELECT * FROM " + TABLE_CALENDAR + " WHERE " + KEY_FORMATTED_START + " <= " + dateInt + " AND "
-                + KEY_FORMATTED_END + " >= " + dateInt + " AND " + KEY_CONTENT + " IS NOT NULL";
+        Integer dateStart = Integer.parseInt(formatDate(now, "yyyyMMdd"));
+        Integer dateEnd = Integer.parseInt(formatDate(addDays(now, 14), "yyyyMMdd"));
+        String Query = "SELECT * FROM " + TABLE_CALENDAR + " WHERE " + KEY_FORMATTED_START + " <= " + dateEnd + " AND "
+                + KEY_FORMATTED_END + " >= " + dateStart + " AND " + KEY_CONTENT + " IS NOT NULL";
 
         Cursor cursor = db.rawQuery(Query, null);
         Log.d(TAG, "getAppointmentsByDate: Query: " + Query);

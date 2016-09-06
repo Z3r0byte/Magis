@@ -33,8 +33,10 @@ import com.z3r0byte.magis.CalendarActivity;
 import com.z3r0byte.magis.R;
 import com.z3r0byte.magis.Utils.ConfigUtil;
 import com.z3r0byte.magis.Utils.DB_Handlers.CalendarDB;
+import com.z3r0byte.magis.Utils.DateUtils;
 
 import net.ilexiconn.magister.container.Appointment;
+import net.ilexiconn.magister.container.type.AppointmentType;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -75,7 +77,7 @@ public class AppointmentService extends Service {
                     Log.d(TAG, "run: amount " + appointments.length);
                     if (appointments.length >= 1) {
                         Appointment appointment = appointments[0];
-                        if (!gson.toJson(appointment).equals(previousAppointment)) {
+                        if (!gson.toJson(appointment).equals(previousAppointment) && isCandidate(appointment)) {
                             NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(getApplicationContext());
                             mBuilder.setSmallIcon(R.drawable.ic_date);
 
@@ -86,8 +88,9 @@ public class AppointmentService extends Service {
                             PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
                             mBuilder.setContentIntent(resultPendingIntent);
 
-                            if (appointment.startDateString != null) {
-                                mBuilder.setContentTitle("Volgende les (" + appointment.startDateString + ")");
+                            if (appointment.startDate != null) {
+                                String time = DateUtils.formatDate(DateUtils.addHours(appointment.startDate, 2), "HH:mm");
+                                mBuilder.setContentTitle("Volgende les/afspraak (" + time + ")");
                             } else {
                                 mBuilder.setContentTitle("Volgende afspraak:");
                             }
@@ -106,6 +109,18 @@ public class AppointmentService extends Service {
                 }
             };
             timer.schedule(notificationTask, 20000, 60 * 1000);
+        }
+    }
+
+    private boolean isCandidate(Appointment appointment) {
+        if (configUtil.getBoolean("show_own_appointments")) {
+            return true;
+        } else {
+            if (appointment.type == AppointmentType.PERSONAL) {
+                return false;
+            } else {
+                return true;
+            }
         }
     }
 

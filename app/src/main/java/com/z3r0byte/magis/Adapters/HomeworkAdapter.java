@@ -27,6 +27,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.z3r0byte.magis.R;
+import com.z3r0byte.magis.Utils.DateUtils;
 
 import net.ilexiconn.magister.container.Appointment;
 
@@ -37,6 +38,7 @@ import net.ilexiconn.magister.container.Appointment;
 public class HomeworkAdapter extends ArrayAdapter<Appointment> {
     private final Context context;
     private final Appointment[] appointments;
+    String previousDay = "";
 
     public HomeworkAdapter(Context context, Appointment[] appointments) {
         super(context, -1, appointments);
@@ -53,8 +55,16 @@ public class HomeworkAdapter extends ArrayAdapter<Appointment> {
         TextView period = (TextView) rowView.findViewById(R.id.text_list_period);
         TextView lesson = (TextView) rowView.findViewById(R.id.text_lesson);
         TextView homework = (TextView) rowView.findViewById(R.id.text_homework);
+        TextView headerText = (TextView) rowView.findViewById(R.id.header_text);
         RelativeLayout header = (RelativeLayout) rowView.findViewById(R.id.header);
-        header.setVisibility(View.GONE);
+
+        String day = DateUtils.formatDate(appointments[position].startDate, "yyyyMMdd");
+        if (!previousDay.equals(day)) {
+            headerText.setText(DateUtils.formatDate(appointments[position].startDate, "EEEE dd MMM"));
+            previousDay = day;
+        } else {
+            header.setVisibility(View.GONE);
+        }
 
 
         period.setText(appointments[position].periodFrom + "");

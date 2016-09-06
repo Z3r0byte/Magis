@@ -32,10 +32,12 @@
         android:layout_marginBottom="16dp">
 
         <TextView
+            android:id="@+id/header_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Dinsdag 1 januari"
-            android:textColor="@color/accent" />
+            android:textColor="@color/accent"
+            android:textStyle="normal|bold" />
     </RelativeLayout>
 
     <RelativeLayout

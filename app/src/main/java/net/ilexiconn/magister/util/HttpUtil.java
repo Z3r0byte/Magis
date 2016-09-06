@@ -103,14 +103,14 @@ public class HttpUtil {
         //outputStream.flush();
         //outputStream.close();
 
-        Log.d(TAG, "httpPost: connection: " + connection.toString());
+        Log.d(TAG, "httpPost: connection: Cookie: " + connection.getRequestProperty("Cookie"));
+        Log.d(TAG, "httpPost: connection: Cookie-Set: " + connection.getHeaderField("Set-Cookie"));
 
         storeCookies(connection);
         if (connection.getResponseCode() >= 200 && connection.getResponseCode() < 400) {
             return new InputStreamReader(connection.getInputStream());
         } else {
-            Log.d(TAG, "httpPost: " + LogUtil.getStringFromInputStream(new InputStreamReader(connection.getErrorStream())));
-            throw new IOException("Http Error: " + connection.getResponseCode());
+            return new InputStreamReader(connection.getErrorStream());
         }
     }
 
@@ -187,12 +187,14 @@ public class HttpUtil {
         connection.connect();
         storeCookies(connection);
 
+        Log.d(TAG, "httpPost: connection: Cookie: " + connection.getRequestProperty("Cookie"));
+        Log.d(TAG, "httpPost: connection: Cookie-Set: " + connection.getHeaderField("Set-Cookie"));
+
 
         if (connection.getResponseCode() >= 200 && connection.getResponseCode() < 400) {
             return new InputStreamReader(connection.getInputStream());
         } else {
-            Log.d(TAG, "httpGet: " + LogUtil.getStringFromInputStream(new InputStreamReader(connection.getErrorStream())));
-            throw new IOException("Http Error: " + connection.getResponseCode());
+            return new InputStreamReader(connection.getErrorStream());
         }
     }
 
