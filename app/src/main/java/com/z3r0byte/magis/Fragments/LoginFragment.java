@@ -104,7 +104,7 @@ public class LoginFragment extends SlideFragment {
                     mUrl = mSchool.url;
                 }
 
-                login(mUserNameEditText.getText().toString(), mPasswordEditText.getText().toString());
+                login(mUserNameEditText.getText().toString().trim(), mPasswordEditText.getText().toString().trim());
             }
         });
 
