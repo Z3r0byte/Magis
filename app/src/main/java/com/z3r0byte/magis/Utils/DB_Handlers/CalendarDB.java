@@ -146,11 +146,14 @@ public class CalendarDB extends SQLiteOpenHelper {
                 e.printStackTrace();
             }
             String endDateString;
+            String secondEndDateString;
             try {
-                endDateString = DateUtil.dateToString(DateUtils.addHours(item.endDate, 1));
                 //Not adding 2 hours to prevent appointments from being showed one day too long.
+                endDateString = DateUtil.dateToString(DateUtils.addHours(item.endDate, 1));
+                secondEndDateString = DateUtil.dateToString(DateUtils.addHours(item.endDate, 2));
             } catch (ParseException e) {
                 endDateString = null;
+                secondEndDateString = null;
                 e.printStackTrace();
             }
             /*
@@ -170,7 +173,7 @@ public class CalendarDB extends SQLiteOpenHelper {
             contentValues.put(KEY_FINISHED, item.finished);
             contentValues.put(KEY_FORMATTED_END, endDateString.replaceAll("-", "").substring(0, 8));
             contentValues.put(KEY_FORMATTED_START, startDateString.replaceAll("-", "").substring(0, 8));
-            contentValues.put(KEY_FORMATTED_END_2, endDateString.replaceAll("[T:-]", "").substring(4, 12));
+            contentValues.put(KEY_FORMATTED_END_2, secondEndDateString.replaceAll("[T:-]", "").substring(4, 12));
             contentValues.put(KEY_FORMATTED_START_2, startDateString.replaceAll("[T:-]", "").substring(4, 12));
             contentValues.put(KEY_INFO_TYPE, item.infoType.getID());
             contentValues.put(KEY_LINKS, new Gson().toJson(item.links));
@@ -340,6 +343,33 @@ public class CalendarDB extends SQLiteOpenHelper {
                     appointment.classState = cursor.getInt(cursor.getColumnIndex(KEY_STATE));
                     appointment.subjects = gson.fromJson(cursor.getString(cursor.getColumnIndex(KEY_SUBJECTS)), SubSubject[].class);
                     appointment.teachers = gson.fromJson(cursor.getString(cursor.getColumnIndex(KEY_TEACHER)), Teacher[].class);
+                    appointment.type = AppointmentType.getTypeById(cursor.getInt(cursor.getColumnIndex(KEY_TYPE)));
+
+                    results[i] = appointment;
+                    i++;
+                } while (cursor.moveToNext());
+            }
+        }
+        cursor.close();
+
+        return results;
+    }
+
+    public Appointment[] getSilentAppointments() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        Integer startdateInt = parseInt(formatDate(getToday(), "MMddHHmm"));
+        String Query = "SELECT * FROM " + TABLE_CALENDAR + " WHERE " + KEY_FORMATTED_START_2 + " <= " + startdateInt + " AND "
+                + KEY_FORMATTED_END_2 + " >= " + startdateInt;
+        Log.d(TAG, "getSilentAppointments: Query: " + Query);
+        Cursor cursor = db.rawQuery(Query, null);
+
+        Appointment[] results = new Appointment[cursor.getCount()];
+        int i = 0;
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
+                do {
+                    Appointment appointment = new Appointment();
+                    appointment.id = cursor.getInt(cursor.getColumnIndex(KEY_CALENDAR_ID));
                     appointment.type = AppointmentType.getTypeById(cursor.getInt(cursor.getColumnIndex(KEY_TYPE)));
 
                     results[i] = appointment;
