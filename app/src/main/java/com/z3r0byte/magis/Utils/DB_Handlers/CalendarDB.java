@@ -312,7 +312,7 @@ public class CalendarDB extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         Date now = getToday();
         Date start = addMinutes(now, 25);
-        Date end = addMinutes(now, -45);
+        Date end = addMinutes(now, 15);
 
         Integer startdateInt = parseInt(formatDate(start, "MMddHHmm"));
         Integer enddateInt = parseInt(formatDate(end, "MMddHHmm"));
