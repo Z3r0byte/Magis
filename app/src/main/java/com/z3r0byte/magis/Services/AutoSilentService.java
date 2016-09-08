@@ -65,14 +65,11 @@ public class AutoSilentService extends Service {
             TimerTask notificationTask = new TimerTask() {
                 @Override
                 public void run() {
-                    appointments = calendarDB.getNotificationAppointments();
-                    Log.d(TAG, "run: amount " + appointments.length);
-                    if (appointments.length >= 1) {
-                        if (doSilent(appointments)) {
-                            silenced(true);
-                            AudioManager audiomanage = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-                            audiomanage.setRingerMode(AudioManager.RINGER_MODE_SILENT);
-                        }
+                    appointments = calendarDB.getSilentAppointments();
+                    if (doSilent(appointments)) {
+                        silenced(true);
+                        AudioManager audiomanage = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+                        audiomanage.setRingerMode(AudioManager.RINGER_MODE_SILENT);
                     } else {
                         if (isSilencedByApp()) {
                             AudioManager audiomanage = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
@@ -87,6 +84,9 @@ public class AutoSilentService extends Service {
     }
 
     private Boolean doSilent(Appointment[] appointments) {
+        if (appointments.length < 1) {
+            return false;
+        }
         for (Appointment appointment :
                 appointments) {
             try {
@@ -97,7 +97,7 @@ public class AutoSilentService extends Service {
                     Log.d(TAG, "doSilent: No valid appointment");
                 }
             } catch (NullPointerException e) {
-                Log.d(TAG, "doSilent: No valid appointment");
+                Log.d(TAG, "doSilent: No valid appointments found");
             }
         }
         return false;

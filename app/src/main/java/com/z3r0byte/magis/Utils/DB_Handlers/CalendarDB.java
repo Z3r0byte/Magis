@@ -175,7 +175,12 @@ public class CalendarDB extends SQLiteOpenHelper {
             contentValues.put(KEY_FORMATTED_START, startDateString.replaceAll("-", "").substring(0, 8));
             contentValues.put(KEY_FORMATTED_END_2, secondEndDateString.replaceAll("[T:-]", "").substring(4, 12));
             contentValues.put(KEY_FORMATTED_START_2, startDateString.replaceAll("[T:-]", "").substring(4, 12));
-            contentValues.put(KEY_INFO_TYPE, item.infoType.getID());
+            try {
+                contentValues.put(KEY_INFO_TYPE, item.infoType.getID());
+            } catch (NullPointerException e) {
+                Log.e(TAG, "addItems: No infotype!", e);
+                contentValues.put(KEY_INFO_TYPE, 0);
+            }
             contentValues.put(KEY_LINKS, new Gson().toJson(item.links));
             contentValues.put(KEY_LOCATION, item.location);
             contentValues.put(KEY_PERIOD_FROM, item.periodFrom);
@@ -312,12 +317,12 @@ public class CalendarDB extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         Date now = getToday();
         Date start = addMinutes(now, 25);
-        Date end = addMinutes(now, 15);
+        //Date end = addMinutes(now, 25);
 
         Integer startdateInt = parseInt(formatDate(start, "MMddHHmm"));
-        Integer enddateInt = parseInt(formatDate(end, "MMddHHmm"));
+        //Integer enddateInt = parseInt(formatDate(end, "MMddHHmm"));
         String Query = "SELECT * FROM " + TABLE_CALENDAR + " WHERE " + KEY_FORMATTED_START_2 + " <= " + startdateInt + " AND "
-                + KEY_FORMATTED_END_2 + " >= " + enddateInt;
+                + KEY_FORMATTED_END_2 + " >= " + startdateInt;
         Log.d(TAG, "getNotificationAppointments: Query: " + Query);
         Cursor cursor = db.rawQuery(Query, null);
 
