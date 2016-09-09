@@ -65,15 +65,15 @@ public class AutoSilentService extends Service {
             TimerTask notificationTask = new TimerTask() {
                 @Override
                 public void run() {
-                    appointments = calendarDB.getSilentAppointments();
+                    appointments = calendarDB.getSilentAppointments(getMargin());
                     if (doSilent(appointments)) {
                         silenced(true);
-                        AudioManager audiomanage = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-                        audiomanage.setRingerMode(AudioManager.RINGER_MODE_SILENT);
+                        AudioManager audiomanager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+                        audiomanager.setRingerMode(AudioManager.RINGER_MODE_SILENT);
                     } else {
                         if (isSilencedByApp()) {
-                            AudioManager audiomanage = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-                            audiomanage.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
+                            AudioManager audiomanager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+                            audiomanager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
                             silenced(false);
                         }
                     }
@@ -90,7 +90,7 @@ public class AutoSilentService extends Service {
         for (Appointment appointment :
                 appointments) {
             try {
-                if (appointment.type.getID() == AppointmentType.PERSONAL.getID() || true) {
+                if (appointment.type.getID() != AppointmentType.PERSONAL.getID() || configUtil.getBoolean("silent_own_appointments")) {
                     Log.d(TAG, "doSilent: valid appointment");
                     return true;
                 } else {
@@ -114,6 +114,23 @@ public class AutoSilentService extends Service {
     private Boolean isSilencedByApp() {
         SharedPreferences prefs = getSharedPreferences("data", MODE_PRIVATE);
         return prefs.getBoolean("silent", false);
+    }
+
+    private Integer getMargin() {
+        String margin = configUtil.getString("silent_margin");
+        if (margin.contains("1")) {
+            return 1;
+        } else if (margin.contains("2")) {
+            return 2;
+        } else if (margin.contains("3")) {
+            return 3;
+        } else if (margin.contains("4")) {
+            return 4;
+        } else if (margin.contains("5")) {
+            return 5;
+        } else {
+            return 0;
+        }
     }
 
     @Override

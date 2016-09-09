@@ -28,12 +28,23 @@
             android:title="Eigen afspraken" />
     </com.codevscolor.materialpreference.widget.MaterialPreferenceCategory>
 
-    <com.codevscolor.materialpreference.widget.MaterialPreferenceCategory android:title="Experimentele functies">
+    <com.codevscolor.materialpreference.widget.MaterialPreferenceCategory android:title="Auto-stil">
         <android.support.v7.preference.SwitchPreferenceCompat
             android:defaultValue="false"
             android:key="auto-silent"
             android:summary="Zet de telefoon automatisch op stil tijdens lessen."
             android:title="Auto-stil" />
+        <android.support.v7.preference.CheckBoxPreference
+            android:defaultValue="false"
+            android:key="silent_own_appointments"
+            android:summary="Ook op stil bij eigen afspraken"
+            android:title="Eigen afspraken" />
+        <android.support.v7.preference.ListPreference
+            android:entries="@array/margin_array"
+            android:entryValues="@array/margin_array_values"
+            android:title="Marge"
+            android:summary="Hoeveel minuten voor en na de les de telefoon nog op stil moet blijven."
+            android:key="silent_margin" />
     </com.codevscolor.materialpreference.widget.MaterialPreferenceCategory>
 
 

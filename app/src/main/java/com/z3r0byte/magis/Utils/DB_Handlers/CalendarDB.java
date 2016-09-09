@@ -360,11 +360,12 @@ public class CalendarDB extends SQLiteOpenHelper {
         return results;
     }
 
-    public Appointment[] getSilentAppointments() {
+    public Appointment[] getSilentAppointments(int margin) {
         SQLiteDatabase db = this.getWritableDatabase();
-        Integer startdateInt = parseInt(formatDate(getToday(), "MMddHHmm"));
+        Integer startdateInt = parseInt(formatDate(addMinutes(getToday(), margin), "MMddHHmm"));
+        Integer enddateInt = parseInt(formatDate(addMinutes(getToday(), -margin), "MMddHHmm"));
         String Query = "SELECT * FROM " + TABLE_CALENDAR + " WHERE " + KEY_FORMATTED_START_2 + " <= " + startdateInt + " AND "
-                + KEY_FORMATTED_END_2 + " >= " + startdateInt;
+                + KEY_FORMATTED_END_2 + " >= " + enddateInt;
         Log.d(TAG, "getSilentAppointments: Query: " + Query);
         Cursor cursor = db.rawQuery(Query, null);
 

@@ -21,6 +21,20 @@
     <string-array name="web_array_values">
         <item>0</item>
     </string-array>
+    <string-array name="margin_array">
+        <item>1 minuut</item>
+        <item>2 minuten</item>
+        <item>3 minuten</item>
+        <item>4 minuten</item>
+        <item>5 minuten</item>
+    </string-array>
+    <string-array name="margin_array_values">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+    </string-array>
     <string-array name="library_array">
         <item>Bekijk gebruikte libaries</item>
     </string-array>
