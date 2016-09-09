@@ -42,6 +42,8 @@ import net.ilexiconn.magister.container.User;
 import java.security.InvalidParameterException;
 import java.util.Date;
 
+import tr.xip.errorview.ErrorView;
+
 public class HomeworkActivity extends MagisActivity {
 
     private static final String TAG = "HomeworkActivity";
@@ -91,6 +93,7 @@ public class HomeworkActivity extends MagisActivity {
                 }
         );
         mSwipeRefreshLayout.setRefreshing(true);
+        errorView = (ErrorView) findViewById(R.id.error_view_homework);
 
         mAppointments = new Appointment[0];
 

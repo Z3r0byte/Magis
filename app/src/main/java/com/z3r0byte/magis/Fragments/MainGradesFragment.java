@@ -40,6 +40,8 @@ import net.ilexiconn.magister.ParcelableMagister;
 import net.ilexiconn.magister.container.Grade;
 import net.ilexiconn.magister.container.Study;
 
+import tr.xip.errorview.ErrorView;
+
 public class MainGradesFragment extends MagisFragment {
     private static final String TAG = "MainGradesFragment";
     public static Study study = null;
@@ -80,6 +82,7 @@ public class MainGradesFragment extends MagisFragment {
                     }
                 }
         );
+        errorView = (ErrorView) view.findViewById(R.id.error_view_grades);
 
         mMagister = getArguments().getParcelable("Magister");
 

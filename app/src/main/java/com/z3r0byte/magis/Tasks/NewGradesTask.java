@@ -18,10 +18,12 @@ package com.z3r0byte.magis.Tasks;
 
 import android.os.AsyncTask;
 import android.util.Log;
+import android.view.View;
 
 import com.z3r0byte.magis.Adapters.NewGradesAdapter;
 import com.z3r0byte.magis.R;
 import com.z3r0byte.magis.Utils.DB_Handlers.NewGradesDB;
+import com.z3r0byte.magis.Utils.ErrorViewConfigs;
 import com.z3r0byte.magis.Utils.MagisFragment;
 
 import net.ilexiconn.magister.Magister;
@@ -76,14 +78,21 @@ public class NewGradesTask extends AsyncTask<Void, Void, Grade[]> {
 
     @Override
     protected void onPostExecute(final Grade[] grades) {
-        fragment.getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                fragment.grades = grades;
-                fragment.mNewGradesAdapter = new NewGradesAdapter(fragment.getActivity(), fragment.grades);
-                fragment.listView.setAdapter(fragment.mNewGradesAdapter);
-                fragment.mSwipeRefreshLayout.setRefreshing(false);
-            }
-        });
+        if (grades != null && grades.length > 1) {
+            fragment.getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    fragment.grades = grades;
+                    fragment.mNewGradesAdapter = new NewGradesAdapter(fragment.getActivity(), fragment.grades);
+                    fragment.listView.setAdapter(fragment.mNewGradesAdapter);
+                    fragment.errorView.setVisibility(View.GONE);
+                    fragment.mSwipeRefreshLayout.setRefreshing(false);
+                }
+            });
+        } else {
+            fragment.mSwipeRefreshLayout.setRefreshing(false);
+            fragment.errorView.setVisibility(View.VISIBLE);
+            fragment.errorView.setConfig(ErrorViewConfigs.NoNewGradesConfig);
+        }
     }
 }
