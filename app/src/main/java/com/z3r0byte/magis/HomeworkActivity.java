@@ -33,6 +33,7 @@ import com.z3r0byte.magis.DetailActivity.HomeworkDetails;
 import com.z3r0byte.magis.GUI.NavigationDrawer;
 import com.z3r0byte.magis.Tasks.HomeworkTask;
 import com.z3r0byte.magis.Utils.DateUtils;
+import com.z3r0byte.magis.Utils.ErrorViewConfigs;
 import com.z3r0byte.magis.Utils.MagisActivity;
 
 import net.ilexiconn.magister.container.Appointment;
@@ -41,6 +42,8 @@ import net.ilexiconn.magister.container.User;
 
 import java.security.InvalidParameterException;
 import java.util.Date;
+
+import tr.xip.errorview.ErrorView;
 
 public class HomeworkActivity extends MagisActivity {
 
@@ -91,6 +94,7 @@ public class HomeworkActivity extends MagisActivity {
                 }
         );
         mSwipeRefreshLayout.setRefreshing(true);
+        errorView = (ErrorView) findViewById(R.id.error_view_homework);
 
         mAppointments = new Appointment[0];
 
@@ -118,8 +122,15 @@ public class HomeworkActivity extends MagisActivity {
 
 
     public void loadHomework() {
-        Date start = DateUtils.getToday();
-        Date end = DateUtils.addDays(DateUtils.getToday(), 14);
-        new HomeworkTask(this, mMagister, start, end).execute();
+        if (mMagister == null) {
+            errorView.setVisibility(View.VISIBLE);
+            errorView.setConfig(ErrorViewConfigs.NotLoggedInConfig);
+            listView.setVisibility(View.GONE);
+            mSwipeRefreshLayout.setRefreshing(false);
+        } else {
+            Date start = DateUtils.getToday();
+            Date end = DateUtils.addDays(DateUtils.getToday(), 14);
+            new HomeworkTask(this, mMagister, start, end).execute();
+        }
     }
 }

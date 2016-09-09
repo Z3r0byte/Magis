@@ -41,4 +41,14 @@ public class ConfigUtil {
         SharedPreferences sharedPreferences = context.getSharedPreferences("com.z3r0byte.magis_preferences", Context.MODE_PRIVATE);
         return sharedPreferences.getBoolean(name, false);
     }
+
+    public int getInteger(String name) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences("com.z3r0byte.magis_preferences", Context.MODE_PRIVATE);
+        return sharedPreferences.getInt(name, 0);
+    }
+
+    public String getString(String name) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences("com.z3r0byte.magis_preferences", Context.MODE_PRIVATE);
+        return sharedPreferences.getString(name, "");
+    }
 }

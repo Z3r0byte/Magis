@@ -33,6 +33,8 @@ import com.z3r0byte.magis.Utils.MagisFragment;
 import net.ilexiconn.magister.ParcelableMagister;
 import net.ilexiconn.magister.container.Grade;
 
+import tr.xip.errorview.ErrorView;
+
 
 public class NewGradesFragment extends MagisFragment {
     private static final String TAG = "NewGradesFragment";
@@ -68,6 +70,7 @@ public class NewGradesFragment extends MagisFragment {
                     }
                 }
         );
+        errorView = (ErrorView) view.findViewById(R.id.error_view_new_grades);
 
         mMagister = getArguments().getParcelable("Magister");
 

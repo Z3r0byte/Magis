@@ -18,10 +18,12 @@ package com.z3r0byte.magis.Tasks;
 
 import android.os.AsyncTask;
 import android.util.Log;
+import android.view.View;
 
 import com.z3r0byte.magis.Adapters.HomeworkAdapter;
 import com.z3r0byte.magis.R;
 import com.z3r0byte.magis.Utils.DB_Handlers.CalendarDB;
+import com.z3r0byte.magis.Utils.ErrorViewConfigs;
 import com.z3r0byte.magis.Utils.MagisActivity;
 
 import net.ilexiconn.magister.Magister;
@@ -87,11 +89,14 @@ public class HomeworkTask extends AsyncTask<Void, Void, Appointment[]> {
         if (appointments != null) {
             activity.mAppointments = appointments;
             activity.mSwipeRefreshLayout.setRefreshing(false);
+            activity.errorView.setVisibility(View.GONE);
 
             activity.mHomeworkAdapter = new HomeworkAdapter(activity, activity.mAppointments);
             activity.listView.setAdapter(activity.mHomeworkAdapter);
         } else {
             activity.mSwipeRefreshLayout.setRefreshing(false);
+            activity.errorView.setVisibility(View.VISIBLE);
+            activity.errorView.setConfig(ErrorViewConfigs.NoHomeworkConfig);
             Log.e(TAG, error);
         }
     }

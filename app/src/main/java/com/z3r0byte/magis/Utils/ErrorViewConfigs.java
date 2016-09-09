@@ -33,4 +33,28 @@ public class ErrorViewConfigs {
             .subtitle("Er is geen cache beschikbaar")
             .retryVisible(false)
             .build();
+
+    public static ErrorView.Config NoHomeworkConfig = ErrorView.Config.create()
+            .title("Geen Huiswerk")
+            .subtitle("")
+            .retryVisible(false)
+            .build();
+
+    public static ErrorView.Config NoGradesConfig = ErrorView.Config.create()
+            .title("Geen cijfers")
+            .subtitle("")
+            .retryVisible(false)
+            .build();
+
+    public static ErrorView.Config NoNewGradesConfig = ErrorView.Config.create()
+            .title("Geen nieuwe cijfers")
+            .subtitle("")
+            .retryVisible(false)
+            .build();
+
+    public static ErrorView.Config NotLoggedInConfig = ErrorView.Config.create()
+            .title("Niet ingelogd")
+            .subtitle("Ga naar Agenda en swipe naar beneden.")
+            .retryVisible(false)
+            .build();
 }

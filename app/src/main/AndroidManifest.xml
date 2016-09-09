@@ -71,12 +71,17 @@
 
         <activity
             android:name=".HomeworkActivity"
-            android:launchMode="singleTop"
-            android:configChanges="keyboardHidden|orientation|screenSize" />
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:launchMode="singleTop" />
         <activity
             android:name=".DetailActivity.HomeworkDetails"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:parentActivityName=".HomeworkActivity" />
+
+        <service
+            android:name=".Services.AutoSilentService"
+            android:enabled="true"
+            android:exported="true"></service>
     </application>
 
 </manifest>

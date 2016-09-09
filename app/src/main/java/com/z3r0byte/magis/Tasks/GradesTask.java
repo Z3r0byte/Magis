@@ -23,6 +23,7 @@ import android.view.View;
 import com.z3r0byte.magis.Adapters.GradesAdapter;
 import com.z3r0byte.magis.R;
 import com.z3r0byte.magis.Utils.DB_Handlers.GradesDB;
+import com.z3r0byte.magis.Utils.ErrorViewConfigs;
 import com.z3r0byte.magis.Utils.MagisFragment;
 
 import net.ilexiconn.magister.Magister;
@@ -67,6 +68,12 @@ public class GradesTask extends AsyncTask<Void, Void, Grade[]> {
     @Override
     protected Grade[] doInBackground(Void... params) {
         try {
+            if (magister == null) {
+                throw new InvalidParameterException("Niet ingelogd!");
+            }
+            if (study != null && study.id == 999) {
+                throw new InvalidParameterException("Geen geldige studie");
+            }
             GradeHandler gradeHandler = new GradeHandler(magister);
             Grade[] grades;
 
@@ -84,6 +91,7 @@ public class GradesTask extends AsyncTask<Void, Void, Grade[]> {
             gradesDB.addGrades(grades, study.id);
 
             grades = gradesDB.getUniqueAverageGrades(study);
+            Log.d(TAG, "doInBackground: amount of Grades: " + grades.length);
             return grades;
         } catch (IOException e) {
             Log.e(TAG, "Unable to retrieve data", e);
@@ -98,27 +106,57 @@ public class GradesTask extends AsyncTask<Void, Void, Grade[]> {
 
     @Override
     protected void onPostExecute(final Grade[] grades) {
-        if (grades == null || grades.length == 0) {
-            Log.e(TAG, "onPostExecute: No Grades!");
-            fragment.getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    fragment.listView.setVisibility(View.GONE);
-                    fragment.mSwipeRefreshLayout.setRefreshing(false);
-                }
-            });
+        if (error != null) {
+            GradesDB gradesDB = new GradesDB(fragment.getActivity());
+            Grade[] gradesCache = gradesDB.getUniqueAverageGrades(study);
+            if (gradesCache != null && gradesCache.length > 0) {
+                fragment.errorView.setVisibility(View.GONE);
+                fragment.grades = gradesCache;
+                fragment.mGradesAdapter = new GradesAdapter(fragment.getActivity(), fragment.grades, true);
+                fragment.mGradesAdapter.notifyDataSetChanged();
+                fragment.listView.setAdapter(fragment.mGradesAdapter);
+                fragment.listView.setVisibility(View.VISIBLE);
+                fragment.mSwipeRefreshLayout.setRefreshing(false);
+            } else {
+                Log.e(TAG, "onPostExecute: No Grades in Cache!");
+                fragment.getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        fragment.listView.setVisibility(View.GONE);
+                        fragment.errorView.setVisibility(View.VISIBLE);
+                        fragment.errorView.setConfig(ErrorViewConfigs.NoGradesConfig);
+                        fragment.mSwipeRefreshLayout.setRefreshing(false);
+                    }
+                });
+            }
         } else {
-            fragment.getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    fragment.grades = grades;
-                    fragment.mGradesAdapter = new GradesAdapter(fragment.getActivity(), fragment.grades, true);
-                    fragment.mGradesAdapter.notifyDataSetChanged();
-                    fragment.listView.setAdapter(fragment.mGradesAdapter);
-                    fragment.listView.setVisibility(View.VISIBLE);
-                    fragment.mSwipeRefreshLayout.setRefreshing(false);
-                }
-            });
+            if (grades == null || grades.length == 0) {
+                Log.e(TAG, "onPostExecute: No Grades!");
+                fragment.getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        fragment.listView.setVisibility(View.GONE);
+                        fragment.errorView.setVisibility(View.VISIBLE);
+                        fragment.errorView.setConfig(ErrorViewConfigs.NoGradesConfig);
+                        fragment.mSwipeRefreshLayout.setRefreshing(false);
+                    }
+                });
+            } else {
+                fragment.getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        fragment.errorView.setVisibility(View.GONE);
+                        fragment.grades = grades;
+                        fragment.mGradesAdapter = new GradesAdapter(fragment.getActivity(), fragment.grades, true);
+                        fragment.mGradesAdapter.notifyDataSetChanged();
+                        fragment.listView.setAdapter(fragment.mGradesAdapter);
+                        fragment.listView.setVisibility(View.VISIBLE);
+                        fragment.mSwipeRefreshLayout.setRefreshing(false);
+                    }
+                });
+            }
         }
+
+
     }
 }
