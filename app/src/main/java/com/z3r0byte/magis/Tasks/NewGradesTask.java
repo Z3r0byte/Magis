@@ -59,6 +59,9 @@ public class NewGradesTask extends AsyncTask<Void, Void, Grade[]> {
     @Override
     protected Grade[] doInBackground(Void... params) {
         try {
+            if (magister == null) {
+                throw new InvalidParameterException("Niet ingelogd");
+            }
             GradeHandler gradeHandler = new GradeHandler(magister);
             Grade[] grades = gradeHandler.getRecentGrades();
             NewGradesDB db = new NewGradesDB(fragment.getActivity());
@@ -78,17 +81,23 @@ public class NewGradesTask extends AsyncTask<Void, Void, Grade[]> {
 
     @Override
     protected void onPostExecute(final Grade[] grades) {
-        if (grades != null && grades.length > 1) {
-            fragment.getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    fragment.grades = grades;
-                    fragment.mNewGradesAdapter = new NewGradesAdapter(fragment.getActivity(), fragment.grades);
-                    fragment.listView.setAdapter(fragment.mNewGradesAdapter);
-                    fragment.errorView.setVisibility(View.GONE);
-                    fragment.mSwipeRefreshLayout.setRefreshing(false);
-                }
-            });
+        if (error != null) {
+            if (grades != null && grades.length > 1) {
+                fragment.getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        fragment.grades = grades;
+                        fragment.mNewGradesAdapter = new NewGradesAdapter(fragment.getActivity(), fragment.grades);
+                        fragment.listView.setAdapter(fragment.mNewGradesAdapter);
+                        fragment.errorView.setVisibility(View.GONE);
+                        fragment.mSwipeRefreshLayout.setRefreshing(false);
+                    }
+                });
+            } else {
+                fragment.mSwipeRefreshLayout.setRefreshing(false);
+                fragment.errorView.setVisibility(View.VISIBLE);
+                fragment.errorView.setConfig(ErrorViewConfigs.NoNewGradesConfig);
+            }
         } else {
             fragment.mSwipeRefreshLayout.setRefreshing(false);
             fragment.errorView.setVisibility(View.VISIBLE);

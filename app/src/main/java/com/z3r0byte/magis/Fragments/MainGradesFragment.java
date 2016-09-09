@@ -85,6 +85,11 @@ public class MainGradesFragment extends MagisFragment {
         errorView = (ErrorView) view.findViewById(R.id.error_view_grades);
 
         mMagister = getArguments().getParcelable("Magister");
+        if (mMagister == null) {
+            study = new Study();
+            study.description = getString(R.string.err_not_logged_in);
+            study.id = 999;
+        }
 
         grades = new Grade[0];
 

@@ -68,7 +68,7 @@ public class GradesTask extends AsyncTask<Void, Void, Grade[]> {
     @Override
     protected Grade[] doInBackground(Void... params) {
         try {
-            if (magister == null) {
+            if (magister == null || study.id == 999) {
                 throw new InvalidParameterException("Niet ingelogd!");
             }
             GradeHandler gradeHandler = new GradeHandler(magister);

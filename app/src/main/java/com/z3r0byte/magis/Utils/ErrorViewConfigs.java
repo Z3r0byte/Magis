@@ -51,4 +51,10 @@ public class ErrorViewConfigs {
             .subtitle("")
             .retryVisible(false)
             .build();
+
+    public static ErrorView.Config NotLoggedInConfig = ErrorView.Config.create()
+            .title("Niet ingelogd")
+            .subtitle("Ga naar Agenda en swipe naar beneden.")
+            .retryVisible(false)
+            .build();
 }

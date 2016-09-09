@@ -166,6 +166,22 @@ public class GradeActivity extends MagisActivity implements MaterialTabListener 
                     }
                 } catch (IOException e) {
                     Log.e(TAG, "onCreate: Geen verbinding");
+                } catch (NullPointerException e) {
+                    Log.e(TAG, "run: Not logged in", e);
+                    studies = new Study[1];
+                    studies[0] = new Study();
+                    studies[0].description = getString(R.string.err_not_logged_in);
+                    studies[0].id = 999;
+                    studyAdapter = new StudyAdapter(getApplicationContext(), studies);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            spinner.setAdapter(studyAdapter);
+                        }
+                    });
+                    for (Study study : studies) {
+                        Log.d(TAG, "onCreate: Study: " + study.description);
+                    }
                 }
             }
         }).start();
