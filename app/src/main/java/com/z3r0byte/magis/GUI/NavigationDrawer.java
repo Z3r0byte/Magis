@@ -16,7 +16,9 @@
 
 package com.z3r0byte.magis.GUI;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.Toolbar;
@@ -81,6 +83,8 @@ public class NavigationDrawer {
             .withIcon(GoogleMaterial.Icon.gmd_refresh).withSelectable(false);
     static PrimaryDrawerItem logoutItem = new SecondaryDrawerItem().withName(R.string.drawer_logout)
             .withIcon(GoogleMaterial.Icon.gmd_exit_to_app).withSelectable(false);
+    static PrimaryDrawerItem bugItem = new SecondaryDrawerItem().withName(R.string.report_bug)
+            .withIcon(GoogleMaterial.Icon.gmd_bug_report).withSelectable(false);
     static PrimaryDrawerItem settingsItem = new SecondaryDrawerItem().withName(R.string.drawer_settings)
             .withIcon(GoogleMaterial.Icon.gmd_settings).withSelectable(false);
 
@@ -107,6 +111,7 @@ public class NavigationDrawer {
                         new SectionDrawerItem().withName(R.string.drawer_tools),
                         //refreshSessionItem,
                         settingsItem,
+                        bugItem,
                         logoutItem
                 )
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
@@ -134,6 +139,7 @@ public class NavigationDrawer {
 
                         } else if (drawerItem == settingsItem) {
                             activity.startActivity(new Intent(activity, SettingsActivity.class));
+                            drawer.closeDrawer();
                         } else if (drawerItem == calendarItem && selection != "Agenda") {
                             activity.finish();
                             drawer.closeDrawer();
@@ -147,6 +153,9 @@ public class NavigationDrawer {
                             Intent intent = new Intent(activity, GradeActivity.class);
                             intent.putExtra("Magister", activity.mMagister);
                             activity.startActivity(new Intent(intent));
+                        } else if (drawerItem == bugItem) {
+                            reportBug();
+                            drawer.closeDrawer();
                         }
                         return true;
                     }
@@ -179,6 +188,19 @@ public class NavigationDrawer {
 
     public Boolean isDrawerOpen() {
         return drawer.isDrawerOpen();
+    }
+
+    private void reportBug() {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(activity);
+        alertDialogBuilder.setTitle(activity.getString(R.string.dialog_bug_title));
+        alertDialogBuilder.setMessage(activity.getString(R.string.dialog_bug_desc));
+        alertDialogBuilder.setPositiveButton("Oké", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+            }
+        });
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
     }
 
 

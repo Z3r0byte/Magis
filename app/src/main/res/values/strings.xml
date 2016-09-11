@@ -32,9 +32,13 @@
     <string name="dialog_logout_title">Uitloggen?</string>
     <string name="dialog_skip_login_desc">Als je het inloggen overslaat, kun je alleen de offline data gebruiken totdat je de sessie ververst.</string>
     <string name="dialog_skip_login_title">Inloggen overslaan?</string>
+    <string name="dialog_bug_title">Bug melden</string>
+    <string name="dialog_bug_desc">Als je een fout wilt melden, kun je gewoon je telefoon op en neer schudden. De app maakt dan
+        automatisch een screenshot en opent een mail venster.</string>
 
     <string name="drawer_logout">Log uit</string>
     <string name="drawer_refresh_session">Sessie verversen</string>
+    <string name="report_bug">Bug melden</string>
     <string name="drawer_settings">Instellingen</string>
     <string name="drawer_tools">Tools</string>
 
