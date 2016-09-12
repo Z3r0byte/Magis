@@ -16,6 +16,7 @@
 
 package com.z3r0byte.magis.GUI;
 
+import android.app.Activity;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,72 +64,97 @@ public class AppointmentDetailCard extends Card {
     private void init() {
     }
 
-    public void setDescription(final Context context, final String description) {
+    public void setDescription(final Activity context, final String description) {
         new Thread(new Runnable() {
             @Override
             public void run() {
                 while (ready != true) {
                 }
-                IconicsDrawable drawable = new IconicsDrawable(context, GoogleMaterial.Icon.gmd_description);
-                descriptionLayout.setVisibility(View.VISIBLE);
-                descriptionImageView.setImageDrawable(drawable);
-                descriptionTextInput.setText(description);
+                context.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        IconicsDrawable drawable = new IconicsDrawable(context, GoogleMaterial.Icon.gmd_description);
+                        descriptionLayout.setVisibility(View.VISIBLE);
+                        descriptionImageView.setImageDrawable(drawable);
+                        descriptionTextInput.setText(description);
+                    }
+                });
             }
         }).start();
     }
 
-    public void setPeriod(final Context context, final String period) {
+    public void setPeriod(final Activity context, final String period) {
         new Thread(new Runnable() {
             @Override
             public void run() {
                 while (ready != true) {
                 }
-                IconicsDrawable drawable = new IconicsDrawable(context, GoogleMaterial.Icon.gmd_info);
-                periodLayout.setVisibility(View.VISIBLE);
-                periodImageView.setImageDrawable(drawable);
-                periodTextInput.setText(period);
+                context.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        IconicsDrawable drawable = new IconicsDrawable(context, GoogleMaterial.Icon.gmd_info);
+                        periodLayout.setVisibility(View.VISIBLE);
+                        periodImageView.setImageDrawable(drawable);
+                        periodTextInput.setText(period);
+                    }
+                });
             }
         }).start();
     }
 
-    public void setTeacher(final Context context, final String teacher) {
+    public void setTeacher(final Activity context, final String teacher) {
         new Thread(new Runnable() {
             @Override
             public void run() {
                 while (ready != true) {
                 }
-                IconicsDrawable drawable = new IconicsDrawable(context, GoogleMaterial.Icon.gmd_person);
-                teacherLayout.setVisibility(View.VISIBLE);
-                teacherImageView.setImageDrawable(drawable);
-                teacherTextInput.setText(teacher);
+                context.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        IconicsDrawable drawable = new IconicsDrawable(context, GoogleMaterial.Icon.gmd_person);
+                        teacherLayout.setVisibility(View.VISIBLE);
+                        teacherImageView.setImageDrawable(drawable);
+                        teacherTextInput.setText(teacher);
+                    }
+                });
             }
         }).start();
     }
 
-    public void setTime(final Context context, final String duration) {
+    public void setTime(final Activity context, final String duration) {
         new Thread(new Runnable() {
             @Override
             public void run() {
                 while (ready != true) {
                 }
-                IconicsDrawable drawable = new IconicsDrawable(context, GoogleMaterial.Icon.gmd_today);
-                durationLayout.setVisibility(View.VISIBLE);
-                durationImageView.setImageDrawable(drawable);
-                durationTextInput.setText(duration);
+                context.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        IconicsDrawable drawable = new IconicsDrawable(context, GoogleMaterial.Icon.gmd_today);
+                        durationLayout.setVisibility(View.VISIBLE);
+                        durationImageView.setImageDrawable(drawable);
+                        durationTextInput.setText(duration);
+                    }
+                });
             }
         }).start();
     }
 
-    public void setLocation(final Context context, final String location) {
+    public void setLocation(final Activity context, final String location) {
         new Thread(new Runnable() {
             @Override
             public void run() {
                 while (ready != true) {
                 }
-                IconicsDrawable drawable = new IconicsDrawable(context, GoogleMaterial.Icon.gmd_location_on);
-                locationLayout.setVisibility(View.VISIBLE);
-                locationImageView.setImageDrawable(drawable);
-                locationTextInput.setText(location);
+                context.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        IconicsDrawable drawable = new IconicsDrawable(context, GoogleMaterial.Icon.gmd_location_on);
+                        locationLayout.setVisibility(View.VISIBLE);
+                        locationImageView.setImageDrawable(drawable);
+                        locationTextInput.setText(location);
+                    }
+                });
             }
         }).start();
     }
