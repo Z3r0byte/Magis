@@ -36,6 +36,8 @@ import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.SectionDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
+import com.mikepenz.materialdrawer.model.interfaces.IProfile;
+import com.z3r0byte.magis.AccountActivity;
 import com.z3r0byte.magis.GradeActivity;
 import com.z3r0byte.magis.HomeworkActivity;
 import com.z3r0byte.magis.R;
@@ -96,7 +98,15 @@ public class NavigationDrawer {
                 .addProfiles(
                         new ProfileDrawerItem().withName(profile.nickname).withEmail(user.username).withIcon(R.drawable.magis512)
                 )
-                .withSelectionListEnabledForSingleProfile(false)
+                .withOnAccountHeaderListener(new AccountHeader.OnAccountHeaderListener() {
+                    @Override
+                    public boolean onProfileChanged(View view, IProfile profile, boolean currentProfile) {
+                        activity.startActivity(new Intent(activity, AccountActivity.class));
+                        drawer.closeDrawer();
+                        return false;
+                    }
+                })
+                .withSelectionListEnabledForSingleProfile(true)
                 .build();
 
 
