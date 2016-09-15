@@ -163,6 +163,7 @@ public class NavigationDrawer {
                             Intent intent = new Intent(activity, GradeActivity.class);
                             intent.putExtra("Magister", activity.mMagister);
                             activity.startActivity(new Intent(intent));
+                            activity.finish();
                         } else if (drawerItem == bugItem) {
                             reportBug();
                             drawer.closeDrawer();
