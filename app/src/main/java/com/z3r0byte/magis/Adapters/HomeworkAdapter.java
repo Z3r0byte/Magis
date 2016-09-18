@@ -59,11 +59,15 @@ public class HomeworkAdapter extends ArrayAdapter<Appointment> {
         RelativeLayout header = (RelativeLayout) rowView.findViewById(R.id.header);
 
         String day = DateUtils.formatDate(appointments[position].startDate, "yyyyMMdd");
-        if (!previousDay.equals(day)) {
-            headerText.setText(DateUtils.formatDate(appointments[position].startDate, "EEEE dd MMM"));
-            previousDay = day;
+        if (position != 0) {
+            previousDay = DateUtils.formatDate(appointments[position - 1].startDate, "yyyyMMdd");
+            if (!previousDay.equals(day)) {
+                headerText.setText(DateUtils.formatDate(appointments[position].startDate, "EEEE dd MMM"));
+            } else {
+                headerText.setVisibility(View.GONE);
+            }
         } else {
-            header.setVisibility(View.GONE);
+            headerText.setText(DateUtils.formatDate(appointments[position].startDate, "EEEE dd MMM"));
         }
 
 
