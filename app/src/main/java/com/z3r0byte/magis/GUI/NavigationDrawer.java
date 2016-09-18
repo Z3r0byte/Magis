@@ -40,6 +40,7 @@ import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 import com.z3r0byte.magis.AccountActivity;
 import com.z3r0byte.magis.GradeActivity;
 import com.z3r0byte.magis.HomeworkActivity;
+import com.z3r0byte.magis.PresenceActivity;
 import com.z3r0byte.magis.R;
 import com.z3r0byte.magis.SettingsActivity;
 import com.z3r0byte.magis.StartActivity;
@@ -81,6 +82,8 @@ public class NavigationDrawer {
             .withIcon(GoogleMaterial.Icon.gmd_timeline).withSelectable(false);
     static PrimaryDrawerItem homeworkItem = new PrimaryDrawerItem().withName(R.string.title_homework)
             .withIcon(GoogleMaterial.Icon.gmd_assignment).withSelectable(false);
+    static PrimaryDrawerItem presenceItem = new PrimaryDrawerItem().withName(R.string.title_presence)
+            .withIcon(GoogleMaterial.Icon.gmd_highlight_off).withSelectable(false);
     static PrimaryDrawerItem refreshSessionItem = new SecondaryDrawerItem().withName(R.string.drawer_refresh_session)
             .withIcon(GoogleMaterial.Icon.gmd_refresh).withSelectable(false);
     static PrimaryDrawerItem logoutItem = new SecondaryDrawerItem().withName(R.string.drawer_logout)
@@ -106,7 +109,7 @@ public class NavigationDrawer {
                         return false;
                     }
                 })
-                .withSelectionListEnabledForSingleProfile(true)
+                .withSelectionListEnabledForSingleProfile(false)
                 .build();
 
 
@@ -118,6 +121,7 @@ public class NavigationDrawer {
                         calendarItem,
                         gradeItem,
                         homeworkItem,
+                        presenceItem,
                         new SectionDrawerItem().withName(R.string.drawer_tools),
                         //refreshSessionItem,
                         settingsItem,
@@ -158,6 +162,11 @@ public class NavigationDrawer {
                             Intent intent = new Intent(activity, HomeworkActivity.class);
                             intent.putExtra("Magister", activity.mMagister);
                             activity.startActivity(intent);
+                        } else if (drawerItem == presenceItem && selection != "Aanwezigheid") {
+                            drawer.closeDrawer();
+                            Intent intent = new Intent(activity, PresenceActivity.class);
+                            intent.putExtra("Magister", activity.mMagister);
+                            activity.startActivity(intent);
                         } else if (drawerItem == gradeItem && selection != "Cijfers") {
                             CloseDrawer();
                             Intent intent = new Intent(activity, GradeActivity.class);
@@ -186,6 +195,9 @@ public class NavigationDrawer {
                 break;
             case "Huiswerk":
                 drawer.setSelection(homeworkItem);
+                break;
+            case "Aanwezigheid":
+                drawer.setSelection(presenceItem);
                 break;
             case "":
                 drawer.setSelection(-1);

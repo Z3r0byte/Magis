@@ -84,7 +84,11 @@
             android:enabled="true"
             android:exported="true" />
 
-        <activity android:name=".AccountActivity"></activity>
+        <activity android:name=".AccountActivity" />
+        <activity
+            android:name=".PresenceActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:launchMode="singleTop" />
     </application>
 
 </manifest>

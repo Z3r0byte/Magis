@@ -129,6 +129,7 @@
     <string name="title_grades">Cijfers</string>
     <string name="title_new_appointment">Nieuwe afspraak</string>
     <string name="title_homework">Huiswerk</string>
+    <string name="title_presence">Aanwezigheid</string>
 
     <string name="aboutLibraries_description_showIcon">true</string>
     <string name="aboutLibraries_description_showVersion">true</string>

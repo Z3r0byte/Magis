@@ -20,6 +20,7 @@
     android:paddingRight="16dp"
     android:paddingLeft="16dp"
     android:paddingTop="16dp"
+    android:paddingBottom="16dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
@@ -44,7 +45,7 @@
         android:layout_below="@+id/header"
         android:id="@+id/main"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="36dp">
 
 
         <RelativeLayout
@@ -69,7 +70,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textStyle=""
-            android:text="Geen gegevens"
+            android:text="na-voj-306"
             android:id="@+id/text_lesson"
             android:paddingLeft="50dp"
             android:paddingRight="32dp"
@@ -82,11 +83,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-            android:text="Geen gegevens"
-            android:id="@+id/text_homework"
+            android:text="Ziek naar huis"
+            android:id="@+id/text_reason"
             android:paddingLeft="50dp"
             android:paddingRight="16dp"
-            android:maxLines="10"
+            android:maxLines="1"
             android:textColor="@color/mi_text_color_secondary_light"
             android:layout_below="@+id/text_lesson"
             android:layout_toRightOf="@+id/layout_list_calendar_period"
