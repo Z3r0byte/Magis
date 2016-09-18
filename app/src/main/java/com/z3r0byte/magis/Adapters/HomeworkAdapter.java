@@ -64,7 +64,7 @@ public class HomeworkAdapter extends ArrayAdapter<Appointment> {
             if (!previousDay.equals(day)) {
                 headerText.setText(DateUtils.formatDate(appointments[position].startDate, "EEEE dd MMM"));
             } else {
-                headerText.setVisibility(View.GONE);
+                header.setVisibility(View.GONE);
             }
         } else {
             headerText.setText(DateUtils.formatDate(appointments[position].startDate, "EEEE dd MMM"));
