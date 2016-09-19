@@ -31,6 +31,7 @@ import com.google.gson.Gson;
 import com.z3r0byte.magis.Adapters.PresencePeriodAdapter;
 import com.z3r0byte.magis.GUI.NavigationDrawer;
 import com.z3r0byte.magis.Tasks.PresenceTask;
+import com.z3r0byte.magis.Utils.ErrorViewConfigs;
 import com.z3r0byte.magis.Utils.MagisActivity;
 
 import net.ilexiconn.magister.container.PresencePeriod;
@@ -42,6 +43,8 @@ import net.ilexiconn.magister.handler.PresenceHandler;
 import java.io.IOException;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
+
+import tr.xip.errorview.ErrorView;
 
 public class PresenceActivity extends MagisActivity {
     private static final String TAG = "PresenceActivity";
@@ -87,6 +90,10 @@ public class PresenceActivity extends MagisActivity {
                     @Override
                     public void onRefresh() {
                         Log.d(TAG, "onRefresh: Refreshing!");
+                        if (presencePeriods == null || presencePeriods[0].start == null) {
+                            getPresencePeriods();
+                        }
+                        getPresence();
                     }
                 }
         );
@@ -104,7 +111,12 @@ public class PresenceActivity extends MagisActivity {
                 Log.d(TAG, "onItemSelected: PresencePeriod: " + adapterView.getItemAtPosition(i).toString());
                 presencePeriod = (PresencePeriod) adapterView.getItemAtPosition(i);
                 Log.d(TAG, "onItemSelected: precense date: " + presencePeriod.start);
-                getPresence();
+                if (mMagister != null) {
+                    getPresence();
+                } else {
+                    errorView.setVisibility(View.VISIBLE);
+                    errorView.setConfig(ErrorViewConfigs.NotLoggedInConfig);
+                }
             }
 
             @Override
@@ -114,7 +126,27 @@ public class PresenceActivity extends MagisActivity {
         });
 
         listView = (ListView) findViewById(R.id.list_presence);
+        errorView = (ErrorView) findViewById(R.id.error_view_presence);
 
+        navigationDrawer = new NavigationDrawer(this, mToolbar, mProfile, mUser, "Aanwezigheid");
+        navigationDrawer.SetupNavigationDrawer();
+
+
+        if (mMagister != null) {
+            getPresencePeriods();
+        } else {
+            errorView.setVisibility(View.VISIBLE);
+            errorView.setConfig(ErrorViewConfigs.NotLoggedInConfig);
+        }
+        //getPresence();
+    }
+
+
+    private void getPresence() {
+        new PresenceTask(this, mMagister, presencePeriod).execute();
+    }
+
+    private void getPresencePeriods() {
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -163,15 +195,5 @@ public class PresenceActivity extends MagisActivity {
                 }
             }
         }).start();
-
-        navigationDrawer = new NavigationDrawer(this, mToolbar, mProfile, mUser, "Aanwezigheid");
-        navigationDrawer.SetupNavigationDrawer();
-
-        getPresence();
-    }
-
-
-    private void getPresence() {
-        new PresenceTask(this, mMagister, presencePeriod).execute();
     }
 }

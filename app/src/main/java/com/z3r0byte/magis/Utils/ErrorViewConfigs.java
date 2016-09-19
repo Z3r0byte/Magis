@@ -40,9 +40,21 @@ public class ErrorViewConfigs {
             .retryVisible(false)
             .build();
 
+    public static ErrorView.Config NoPresenceConfig = ErrorView.Config.create()
+            .title("Geen Aanwezigheid")
+            .subtitle("")
+            .retryVisible(false)
+            .build();
+
     public static ErrorView.Config NoGradesConfig = ErrorView.Config.create()
             .title("Geen cijfers")
             .subtitle("")
+            .retryVisible(false)
+            .build();
+
+    public static ErrorView.Config NoConnectionConfig = ErrorView.Config.create()
+            .title("Geen verbinding")
+            .subtitle("Er ging iets mis tijdens het ophalen van de gegevens.")
             .retryVisible(false)
             .build();
 

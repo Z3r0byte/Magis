@@ -18,9 +18,11 @@ package com.z3r0byte.magis.Tasks;
 
 import android.os.AsyncTask;
 import android.util.Log;
+import android.view.View;
 
 import com.z3r0byte.magis.Adapters.PresenceAdapter;
 import com.z3r0byte.magis.R;
+import com.z3r0byte.magis.Utils.ErrorViewConfigs;
 import com.z3r0byte.magis.Utils.MagisActivity;
 
 import net.ilexiconn.magister.Magister;
@@ -82,17 +84,25 @@ public class PresenceTask extends AsyncTask<Void, Void, Presence[]> {
 
     @Override
     protected void onPostExecute(Presence[] presences) {
+        Log.d(TAG, "onPostExecute: Got here");
         if (presences != null && presences.length > 0) {
+            Log.d(TAG, "onPostExecute: Valid appointments");
             activity.mPresences = presences;
             activity.mSwipeRefreshLayout.setRefreshing(false);
             //activity.errorView.setVisibility(View.GONE);
 
-            activity.mPresenceAdapter = new PresenceAdapter(activity, presences);
-            activity.listView.setAdapter(activity.mHomeworkAdapter);
+            Log.d(TAG, "onPostExecute: Creating adapter");
+            activity.mPresenceAdapter = new PresenceAdapter(activity, activity.mPresences);
+            Log.d(TAG, "onPostExecute: Assigning adapter");
+            activity.listView.setAdapter(activity.mPresenceAdapter);
         } else {
             activity.mSwipeRefreshLayout.setRefreshing(false);
-            //activity.errorView.setVisibility(View.VISIBLE);
-            //activity.errorView.setConfig(ErrorViewConfigs.NoHomeworkConfig);
+            activity.errorView.setVisibility(View.VISIBLE);
+            activity.errorView.setConfig(ErrorViewConfigs.NoPresenceConfig);
+
+            if (error != null) {
+                activity.errorView.setConfig(ErrorViewConfigs.NoConnectionConfig);
+            }
             Log.e(TAG, "Error: " + error);
         }
     }

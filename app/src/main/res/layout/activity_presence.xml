@@ -40,8 +40,22 @@
         <ListView
             android:id="@+id/list_presence"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"></ListView>
+            android:layout_height="match_parent" />
+
     </android.support.v4.widget.SwipeRefreshLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/layoutStudyPicker"
+        android:layout_below="@id/Toolbar">
+
+        <tr.xip.errorview.ErrorView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/error_view_presence"
+            android:visibility="gone" />
+    </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/layoutStudyPicker"

@@ -17,7 +17,7 @@
 package com.z3r0byte.magis.Adapters;
 
 import android.content.Context;
-import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,16 +26,19 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.z3r0byte.magis.R;
+import com.z3r0byte.magis.Utils.DateUtils;
 
 import net.ilexiconn.magister.container.Presence;
+
+import static android.graphics.Color.parseColor;
 
 /**
  * Created by bas on 18-9-16.
  */
 
-public class PresenceAdapter extends ArrayAdapter<Presence>
+public class PresenceAdapter extends ArrayAdapter<Presence> {
 
-{
+    private static final String TAG = "PresenceAdapter";
     private final Context context;
     private final Presence[] presences;
     String previousDay = "";
@@ -44,10 +47,12 @@ public class PresenceAdapter extends ArrayAdapter<Presence>
         super(context, -1, presences);
         this.context = context;
         this.presences = presences;
+        Log.d(TAG, "PresenceAdapter: Adapter created with " + presences.length + " items.");
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        Log.d(TAG, "getView: Processing one Presence Item");
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View rowView = inflater.inflate(R.layout.list_homework, parent, false);
@@ -58,16 +63,16 @@ public class PresenceAdapter extends ArrayAdapter<Presence>
         TextView headerText = (TextView) rowView.findViewById(R.id.header_text);
         RelativeLayout header = (RelativeLayout) rowView.findViewById(R.id.header);
 
-        String day = presences[position].start;
+        String day = stringToString(presences[position].start);
         if (position != 0) {
-            previousDay = presences[position].start;
+            previousDay = stringToString(presences[position - 1].start);
             if (!previousDay.equals(day)) {
-                headerText.setText(presences[position].start);
+                headerText.setText(day);
             } else {
                 header.setVisibility(android.view.View.GONE);
             }
         } else {
-            headerText.setText(presences[position].start);
+            headerText.setText(day);
         }
 
 
@@ -76,11 +81,19 @@ public class PresenceAdapter extends ArrayAdapter<Presence>
             period.setText("");
             rowView.findViewById(R.id.layout_list_calendar_period).setBackgroundResource(0);
         }
-        lesson.setText(presences[position].description);
-        CharSequence content = Html.fromHtml(presences[position].description);
-        homework.setText(content);
+        lesson.setText(presences[position].appointment.description);
+        homework.setText(presences[position].description);
 
+        if (!presences[position].isAllowed) {
+            int color = parseColor("#FF0000");
+            lesson.setTextColor(color);
+            homework.setTextColor(color);
+        }
 
         return rowView;
+    }
+
+    private String stringToString(String date) {
+        return DateUtils.formatDate(DateUtils.parseDate(date, "yyyy-MM-dd'T'HH:mm:ss"), "dd MMM yyyy");
     }
 }
