@@ -41,7 +41,7 @@ public class ErrorViewConfigs {
             .build();
 
     public static ErrorView.Config NoPresenceConfig = ErrorView.Config.create()
-            .title("Geen Aanwezigheid")
+            .title("Geen Absenties")
             .subtitle("")
             .retryVisible(false)
             .build();
