@@ -41,7 +41,7 @@ public class NewGradesTask extends AsyncTask<Void, Void, Grade[]> {
     public MagisFragment fragment;
     public Magister magister;
 
-    public String error;
+    public String error = null;
 
 
     public NewGradesTask(MagisFragment fragment, Magister magister) {
@@ -67,6 +67,7 @@ public class NewGradesTask extends AsyncTask<Void, Void, Grade[]> {
             NewGradesDB db = new NewGradesDB(fragment.getActivity());
             db.addGrades(grades);
 
+            Log.d(TAG, "doInBackground: Amount of new Grades: " + grades.length);
             return grades;
         } catch (IOException e) {
             Log.e(TAG, "Unable to retrieve data", e);
@@ -81,8 +82,9 @@ public class NewGradesTask extends AsyncTask<Void, Void, Grade[]> {
 
     @Override
     protected void onPostExecute(final Grade[] grades) {
-        if (error != null) {
-            if (grades != null && grades.length > 1) {
+        if (error == null) {
+            if (grades != null && grades.length > 0) {
+                Log.d(TAG, "onPostExecute: Valid grades");
                 fragment.getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -94,11 +96,13 @@ public class NewGradesTask extends AsyncTask<Void, Void, Grade[]> {
                     }
                 });
             } else {
+                Log.d(TAG, "onPostExecute: Invalid grades");
                 fragment.mSwipeRefreshLayout.setRefreshing(false);
                 fragment.errorView.setVisibility(View.VISIBLE);
                 fragment.errorView.setConfig(ErrorViewConfigs.NoNewGradesConfig);
             }
         } else {
+            Log.d(TAG, "onPostExecute: Error! " + error);
             fragment.mSwipeRefreshLayout.setRefreshing(false);
             fragment.errorView.setVisibility(View.VISIBLE);
             fragment.errorView.setConfig(ErrorViewConfigs.NoNewGradesConfig);

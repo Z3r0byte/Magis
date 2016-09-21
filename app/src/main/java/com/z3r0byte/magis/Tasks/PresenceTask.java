@@ -33,10 +33,6 @@ import net.ilexiconn.magister.handler.PresenceHandler;
 import java.io.IOException;
 import java.security.InvalidParameterException;
 
-/**
- * Created by bas on 18-9-16.
- */
-
 public class PresenceTask extends AsyncTask<Void, Void, Presence[]> {
     private static final String TAG = "PresenceTask";
 
