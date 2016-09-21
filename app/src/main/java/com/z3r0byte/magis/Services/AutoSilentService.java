@@ -69,7 +69,9 @@ public class AutoSilentService extends Service {
                     if (doSilent(appointments)) {
                         silenced(true);
                         AudioManager audiomanager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-                        audiomanager.setRingerMode(AudioManager.RINGER_MODE_SILENT);
+                        if (audiomanager.getRingerMode() != AudioManager.RINGER_MODE_SILENT) {
+                            audiomanager.setRingerMode(AudioManager.RINGER_MODE_SILENT);
+                        }
                     } else {
                         if (isSilencedByApp()) {
                             AudioManager audiomanager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);

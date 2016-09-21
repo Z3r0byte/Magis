@@ -16,6 +16,8 @@
 
 package net.ilexiconn.magister.handler;
 
+import android.util.Log;
+
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
 
@@ -33,6 +35,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class PresenceHandler implements IHandler {
+    private static final String TAG = "PresenceHandler";
     private Gson gson;
     private Magister magister;
 
@@ -53,6 +56,8 @@ public class PresenceHandler implements IHandler {
      * @throws PrivilegeException if the profile doesn't have the privilege to perform this action.
      */
     public Presence[] getPresence() throws IOException, PrivilegeException {
+        Log.d(TAG, "getPresence() called");
+        Log.d(TAG, "getPresence: " + magister.currentStudy.startDateString);
         return getPresence(null);
     }
 
@@ -66,7 +71,8 @@ public class PresenceHandler implements IHandler {
      * @throws PrivilegeException if the profile doesn't have the privilege to perform this action.
      */
     public Presence[] getPresence(PresencePeriod period) throws IOException, PrivilegeException {
-        return gson.fromJson(HttpUtil.httpGet(magister.schoolUrl.getApiUrl() + "personen/" + magister.profile.id + "/absenties?tot=" + (period == null ? magister.currentStudy.startDate : period.start) + "&van=" + (period == null ? magister.currentStudy.endDate : period.end)), Presence[].class);
+        Log.d(TAG, "getPresence() called with: period = [" + period + "]");
+        return gson.fromJson(HttpUtil.httpGet(magister.schoolUrl.getApiUrl() + "personen/" + magister.profile.id + "/absenties?van=" + (period == null ? magister.currentStudy.startDateString.substring(0, 10) : period.start.substring(0, 10)) + "&tot=" + (period == null ? magister.currentStudy.endDateString.substring(0, 10) : period.end.substring(0, 10))), Presence[].class);
     }
 
     /**

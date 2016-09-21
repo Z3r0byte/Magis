@@ -103,8 +103,10 @@ public class GradeActivity extends MagisActivity implements MaterialTabListener 
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 Log.d(TAG, "onItemSelected: Study: " + adapterView.getItemAtPosition(i).toString());
-                mainGradesFragment.study = (Study) adapterView.getItemAtPosition(i);
-                mainGradesFragment.loadGrades();
+                if (!studies[0].description.equals("Laden...")) {
+                    mainGradesFragment.study = (Study) adapterView.getItemAtPosition(i);
+                    mainGradesFragment.loadGrades();
+                }
             }
 
             @Override

@@ -16,7 +16,9 @@
 
 package com.z3r0byte.magis.GUI;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.Toolbar;
@@ -34,8 +36,11 @@ import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.SectionDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
+import com.mikepenz.materialdrawer.model.interfaces.IProfile;
+import com.z3r0byte.magis.AccountActivity;
 import com.z3r0byte.magis.GradeActivity;
 import com.z3r0byte.magis.HomeworkActivity;
+import com.z3r0byte.magis.PresenceActivity;
 import com.z3r0byte.magis.R;
 import com.z3r0byte.magis.SettingsActivity;
 import com.z3r0byte.magis.StartActivity;
@@ -77,10 +82,14 @@ public class NavigationDrawer {
             .withIcon(GoogleMaterial.Icon.gmd_timeline).withSelectable(false);
     static PrimaryDrawerItem homeworkItem = new PrimaryDrawerItem().withName(R.string.title_homework)
             .withIcon(GoogleMaterial.Icon.gmd_assignment).withSelectable(false);
+    static PrimaryDrawerItem presenceItem = new PrimaryDrawerItem().withName(R.string.title_presence)
+            .withIcon(GoogleMaterial.Icon.gmd_highlight_off).withSelectable(false);
     static PrimaryDrawerItem refreshSessionItem = new SecondaryDrawerItem().withName(R.string.drawer_refresh_session)
             .withIcon(GoogleMaterial.Icon.gmd_refresh).withSelectable(false);
     static PrimaryDrawerItem logoutItem = new SecondaryDrawerItem().withName(R.string.drawer_logout)
             .withIcon(GoogleMaterial.Icon.gmd_exit_to_app).withSelectable(false);
+    static PrimaryDrawerItem bugItem = new SecondaryDrawerItem().withName(R.string.report_bug)
+            .withIcon(GoogleMaterial.Icon.gmd_bug_report).withSelectable(false);
     static PrimaryDrawerItem settingsItem = new SecondaryDrawerItem().withName(R.string.drawer_settings)
             .withIcon(GoogleMaterial.Icon.gmd_settings).withSelectable(false);
 
@@ -92,6 +101,14 @@ public class NavigationDrawer {
                 .addProfiles(
                         new ProfileDrawerItem().withName(profile.nickname).withEmail(user.username).withIcon(R.drawable.magis512)
                 )
+                .withOnAccountHeaderListener(new AccountHeader.OnAccountHeaderListener() {
+                    @Override
+                    public boolean onProfileChanged(View view, IProfile profile, boolean currentProfile) {
+                        activity.startActivity(new Intent(activity, AccountActivity.class));
+                        drawer.closeDrawer();
+                        return false;
+                    }
+                })
                 .withSelectionListEnabledForSingleProfile(false)
                 .build();
 
@@ -104,9 +121,11 @@ public class NavigationDrawer {
                         calendarItem,
                         gradeItem,
                         homeworkItem,
+                        presenceItem,
                         new SectionDrawerItem().withName(R.string.drawer_tools),
                         //refreshSessionItem,
                         settingsItem,
+                        bugItem,
                         logoutItem
                 )
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
@@ -134,6 +153,7 @@ public class NavigationDrawer {
 
                         } else if (drawerItem == settingsItem) {
                             activity.startActivity(new Intent(activity, SettingsActivity.class));
+                            drawer.closeDrawer();
                         } else if (drawerItem == calendarItem && selection != "Agenda") {
                             activity.finish();
                             drawer.closeDrawer();
@@ -142,11 +162,20 @@ public class NavigationDrawer {
                             Intent intent = new Intent(activity, HomeworkActivity.class);
                             intent.putExtra("Magister", activity.mMagister);
                             activity.startActivity(intent);
+                        } else if (drawerItem == presenceItem && selection != "Aanwezigheid") {
+                            drawer.closeDrawer();
+                            Intent intent = new Intent(activity, PresenceActivity.class);
+                            intent.putExtra("Magister", activity.mMagister);
+                            activity.startActivity(intent);
                         } else if (drawerItem == gradeItem && selection != "Cijfers") {
                             CloseDrawer();
                             Intent intent = new Intent(activity, GradeActivity.class);
                             intent.putExtra("Magister", activity.mMagister);
                             activity.startActivity(new Intent(intent));
+                            activity.finish();
+                        } else if (drawerItem == bugItem) {
+                            reportBug();
+                            drawer.closeDrawer();
                         }
                         return true;
                     }
@@ -167,6 +196,9 @@ public class NavigationDrawer {
             case "Huiswerk":
                 drawer.setSelection(homeworkItem);
                 break;
+            case "Aanwezigheid":
+                drawer.setSelection(presenceItem);
+                break;
             case "":
                 drawer.setSelection(-1);
                 break;
@@ -179,6 +211,19 @@ public class NavigationDrawer {
 
     public Boolean isDrawerOpen() {
         return drawer.isDrawerOpen();
+    }
+
+    private void reportBug() {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(activity);
+        alertDialogBuilder.setTitle(activity.getString(R.string.dialog_bug_title));
+        alertDialogBuilder.setMessage(activity.getString(R.string.dialog_bug_desc));
+        alertDialogBuilder.setPositiveButton("Oké", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+            }
+        });
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
     }
 
 

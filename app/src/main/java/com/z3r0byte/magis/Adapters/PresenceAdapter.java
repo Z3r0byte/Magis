@@ -17,8 +17,7 @@
 package com.z3r0byte.magis.Adapters;
 
 import android.content.Context;
-import android.graphics.Paint;
-import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,25 +28,31 @@ import android.widget.TextView;
 import com.z3r0byte.magis.R;
 import com.z3r0byte.magis.Utils.DateUtils;
 
-import net.ilexiconn.magister.container.Appointment;
+import net.ilexiconn.magister.container.Presence;
+
+import static android.graphics.Color.parseColor;
 
 /**
- * Created by bas on 23-8-16.
+ * Created by bas on 18-9-16.
  */
 
-public class HomeworkAdapter extends ArrayAdapter<Appointment> {
+public class PresenceAdapter extends ArrayAdapter<Presence> {
+
+    private static final String TAG = "PresenceAdapter";
     private final Context context;
-    private final Appointment[] appointments;
+    private final Presence[] presences;
     String previousDay = "";
 
-    public HomeworkAdapter(Context context, Appointment[] appointments) {
-        super(context, -1, appointments);
+    public PresenceAdapter(Context context, Presence[] presences) {
+        super(context, -1, presences);
         this.context = context;
-        this.appointments = appointments;
+        this.presences = presences;
+        Log.d(TAG, "PresenceAdapter: Adapter created with " + presences.length + " items.");
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        Log.d(TAG, "getView: Processing one Presence Item");
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View rowView = inflater.inflate(R.layout.list_homework, parent, false);
@@ -58,35 +63,37 @@ public class HomeworkAdapter extends ArrayAdapter<Appointment> {
         TextView headerText = (TextView) rowView.findViewById(R.id.header_text);
         RelativeLayout header = (RelativeLayout) rowView.findViewById(R.id.header);
 
-        String day = DateUtils.formatDate(appointments[position].startDate, "yyyyMMdd");
+        String day = stringToString(presences[position].start);
         if (position != 0) {
-            previousDay = DateUtils.formatDate(appointments[position - 1].startDate, "yyyyMMdd");
+            previousDay = stringToString(presences[position - 1].start);
             if (!previousDay.equals(day)) {
-                headerText.setText(DateUtils.formatDate(appointments[position].startDate, "EEEE dd MMM"));
+                headerText.setText(day);
             } else {
-                header.setVisibility(View.GONE);
+                header.setVisibility(android.view.View.GONE);
             }
         } else {
-            headerText.setText(DateUtils.formatDate(appointments[position].startDate, "EEEE dd MMM"));
+            headerText.setText(day);
         }
 
 
-        period.setText(appointments[position].periodFrom + "");
-        if (appointments[position].periodFrom == 0) {
+        period.setText(presences[position].period + "");
+        if (presences[position].period == 0) {
             period.setText("");
             rowView.findViewById(R.id.layout_list_calendar_period).setBackgroundResource(0);
         }
-        lesson.setText(appointments[position].description);
-        CharSequence content = Html.fromHtml(appointments[position].content);
-        homework.setText(content);
+        lesson.setText(presences[position].appointment.description);
+        homework.setText(presences[position].description);
 
-
-        if (appointments[position].finished && appointments[position].infoType.getID() == 1) {
-            lesson.setPaintFlags(lesson.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-            homework.setPaintFlags(homework.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+        if (!presences[position].isAllowed) {
+            int color = parseColor("#FF0000");
+            lesson.setTextColor(color);
+            homework.setTextColor(color);
         }
 
-
         return rowView;
+    }
+
+    private String stringToString(String date) {
+        return DateUtils.formatDate(DateUtils.parseDate(date, "yyyy-MM-dd'T'HH:mm:ss"), "dd MMM yyyy");
     }
 }

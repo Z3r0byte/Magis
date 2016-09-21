@@ -78,9 +78,8 @@ public class GradesTask extends AsyncTask<Void, Void, Grade[]> {
             Grade[] grades;
 
 
-            if (study == null) {
-                study = magister.currentStudy;
-                grades = gradeHandler.getGrades(true, false, true);
+            if (study == null || study.id == magister.currentStudy.id) {
+                grades = gradeHandler.getGrades(false, true, true);
             } else {
                 grades = gradeHandler.getGradesFromStudy(study, true, false);
             }

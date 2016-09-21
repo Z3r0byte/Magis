@@ -103,9 +103,6 @@ public class MainGradesFragment extends MagisFragment {
             }
         });
 
-        loadGrades();
-
-
         return view;
     }
 
