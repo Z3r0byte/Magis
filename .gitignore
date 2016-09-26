@@ -6,3 +6,4 @@
 .DS_Store
 /build
 /captures
+/app/src/main/java/com.z3r0byte.magis/Utils/ApiKeyUtil.java

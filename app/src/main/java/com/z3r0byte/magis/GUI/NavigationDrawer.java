@@ -47,6 +47,7 @@ import com.z3r0byte.magis.StartActivity;
 import com.z3r0byte.magis.Tasks.LoginTask;
 import com.z3r0byte.magis.Utils.DB_Handlers.CalendarDB;
 import com.z3r0byte.magis.Utils.DB_Handlers.GradesDB;
+import com.z3r0byte.magis.Utils.DB_Handlers.NewGradesDB;
 import com.z3r0byte.magis.Utils.MagisActivity;
 
 import net.ilexiconn.magister.container.Profile;
@@ -144,6 +145,7 @@ public class NavigationDrawer {
                                             activity.getSharedPreferences("data", Context.MODE_PRIVATE).edit().clear().apply();
                                             new CalendarDB(activity).removeAll();
                                             new GradesDB(activity).removeAll();
+                                            new NewGradesDB(activity).removeAll();
                                             activity.startActivity(new Intent(activity, StartActivity.class));
                                             activity.finish();
                                         }
@@ -162,17 +164,19 @@ public class NavigationDrawer {
                             Intent intent = new Intent(activity, HomeworkActivity.class);
                             intent.putExtra("Magister", activity.mMagister);
                             activity.startActivity(intent);
+                            closeActivity();
                         } else if (drawerItem == presenceItem && selection != "Aanwezigheid") {
                             drawer.closeDrawer();
                             Intent intent = new Intent(activity, PresenceActivity.class);
                             intent.putExtra("Magister", activity.mMagister);
                             activity.startActivity(intent);
+                            closeActivity();
                         } else if (drawerItem == gradeItem && selection != "Cijfers") {
                             CloseDrawer();
                             Intent intent = new Intent(activity, GradeActivity.class);
                             intent.putExtra("Magister", activity.mMagister);
                             activity.startActivity(new Intent(intent));
-                            activity.finish();
+                            closeActivity();
                         } else if (drawerItem == bugItem) {
                             reportBug();
                             drawer.closeDrawer();
@@ -211,6 +215,12 @@ public class NavigationDrawer {
 
     public Boolean isDrawerOpen() {
         return drawer.isDrawerOpen();
+    }
+
+    private void closeActivity() {
+        if (selection != "Agenda") {
+            activity.finish();
+        }
     }
 
     private void reportBug() {
