@@ -22,7 +22,7 @@ package com.z3r0byte.magis.Utils;
 
 public class ApiKeyUtil {
 
-    private static final String API_KEY = "YOUR API KEY";
+    private static final String API_KEY = "YOUR_API_KEY";
 
     public static String getKey() {
         return API_KEY;
