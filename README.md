@@ -11,7 +11,7 @@ If you wanna help, please don't hesitate and create a Pull Request!
 However try to follow these guidelines:
 <ul>
 <li>Commit to the dev branch. Any PR's to the master branch will most likely be rejected.</li>
-<li>Use English, except for in-app strings. (If you don't speak Dutch, write the strings in English, but note this at your PR.</li>
+<li>Use English, except for in-app strings. (If you don't speak Dutch, write the strings in English, but note this at your PR.)</li>
 <li>Create methods in the following notation:</li>
   <code>private void mVoid(String s){</code></br><code>
       //do something</code></br><code>
