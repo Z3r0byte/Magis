@@ -1,5 +1,5 @@
 # Magis
-Dit is de repository van de Magister-app Magis.
+This is the github repository for my app Magis, an unofficial, free and open-source Magister 6 App.
 
 
 ######[Website](http://magis-app.nl)
@@ -7,16 +7,17 @@ Dit is de repository van de Magister-app Magis.
 
 
 ###Contributing: <br>
-Als je mee wilt helpen aan deze app is dat helemaal prima!
-Probeer echter wel op een paar dingen te letten:
+If you wanna help, please don't hesitate and create a Pull Request!
+However try to follow these guidelines:
 <ul>
-<li>Gebruik Engels, met uitzondering van tekst, natuurlijk</li>
-<li>Maak methods in de volgende notatie:</li>
+<li>Commit to the dev branch. Any PR's to the master branch will most likely be rejected.</li>
+<li>Use English, except for in-app strings. (If you don't speak Dutch, write the strings in English, but note this at your PR.</li>
+<li>Create methods in the following notation:</li>
   <code>private void mVoid(String s){</code></br><code>
-      //doe iets</code></br><code>
+      //do something</code></br><code>
   }</code>
-<li>Vermijd hard-coded strings, gebruik aub de resources!</li>
-<li>Voor de rest: probeer <a href="https://github.com/ribot/android-guidelines/blob/master/project_and_code_guidelines.md">deze</a> richtlijnen aan te houden.</li>
+<li>Avoid using hard-coded strings, use the resources!</li>
+<li>For anything not listed above, please try to follow <a href="https://github.com/ribot/android-guidelines/blob/master/project_and_code_guidelines.md">these</a> guidelines.</li>
 </ul>
 <br><br><br>
 
