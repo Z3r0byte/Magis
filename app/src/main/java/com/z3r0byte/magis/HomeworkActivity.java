@@ -31,7 +31,10 @@ import com.google.gson.Gson;
 import com.z3r0byte.magis.Adapters.HomeworkAdapter;
 import com.z3r0byte.magis.DetailActivity.HomeworkDetails;
 import com.z3r0byte.magis.GUI.NavigationDrawer;
+import com.z3r0byte.magis.Listeners.FinishResponder;
+import com.z3r0byte.magis.Listeners.SharedListener;
 import com.z3r0byte.magis.Tasks.HomeworkTask;
+import com.z3r0byte.magis.Utils.DB_Handlers.CalendarDB;
 import com.z3r0byte.magis.Utils.DateUtils;
 import com.z3r0byte.magis.Utils.ErrorViewConfigs;
 import com.z3r0byte.magis.Utils.MagisActivity;
@@ -111,6 +114,8 @@ public class HomeworkActivity extends MagisActivity {
         });
 
         loadHomework();
+        FinishResponder responder = new FinishResponder(this);
+        SharedListener.finishInitiator.addListener(responder);
     }
 
     private void finishAppointment(final Appointment appointment) {
@@ -121,11 +126,31 @@ public class HomeworkActivity extends MagisActivity {
     }
 
 
+    public void applyFinish() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                CalendarDB db = new CalendarDB(getApplicationContext());
+                mAppointments = db.getHomework(DateUtils.getToday());
+                if (mAppointments != null && mAppointments.length != 0) {
+                    mSwipeRefreshLayout.setRefreshing(false);
+                    errorView.setVisibility(View.GONE);
+
+                    mHomeworkAdapter = new HomeworkAdapter(getApplicationContext(), mAppointments);
+                    listView.setAdapter(mHomeworkAdapter);
+                } else {
+                    mSwipeRefreshLayout.setRefreshing(false);
+                    errorView.setVisibility(View.VISIBLE);
+                    errorView.setConfig(ErrorViewConfigs.NoHomeworkConfig);
+                }
+            }
+        });
+    }
+
+
     public void loadHomework() {
         if (mMagister == null) {
-            errorView.setVisibility(View.VISIBLE);
-            errorView.setConfig(ErrorViewConfigs.NotLoggedInConfig);
-            listView.setVisibility(View.GONE);
+            applyFinish();
             mSwipeRefreshLayout.setRefreshing(false);
         } else {
             Date start = DateUtils.getToday();

@@ -18,6 +18,7 @@ package com.z3r0byte.magis.GUI;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -64,15 +65,25 @@ public class AppointmentDetailCard extends Card {
     private void init() {
     }
 
-    public void setDescription(final Activity context, final String description) {
+    public void waitForReady() {
         new Thread(new Runnable() {
             @Override
             public void run() {
                 while (ready != true) {
                 }
+                return;
+            }
+        }).start();
+    }
+
+    public void setDescription(final Activity context, final String description) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
                 context.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        Log.d(TAG, "run: Setting desc...");
                         IconicsDrawable drawable = new IconicsDrawable(context, GoogleMaterial.Icon.gmd_description);
                         descriptionLayout.setVisibility(View.VISIBLE);
                         descriptionImageView.setImageDrawable(drawable);
@@ -87,11 +98,10 @@ public class AppointmentDetailCard extends Card {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                while (ready != true) {
-                }
                 context.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        Log.d(TAG, "run: Setting period...");
                         IconicsDrawable drawable = new IconicsDrawable(context, GoogleMaterial.Icon.gmd_info);
                         periodLayout.setVisibility(View.VISIBLE);
                         periodImageView.setImageDrawable(drawable);
@@ -106,11 +116,10 @@ public class AppointmentDetailCard extends Card {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                while (ready != true) {
-                }
                 context.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        Log.d(TAG, "run: Setting teacher...");
                         IconicsDrawable drawable = new IconicsDrawable(context, GoogleMaterial.Icon.gmd_person);
                         teacherLayout.setVisibility(View.VISIBLE);
                         teacherImageView.setImageDrawable(drawable);
@@ -125,11 +134,10 @@ public class AppointmentDetailCard extends Card {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                while (ready != true) {
-                }
                 context.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        Log.d(TAG, "run: Setting time...");
                         IconicsDrawable drawable = new IconicsDrawable(context, GoogleMaterial.Icon.gmd_today);
                         durationLayout.setVisibility(View.VISIBLE);
                         durationImageView.setImageDrawable(drawable);
@@ -144,11 +152,10 @@ public class AppointmentDetailCard extends Card {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                while (ready != true) {
-                }
                 context.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        Log.d(TAG, "run: Setting location...");
                         IconicsDrawable drawable = new IconicsDrawable(context, GoogleMaterial.Icon.gmd_location_on);
                         locationLayout.setVisibility(View.VISIBLE);
                         locationImageView.setImageDrawable(drawable);

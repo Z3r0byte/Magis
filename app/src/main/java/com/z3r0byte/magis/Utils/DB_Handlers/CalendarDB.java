@@ -366,7 +366,6 @@ public class CalendarDB extends SQLiteOpenHelper {
         Integer enddateInt = parseInt(formatDate(addMinutes(getToday(), -margin), "MMddHHmm"));
         String Query = "SELECT * FROM " + TABLE_CALENDAR + " WHERE " + KEY_FORMATTED_START_2 + " <= " + startdateInt + " AND "
                 + KEY_FORMATTED_END_2 + " >= " + enddateInt;
-        Log.d(TAG, "getSilentAppointments: Query: " + Query);
         Cursor cursor = db.rawQuery(Query, null);
 
         Appointment[] results = new Appointment[cursor.getCount()];

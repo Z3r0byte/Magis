@@ -40,6 +40,9 @@ import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.z3r0byte.magis.Adapters.AppointmentsAdapter;
 import com.z3r0byte.magis.DetailActivity.AppointmentDetails;
 import com.z3r0byte.magis.GUI.NavigationDrawer;
+import com.z3r0byte.magis.Listeners.FinishInitiator;
+import com.z3r0byte.magis.Listeners.FinishResponder;
+import com.z3r0byte.magis.Listeners.SharedListener;
 import com.z3r0byte.magis.Tasks.AppointmentsTask;
 import com.z3r0byte.magis.Tasks.LoginTask;
 import com.z3r0byte.magis.Utils.DB_Handlers.CalendarDB;
@@ -151,6 +154,10 @@ public class CalendarActivity extends MagisActivity implements DatePickerDialog.
         firstDate = DateUtils.parseDate(sharedPreferences.getString("firstDate", ""), "yyyy-MM-dd");
         lastDate = DateUtils.parseDate(sharedPreferences.getString("lastDate", ""), "yyyy-MM-dd");
 
+
+        SharedListener.finishInitiator = new FinishInitiator();
+        FinishResponder responder = new FinishResponder(this);
+        SharedListener.finishInitiator.addListener(responder);
     }
 
 
@@ -282,6 +289,15 @@ public class CalendarActivity extends MagisActivity implements DatePickerDialog.
         intent.putExtra("Appointment", new Gson().toJson(mAppointments[i]));
         intent.putExtra("Magister", mMagister);
         startActivity(intent);
+    }
+
+    public void applyFinish() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                getAppointmentsByDate(date);
+            }
+        });
     }
 
     @Override
