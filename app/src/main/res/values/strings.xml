@@ -40,6 +40,7 @@
     <string name="drawer_refresh_session">Sessie verversen</string>
     <string name="report_bug">Bug melden</string>
     <string name="drawer_settings">Instellingen</string>
+    <string name="drawer_status">Status</string>
     <string name="drawer_tools">Tools</string>
 
     <string name="err_set_date_first">Stel eerst een datum in.</string>
