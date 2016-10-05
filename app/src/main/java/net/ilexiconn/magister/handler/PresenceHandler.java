@@ -72,7 +72,12 @@ public class PresenceHandler implements IHandler {
      */
     public Presence[] getPresence(PresencePeriod period) throws IOException, PrivilegeException {
         Log.d(TAG, "getPresence() called with: period = [" + period + "]");
-        return gson.fromJson(HttpUtil.httpGet(magister.schoolUrl.getApiUrl() + "personen/" + magister.profile.id + "/absenties?van=" + (period == null ? magister.currentStudy.startDateString.substring(0, 10) : period.start.substring(0, 10)) + "&tot=" + (period == null ? magister.currentStudy.endDateString.substring(0, 10) : period.end.substring(0, 10))), Presence[].class);
+        try {
+            return gson.fromJson(HttpUtil.httpGet(magister.schoolUrl.getApiUrl() + "personen/" + magister.profile.id + "/absenties?van=" + (period == null ? magister.currentStudy.startDateString.substring(0, 10) : period.start.substring(0, 10)) + "&tot=" + (period == null ? magister.currentStudy.endDateString.substring(0, 10) : period.end.substring(0, 10))), Presence[].class);
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     /**
