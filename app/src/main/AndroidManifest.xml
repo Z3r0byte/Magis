@@ -92,7 +92,7 @@
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:launchMode="singleTop" />
 
-        <receiver android:name="com.z3r0byte..magis.MyBroadcastReceiver">
+        <receiver android:name=".Services.MyBroadcastReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
