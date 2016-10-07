@@ -191,6 +191,9 @@ public class NavigationDrawer {
                         } else if (drawerItem == bugItem) {
                             reportBug();
                             drawer.closeDrawer();
+                        } else if (drawerItem == statusItem) {
+                            explainStatus();
+                            drawer.closeDrawer();
                         }
                         return true;
                     }
@@ -267,6 +270,19 @@ public class NavigationDrawer {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(activity);
         alertDialogBuilder.setTitle(activity.getString(R.string.dialog_bug_title));
         alertDialogBuilder.setMessage(activity.getString(R.string.dialog_bug_desc));
+        alertDialogBuilder.setPositiveButton("Oké", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+            }
+        });
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
+    }
+
+    private void explainStatus() {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(activity);
+        alertDialogBuilder.setTitle(activity.getString(R.string.dialog_status_title));
+        alertDialogBuilder.setMessage(activity.getString(R.string.dialog_status_desc));
         alertDialogBuilder.setPositiveButton("Oké", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {

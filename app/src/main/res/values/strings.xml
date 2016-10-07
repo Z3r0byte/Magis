@@ -32,9 +32,11 @@
     <string name="dialog_logout_title">Uitloggen?</string>
     <string name="dialog_skip_login_desc">Als je het inloggen overslaat, kun je alleen de offline data gebruiken totdat je de sessie ververst.</string>
     <string name="dialog_skip_login_title">Inloggen overslaan?</string>
+    <string name="dialog_status_title">Magister 6 status</string>
+    <string name="dialog_status_desc">Hiermee kun je zien of Magister 6 een storing heeft. Groen betekent alles OK, oranje betekent langzaam, en rood betekent offline. \nDe gegevens worden van http://status.magis-app.nl/ gehaald, een sub-projectje van mij. De API kun je zelf ook gebruiken, mocht je dat willen.</string>
     <string name="dialog_bug_title">Bug melden</string>
     <string name="dialog_bug_desc">Als je een fout wilt melden, kun je gewoon je telefoon op en neer schudden. De app maakt dan
-        automatisch een screenshot en opent een mail venster.</string>
+        automatisch een screenshot en opent een mail venster. Hier kun je dan een korte beschrijving van de fout invullen.</string>
 
     <string name="drawer_logout">Log uit</string>
     <string name="drawer_refresh_session">Sessie verversen</string>
