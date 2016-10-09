@@ -105,6 +105,9 @@ public class GradesTask extends AsyncTask<Void, Void, Grade[]> {
 
     @Override
     protected void onPostExecute(final Grade[] grades) {
+        if (fragment.getActivity() == null) {
+            return;
+        }
         if (error != null) {
             GradesDB gradesDB = new GradesDB(fragment.getActivity());
             Grade[] gradesCache = gradesDB.getUniqueAverageGrades(study);

@@ -96,7 +96,7 @@ public class ParcelableMagister extends Magister implements Parcelable {
         magister.school = school;
         SchoolUrl url = magister.schoolUrl = new SchoolUrl(school);
         magister.version = magister.gson.fromJson(HttpUtil.httpGet(url.getVersionUrl()), Version.class);
-        magister.user = new User(username, password, true);
+        magister.user = new User(username, password, false);
         magister.logout();
         String data = magister.gson.toJson(magister.user);
         String session = LogUtil.getStringFromInputStream(HttpUtil.httpPost(url.getSessionUrl(), data)); //logging

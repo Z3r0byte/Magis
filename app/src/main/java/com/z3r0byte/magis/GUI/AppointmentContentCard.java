@@ -16,6 +16,7 @@
 
 package com.z3r0byte.magis.GUI;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Looper;
 import android.util.Log;
@@ -26,9 +27,11 @@ import android.widget.Toast;
 
 import com.z3r0byte.magis.DetailActivity.AppointmentDetails;
 import com.z3r0byte.magis.DetailActivity.HomeworkDetails;
+import com.z3r0byte.magis.Listeners.SharedListener;
 import com.z3r0byte.magis.R;
 
 import net.ilexiconn.magister.Magister;
+import net.ilexiconn.magister.ParcelableMagister;
 import net.ilexiconn.magister.container.Appointment;
 import net.ilexiconn.magister.handler.AppointmentHandler;
 
@@ -47,28 +50,63 @@ public class AppointmentContentCard extends Card {
     TextView ContentTextView;
     TextView ContentButton;
     Context Context;
+    ParcelableMagister magister;
+    Appointment appointment;
+    AppointmentDetails details;
+    HomeworkDetails homeworkDetails;
     Boolean ready = false;
 
-    public AppointmentContentCard(Context context) {
-        this(context, R.layout.card_appointments_content_layout);
+    public AppointmentContentCard(Context context, ParcelableMagister magister, Appointment appointment, HomeworkDetails homeworkdetails) {
+        this(context, homeworkdetails, magister, appointment, R.layout.card_appointments_content_layout);
     }
 
-    public AppointmentContentCard(Context context, int innerLayout) {
+    public AppointmentContentCard(Context context, HomeworkDetails homeworkdetails, ParcelableMagister magister, Appointment appointment, int innerLayout) {
         super(context, innerLayout);
         Context = context;
+        this.magister = magister;
+        this.appointment = appointment;
+        this.homeworkDetails = homeworkdetails;
+        init();
+    }
+
+    public AppointmentContentCard(Context context, ParcelableMagister magister, Appointment appointment, AppointmentDetails details) {
+        this(context, details, magister, appointment, R.layout.card_appointments_content_layout);
+    }
+
+    public AppointmentContentCard(Context context, AppointmentDetails details, ParcelableMagister magister, Appointment appointment, int innerLayout) {
+        super(context, innerLayout);
+        Context = context;
+        this.magister = magister;
+        this.appointment = appointment;
+        this.details = details;
         init();
     }
 
     private void init() {
     }
 
-    public void setContent(final String description, final Boolean afgerond) {
+    public void waitForReady() {
         new Thread(new Runnable() {
             @Override
             public void run() {
                 while (ready != true) {
                 }
-                setAfgerond(afgerond, description);
+                return;
+            }
+        }).start();
+    }
+
+    public void setContent(final Activity context, final String description, final Boolean afgerond) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Log.d(TAG, "setContent: setting content...");
+                context.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        setAfgerond(afgerond, description);
+                    }
+                });
             }
         }).start();
     }
@@ -87,8 +125,6 @@ public class AppointmentContentCard extends Card {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                while (ready != true) {
-                }
                 if (magister != null) {
                     ContentButton.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -104,6 +140,7 @@ public class AppointmentContentCard extends Card {
                                         Log.d(TAG, "run: Gelukt: " + finished);
                                         if (finished) {
                                             activity.updateAppointment(appointment);
+                                            SharedListener.finishInitiator.finished();
                                         }
                                     } catch (IOException e) {
                                         e.printStackTrace();
@@ -150,6 +187,7 @@ public class AppointmentContentCard extends Card {
                                         Boolean finished = appointmentHandler.finishAppointment(appointment);
                                         Log.d(TAG, "run: Gelukt: " + finished);
                                         if (finished) {
+                                            SharedListener.finishInitiator.finished();
                                             activity.updateAppointment(appointment);
                                         }
                                     } catch (IOException e) {
@@ -182,6 +220,15 @@ public class AppointmentContentCard extends Card {
     public void setupInnerViewElements(ViewGroup parent, View view) {
         ContentTextView = (TextView) view.findViewById(R.id.card_content_textview);
         ContentButton = (TextView) view.findViewById(R.id.card_content_button);
+
+
+        if (details != null) {
+            setClickListener(magister, appointment, details);
+        } else if (homeworkDetails != null) {
+            setClickListener(magister, appointment, homeworkDetails);
+        } else {
+            Log.e(TAG, "setupInnerViewElements: No activity supplied!", new IllegalArgumentException());
+        }
         ready = true;
         Log.d(TAG, "setupInnerViewElements: Done setting up");
     }

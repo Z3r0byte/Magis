@@ -17,6 +17,7 @@
 package com.z3r0byte.magis.Adapters;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.text.Html;
 import android.view.LayoutInflater;
@@ -86,6 +87,9 @@ public class HomeworkAdapter extends ArrayAdapter<Appointment> {
             homework.setPaintFlags(homework.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
         }
 
+        //fixing a weird bug
+        period.setTextColor(Color.WHITE);
+        lesson.setTextColor(Color.BLACK);
 
         return rowView;
     }

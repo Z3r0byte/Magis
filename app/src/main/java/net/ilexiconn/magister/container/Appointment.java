@@ -88,4 +88,21 @@ public class Appointment implements Serializable {
 
     @SerializedName("Omschrijving")
     public String description;
+
+    @Override
+    public String toString() {
+        return "Appointment{" +
+                "id=" + id +
+                ", startDateString='" + startDateString + '\'' +
+                ", endDateString='" + endDateString + '\'' +
+                ", periodFrom=" + periodFrom +
+                ", periodUpToAndIncluding=" + periodUpToAndIncluding +
+                ", takesAllDay=" + takesAllDay +
+                ", location='" + location + '\'' +
+                ", classState=" + classState +
+                ", finished=" + finished +
+                ", content='" + content + '\'' +
+                ", description='" + description + '\'' +
+                '}';
+    }
 }

@@ -19,6 +19,7 @@ package com.z3r0byte.magis.Tasks;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import com.z3r0byte.magis.Adapters.HomeworkAdapter;
 import com.z3r0byte.magis.R;
@@ -94,10 +95,27 @@ public class HomeworkTask extends AsyncTask<Void, Void, Appointment[]> {
             activity.mHomeworkAdapter = new HomeworkAdapter(activity, activity.mAppointments);
             activity.listView.setAdapter(activity.mHomeworkAdapter);
         } else {
-            activity.mSwipeRefreshLayout.setRefreshing(false);
-            activity.errorView.setVisibility(View.VISIBLE);
-            activity.errorView.setConfig(ErrorViewConfigs.NoHomeworkConfig);
-            Log.e(TAG, error);
+            CalendarDB db = new CalendarDB(activity);
+            appointments = db.getHomework(date1);
+            if (appointments != null && appointments.length != 0) {
+                activity.mAppointments = appointments;
+                activity.mSwipeRefreshLayout.setRefreshing(false);
+                activity.errorView.setVisibility(View.GONE);
+                activity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(activity, activity.getString(R.string.msg_using_cache), Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+                activity.mHomeworkAdapter = new HomeworkAdapter(activity, activity.mAppointments);
+                activity.listView.setAdapter(activity.mHomeworkAdapter);
+            } else {
+                activity.mSwipeRefreshLayout.setRefreshing(false);
+                activity.errorView.setVisibility(View.VISIBLE);
+                activity.errorView.setConfig(ErrorViewConfigs.NoHomeworkConfig);
+                Log.e(TAG, error);
+            }
         }
     }
 }

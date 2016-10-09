@@ -40,6 +40,9 @@ public class DateUtils {
             return dateFormat.parse(date);
         } catch (ParseException e) {
             e.printStackTrace();
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+            return null;
         }
         Date error = new Date(2000, 12, 31);
         return error;

@@ -103,6 +103,9 @@ public class GradesSubjectTask extends AsyncTask<Void, Void, Grade[]> {
 
     @Override
     protected void onPostExecute(final Grade[] grades) {
+        if (activity == null) {
+            return;
+        }
         if (grades == null || grades.length == 0) {
             Log.e(TAG, "onPostExecute: No Grades!");
             activity.runOnUiThread(new Runnable() {

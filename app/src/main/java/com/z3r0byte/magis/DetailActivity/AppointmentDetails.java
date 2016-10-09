@@ -69,6 +69,12 @@ public class AppointmentDetails extends AppCompatActivity {
             finish();
         }
 
+        if (appointment != null) {
+            Log.d(TAG, "onCreate: appointment: " + appointment.toString());
+        } else {
+            Log.e(TAG, "onCreate: Appointment is null!", new IllegalArgumentException());
+        }
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.Toolbar);
         toolbar.setTitle(appointment.description);
         setSupportActionBar(toolbar);
@@ -78,6 +84,7 @@ public class AppointmentDetails extends AppCompatActivity {
         AppointmentDetailCard mainCardContent = new AppointmentDetailCard(this);
         CardHeader cardHeader = new CardHeader(this);
         cardHeader.setTitle(getString(R.string.msg_details));
+        mainCardContent.waitForReady();
         mainCardContent.setDescription(this, appointment.description);
         mainCardContent.setLocation(this, appointment.location);
         mainCardContent.setPeriod(this, appointment.periodFrom + "");
@@ -96,6 +103,8 @@ public class AppointmentDetails extends AppCompatActivity {
         cardHomeWork = (CardViewNative) findViewById(R.id.card_content);
         if (appointment.infoType.getID() != 0 && !appointment.content.isEmpty()) {
 
+            contentCard = new AppointmentContentCard(this, mMagister, appointment, this);
+            CardHeader cardHeader2 = new CardHeader(this);
             InfoType infoType = appointment.infoType;
             int type = infoType.getID();
             switch (type) {
@@ -124,17 +133,14 @@ public class AppointmentDetails extends AppCompatActivity {
                     Type = getString(R.string.msg_homework);
                     break;
             }
-
-            contentCard = new AppointmentContentCard(this);
-            CardHeader cardHeader2 = new CardHeader(this);
             if (appointment.finished) {
                 cardHeader2.setTitle(Type + " (" + getString(R.string.msg_finished) + ")");
             } else {
                 cardHeader2.setTitle(Type);
             }
+            contentCard.waitForReady();
             contentCard.addCardHeader(cardHeader2);
-            contentCard.setContent(Html.fromHtml(appointment.content).toString(), appointment.finished);
-            contentCard.setClickListener(mMagister, appointment, this);
+            contentCard.setContent(this, Html.fromHtml(appointment.content).toString(), appointment.finished);
             cardHomeWork.setCard(contentCard);
         } else {
             cardHomeWork.setVisibility(View.GONE);

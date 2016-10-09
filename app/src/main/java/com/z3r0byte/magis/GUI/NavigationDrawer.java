@@ -20,8 +20,10 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 
 import com.afollestad.materialdialogs.DialogAction;
@@ -31,6 +33,7 @@ import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
+import com.mikepenz.materialdrawer.holder.BadgeStyle;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
@@ -40,6 +43,7 @@ import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 import com.z3r0byte.magis.AccountActivity;
 import com.z3r0byte.magis.GradeActivity;
 import com.z3r0byte.magis.HomeworkActivity;
+import com.z3r0byte.magis.Networking.GetRequest;
 import com.z3r0byte.magis.PresenceActivity;
 import com.z3r0byte.magis.R;
 import com.z3r0byte.magis.SettingsActivity;
@@ -51,7 +55,10 @@ import com.z3r0byte.magis.Utils.DB_Handlers.NewGradesDB;
 import com.z3r0byte.magis.Utils.MagisActivity;
 
 import net.ilexiconn.magister.container.Profile;
+import net.ilexiconn.magister.container.Status;
 import net.ilexiconn.magister.container.User;
+
+import java.io.IOException;
 
 /**
  * Created by basva on 14-5-2016.
@@ -93,8 +100,11 @@ public class NavigationDrawer {
             .withIcon(GoogleMaterial.Icon.gmd_bug_report).withSelectable(false);
     static PrimaryDrawerItem settingsItem = new SecondaryDrawerItem().withName(R.string.drawer_settings)
             .withIcon(GoogleMaterial.Icon.gmd_settings).withSelectable(false);
+    static PrimaryDrawerItem statusItem = new SecondaryDrawerItem().withName(R.string.drawer_status)
+            .withIcon(GoogleMaterial.Icon.gmd_dns).withSelectable(false).withBadgeStyle(new BadgeStyle(Color.GRAY, Color.GRAY).withTextColor(Color.WHITE)).withBadge("?").withIdentifier(123);
 
     public void SetupNavigationDrawer() {
+        getStatus();
 
         final AccountHeader accountHeader = new AccountHeaderBuilder()
                 .withActivity(activity)
@@ -127,6 +137,7 @@ public class NavigationDrawer {
                         //refreshSessionItem,
                         settingsItem,
                         bugItem,
+                        statusItem,
                         logoutItem
                 )
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
@@ -180,6 +191,9 @@ public class NavigationDrawer {
                         } else if (drawerItem == bugItem) {
                             reportBug();
                             drawer.closeDrawer();
+                        } else if (drawerItem == statusItem) {
+                            explainStatus();
+                            drawer.closeDrawer();
                         }
                         return true;
                     }
@@ -223,10 +237,52 @@ public class NavigationDrawer {
         }
     }
 
+    private void getStatus() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Status status;
+                try {
+                    status = Status.getStatusByString(GetRequest.getRequest("http://magis-app.nl/status/API/status", null));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    return;
+                }
+                Log.d(TAG, "run: Status: " + status.getStatus());
+                if (status == Status.OK) {
+                    statusItem.withBadgeStyle(new BadgeStyle(Color.rgb(0, 153, 0), Color.rgb(0, 153, 0)).withTextColor(Color.WHITE)).withBadge("✔");
+                } else if (status == Status.SLOW) {
+                    statusItem.withBadgeStyle(new BadgeStyle(Color.rgb(255, 128, 0), Color.rgb(255, 128, 0)).withTextColor(Color.WHITE)).withBadge("~");
+                } else if (status == Status.OFFLINE) {
+                    statusItem.withBadgeStyle(new BadgeStyle(Color.RED, Color.RED).withTextColor(Color.WHITE)).withBadge("✖");
+                }
+                activity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        drawer.updateItem(statusItem);
+                    }
+                });
+            }
+        }).start();
+    }
+
     private void reportBug() {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(activity);
         alertDialogBuilder.setTitle(activity.getString(R.string.dialog_bug_title));
         alertDialogBuilder.setMessage(activity.getString(R.string.dialog_bug_desc));
+        alertDialogBuilder.setPositiveButton("Oké", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+            }
+        });
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
+    }
+
+    private void explainStatus() {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(activity);
+        alertDialogBuilder.setTitle(activity.getString(R.string.dialog_status_title));
+        alertDialogBuilder.setMessage(activity.getString(R.string.dialog_status_desc));
         alertDialogBuilder.setPositiveButton("Oké", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
