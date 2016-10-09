@@ -17,11 +17,7 @@
 package com.z3r0byte.magis.Fragments;
 
 
-import android.app.AlertDialog;
-import android.content.ActivityNotFoundException;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -34,19 +30,16 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.heinrichreimersoftware.materialintro.app.SlideFragment;
-import com.z3r0byte.magis.BuildConfig;
 import com.z3r0byte.magis.R;
 
 import net.ilexiconn.magister.Magister;
 import net.ilexiconn.magister.container.Profile;
 import net.ilexiconn.magister.container.School;
 import net.ilexiconn.magister.container.User;
-import net.ilexiconn.magister.util.LogUtil;
 
 import java.io.IOException;
 import java.security.InvalidParameterException;
 import java.text.ParseException;
-import java.util.Arrays;
 
 public class LoginFragment extends SlideFragment {
 
@@ -158,7 +151,7 @@ public class LoginFragment extends SlideFragment {
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            final int buildnumber = BuildConfig.VERSION_CODE;
+                            /*final int buildnumber = BuildConfig.VERSION_CODE;
                             AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
                             alertDialogBuilder.setTitle("Problemen met inloggen?");
                             alertDialogBuilder.setMessage("Zegt de app dat je geen verbinding hebt, maar heb je dat wel? Klik dan op \"Mail mij\" om " +
@@ -188,7 +181,7 @@ public class LoginFragment extends SlideFragment {
                             AlertDialog alertDialog = alertDialogBuilder.create();
                             alertDialog.show();
                             e.printStackTrace();
-
+                            */
                             Toast.makeText(c, getResources().getString(R.string.err_no_connection), Toast.LENGTH_SHORT).show();
                         }
                     });

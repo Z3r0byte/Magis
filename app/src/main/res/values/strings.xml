@@ -30,10 +30,19 @@
 
     <string name="dialog_logout_desc">Als je uitlogt zul je opnieuw moeten inloggen en alle data wordt gewist.</string>
     <string name="dialog_logout_title">Uitloggen?</string>
-    <string name="dialog_skip_login_desc">Als je het inloggen overslaat, kun je alleen de offline data gebruiken totdat je de sessie ververst.</string>
+    <string name="dialog_skip_login_desc">Als je het inloggen overslaat, kun je alleen de offline data gebruiken totdat je de
+        sessie ververst.</string>
     <string name="dialog_skip_login_title">Inloggen overslaan?</string>
     <string name="dialog_status_title">Magister 6 status</string>
-    <string name="dialog_status_desc">Hiermee kun je zien of Magister 6 een storing heeft. Groen betekent alles OK, oranje betekent langzaam, en rood betekent offline. \nDe gegevens worden van http://status.magis-app.nl/ gehaald, een sub-projectje van mij. De API kun je zelf ook gebruiken, mocht je dat willen.</string>
+    <string name="dialog_status_desc">Hiermee kun je zien of Magister 6 een storing heeft. Groen betekent alles OK, oranje
+        betekent langzaam, en rood betekent offline. \nDe gegevens worden van http://status.magis-app.nl/ gehaald, een
+        sub-projectje van mij. De API kun je zelf ook gebruiken, mocht je dat willen.</string>
+    <string name="dialog_manual_school_title">Handmatig invoeren</string>
+    <string name="dialog_manual_school_desc">Voer de url van de school handmatig in. Voer alleen het gedeelte voor .magister.net
+        in.\nVb: Als de url van je school https://commanderij.magister.net is, voer je alleen commanderij in.</string>
+    <string name="dialog_confirm_school_title">URL bevestigen</string>
+    <string name="dialog_confirm_school_desc">Je hebt %1$s ingevoerd, is https://%2$s.magister.net de URL van jouw school? Let op:
+        Als je de verkeerde URL hebt ingevoerd, kun je niet inloggen!</string>
     <string name="dialog_bug_title">Bug melden</string>
     <string name="dialog_bug_desc">Als je een fout wilt melden, kun je gewoon je telefoon op en neer schudden. De app maakt dan
         automatisch een screenshot en opent een mail venster. Hier kun je dan een korte beschrijving van de fout invullen.</string>
@@ -48,7 +57,7 @@
     <string name="err_set_date_first">Stel eerst een datum in.</string>
     <string name="err_fill_in_everything">Fout: Vul eerst alle velden in!</string>
     <string name="err_invalid_session">Ongeldige sessie…</string>
-    <string name="err_no_connection">Geen verbinding…</string>
+    <string name="err_no_connection">Er is iets misgegaan in de verbinding, controleer je internetverbinding.</string>
     <string name="err_no_lessons">Er zijn geen lessen gevonden</string>
     <string name="err_not_logged_in">Fout: je bent niet ingelogd.</string>
     <string name="err_set_start_first">Stel eerst een begintijd in.</string>
@@ -95,7 +104,7 @@
     <string name="msg_login_progress_2">Stap 2/2: opnieuw inloggen...</string>
     <string name="msg_login">Log in</string>
     <string name="msg_no_subject">Dit is geen vak!</string>
-    <string name="msg_no_results">Er zijn geen resultaten</string>
+    <string name="msg_no_results">Er zijn (nog) geen resultaten, tik om handmatig in te voeren.</string>
     <string name="msg_old_version">De data-structuur van Magis is veranderd, we laten je daarom de login-stappen opnieuw doorlopen.</string>
     <string name="msg_oral">Mondeling</string>
     <string name="msg_patience">Even geduld aub</string>

@@ -18,8 +18,11 @@ package com.z3r0byte.magis.Fragments;
 
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -175,6 +178,8 @@ public class SearchSchoolFragment extends SlideFragment {
                                     mAllowForward = true;
                                     Toast.makeText(c, getResources().getString(R.string.msg_school_selected) + ' ' + mSchools[position].name
                                             , Toast.LENGTH_SHORT).show();
+                                } else if (mSchools[position].name.equals(getResources().getString(R.string.msg_no_results))) {
+                                    manualInput();
                                 }
                             }
                         });
@@ -184,6 +189,60 @@ public class SearchSchoolFragment extends SlideFragment {
             }
         });
         mSearchThread.start();
+    }
+
+    private void manualInput() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle(R.string.dialog_manual_school_title);
+        builder.setMessage(R.string.dialog_manual_school_desc);
+
+        final EditText input = new EditText(getActivity());
+        input.setInputType(InputType.TYPE_CLASS_TEXT);
+        builder.setView(input);
+
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                confirmSchool(input.getText().toString());
+            }
+        });
+        builder.setNegativeButton("Annuleer", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
+    }
+
+    private void confirmSchool(final String URL) {
+        android.app.AlertDialog.Builder alertDialogBuilder = new android.app.AlertDialog.Builder(getActivity());
+        alertDialogBuilder.setTitle(R.string.dialog_confirm_school_title);
+        alertDialogBuilder.setMessage(String.format(getString(R.string.dialog_confirm_school_desc), URL, URL));
+        alertDialogBuilder.setPositiveButton("Dit klopt", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                School manualschool = new School();
+                manualschool.name = "Handmatig ingevoerd";
+                manualschool.url = "https://" + URL + ".magister.net";
+                manualschool.id = "999";
+                String school = new Gson().toJson(manualschool);
+                c.getSharedPreferences("data", Context.MODE_PRIVATE).edit().
+                        putString("School", school).apply();
+                mAllowForward = true;
+                Toast.makeText(c, getResources().getString(R.string.msg_school_selected) + ' ' + manualschool.name
+                        , Toast.LENGTH_SHORT).show();
+            }
+        });
+        alertDialogBuilder.setNegativeButton("Ik heb me vergist", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                manualInput();
+            }
+        });
+        android.app.AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
     }
 
     @Override
