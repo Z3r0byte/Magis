@@ -48,13 +48,13 @@ public class GradeAdapter extends TypeAdapter<Grade[]> {
     public Grade[] read(JsonReader in) throws IOException {
         JsonObject object = gson.getAdapter(JsonElement.class).read(in).getAsJsonObject();
         JsonArray array = null;
-        
+
         if (object.has("Items")) {
             array = object.get("Items").getAsJsonArray();
         } else {
             return new Grade[]{};
         }
-        
+
         List<Grade> gradeList = new ArrayList<Grade>();
         for (JsonElement element : array) {
             JsonObject object1 = element.getAsJsonObject();
