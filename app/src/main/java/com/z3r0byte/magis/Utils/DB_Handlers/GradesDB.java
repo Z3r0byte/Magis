@@ -189,7 +189,7 @@ public class GradesDB extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         String Query = "SELECT * FROM " + TABLE_GRADES + " WHERE " + KEY_STUDY_ID + " = " + study.id + " AND " + KEY_GRADE_ID
                 + " != 0 AND " + KEY_SORTABLE_DATE + " IN (SELECT MAX(" + KEY_SORTABLE_DATE
-                + ") FROM " + TABLE_GRADES + " WHERE " + KEY_GRADE_ROW_TYPE + " = 2 OR "
+                + ") FROM " + TABLE_GRADES + " WHERE " + KEY_GRADE_ROW_TYPE + " = 1 OR " + KEY_GRADE_ROW_TYPE + " = 2 OR "
                 + KEY_GRADE_ROW_TYPE + " = 6"
                 + " GROUP BY " + KEY_SUBJECT + ") ORDER BY " + KEY_GRADE_ROW_TYPE + " DESC";
         Cursor cursor = db.rawQuery(Query, null);
@@ -219,7 +219,7 @@ public class GradesDB extends SQLiteOpenHelper {
         List<Grade> gradeList = new ArrayList<Grade>();
         for (Grade grade : grades) {
             try {
-                if (grade.gradeRow.rowSort.getID() == 2 || grade.gradeRow.rowSort.getID() == 6) {
+                if (grade.gradeRow.rowSort.getID() == 2 || grade.gradeRow.rowSort.getID() == 6 || grade.gradeRow.rowSort.getID() == 1) {
                     gradeList.add(grade);
                 }
             } catch (NullPointerException e) {
