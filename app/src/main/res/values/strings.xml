@@ -17,6 +17,10 @@
 <resources>
     <string name="app_name">Magis</string>
 
+    <string name="button_do_nothing">Niks doen (%1$s)</string>
+    <string name="button_donate">Doneren</string>
+    <string name="button_watch_ad">Advertentie</string>
+
     <string name="customactivityoncrash_error_activity_close_app">App sluiten</string>
     <string name="customactivityoncrash_error_activity_error_details_clipboard_label">Fouten-informatie</string>
     <string name="customactivityoncrash_error_activity_error_details_close">Sluiten</string>
@@ -117,6 +121,11 @@
     <string name="msg_search_school">School zoeken</string>
     <string name="msg_search">Zoek</string>
     <string name="msg_searching">Zoeken…</string>
+    <string name="msg_sponsor_title">Beste gebruiker, even een bericht:</string>
+    <string name="msg_sponsor_content">Het ontwikkelen van apps zoals Magis kost geld. Zoals je weet is Magis gratis en bevat deze geen advertenties, ik heb dus alleen
+        maar kosten, ongeveer 70 euro per jaar. Hierbij vraag ik je dan ook mij te steunen. Als elke gebruiker 1 keer op de advertentie zou klikken (en zou wachten tot de
+        pagina geladen is), zou dit bericht maar één keer per jaar weergegeven te hoeven worden. En als iedereen €0,50 zou doneren, zou dit bericht nooit meer hoeven komen.
+         \n \nAlvast bedankt, \nBas van den Boom - Ontwikkelaar Magis</string>
     <string name="msg_start">start</string>
     <string name="msg_teacher">Docent</string>
     <string name="msg_test">Proefwerk</string>
@@ -142,6 +151,7 @@
     <string name="title_new_appointment">Nieuwe afspraak</string>
     <string name="title_homework">Huiswerk</string>
     <string name="title_presence">Aanwezigheid</string>
+    <string name="title_ad">Steun mij</string>
 
     <string name="aboutLibraries_description_showIcon">true</string>
     <string name="aboutLibraries_description_showVersion">true</string>
