@@ -17,7 +17,8 @@
 <resources>
     <string name="app_name">Magis</string>
 
-    <string name="button_do_nothing">Niks doen (%1$s)</string>
+    <string name="button_do_nothing">Niks doen (%1$d)</string>
+    <string name="button_do_nothing_active">Niks doen</string>
     <string name="button_donate">Doneren</string>
     <string name="button_watch_ad">Advertentie</string>
 
@@ -50,6 +51,10 @@
     <string name="dialog_bug_title">Bug melden</string>
     <string name="dialog_bug_desc">Als je een fout wilt melden, kun je gewoon je telefoon op en neer schudden. De app maakt dan
         automatisch een screenshot en opent een mail venster. Hier kun je dan een korte beschrijving van de fout invullen.</string>
+    <string name="dialog_do_nothin_title">Niks doen?</string>
+    <string name="dialog_do_nothing_desc">Als je niks doet zul je dit bericht vandaag nog elke keer krijgen als je de app opstart. Als je toch een advertentie
+    kijkt, zul je dit bericht voorlopig niet meer zien, en als je doneert krijg je dit bericht nooit meer te zien.</string>
+
 
     <string name="drawer_logout">Log uit</string>
     <string name="drawer_refresh_session">Sessie verversen</string>
@@ -121,7 +126,7 @@
     <string name="msg_search_school">School zoeken</string>
     <string name="msg_search">Zoek</string>
     <string name="msg_searching">Zoeken…</string>
-    <string name="msg_sponsor_title">Beste gebruiker, even een bericht:</string>
+    <string name="msg_sponsor_title">Beste gebruiker,</string>
     <string name="msg_sponsor_content">Het ontwikkelen van apps zoals Magis kost geld. Zoals je weet is Magis gratis en bevat deze geen advertenties, ik heb dus alleen
         maar kosten, ongeveer 70 euro per jaar. Hierbij vraag ik je dan ook mij te steunen. Als elke gebruiker 1 keer op de advertentie zou klikken (en zou wachten tot de
         pagina geladen is), zou dit bericht maar één keer per jaar weergegeven te hoeven worden. En als iedereen €0,50 zou doneren, zou dit bericht nooit meer hoeven komen.

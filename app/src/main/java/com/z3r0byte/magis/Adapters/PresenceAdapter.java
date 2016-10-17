@@ -79,7 +79,7 @@ public class PresenceAdapter extends ArrayAdapter<Presence> {
         period.setText(presences[position].period + "");
         if (presences[position].period == 0) {
             period.setText("");
-            rowView.findViewById(R.id.layout_list_calendar_period).setBackgroundResource(0);
+            rowView.findViewById(R.id.layout_period).setBackgroundResource(0);
         }
         lesson.setText(presences[position].appointment.description);
         homework.setText(presences[position].description);

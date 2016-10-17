@@ -38,10 +38,11 @@
         android:layout_centerHorizontal="true">
 
         <Button
+            android:enabled="false"
             android:text="@string/button_do_nothing"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:id="@+id/button2"
+            android:id="@+id/do_nothing"
             android:layout_weight="0.33" />
 
         <Button
@@ -49,14 +50,14 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.33"
-            android:id="@+id/button3" />
+            android:id="@+id/donate" />
 
         <Button
             android:text="@string/button_watch_ad"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.33"
-            android:id="@+id/button" />
+            android:id="@+id/watch_ad" />
     </LinearLayout>
 
     <TextView

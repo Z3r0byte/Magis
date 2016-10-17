@@ -141,7 +141,7 @@ public class NavigationDrawer {
                         //refreshSessionItem,
                         settingsItem,
                         bugItem,
-                        //sponsorItem,
+                        sponsorItem,
                         statusItem,
                         logoutItem
                 )
