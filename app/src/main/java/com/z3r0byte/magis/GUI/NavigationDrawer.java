@@ -102,6 +102,9 @@ public class NavigationDrawer {
             .withIcon(GoogleMaterial.Icon.gmd_settings).withSelectable(false);
     static PrimaryDrawerItem statusItem = new SecondaryDrawerItem().withName(R.string.drawer_status)
             .withIcon(GoogleMaterial.Icon.gmd_dns).withSelectable(false).withBadgeStyle(new BadgeStyle(Color.GRAY, Color.GRAY).withTextColor(Color.WHITE)).withBadge("?").withIdentifier(123);
+    static PrimaryDrawerItem sponsorItem = new SecondaryDrawerItem().withName(R.string.title_ad)
+            .withIcon(GoogleMaterial.Icon.gmd_attach_money).withSelectable(false);
+
 
     public void SetupNavigationDrawer() {
         getStatus();
@@ -137,6 +140,7 @@ public class NavigationDrawer {
                         //refreshSessionItem,
                         settingsItem,
                         bugItem,
+                        //sponsorItem,
                         statusItem,
                         logoutItem
                 )
@@ -194,6 +198,10 @@ public class NavigationDrawer {
                         } else if (drawerItem == statusItem) {
                             explainStatus();
                             drawer.closeDrawer();
+                        } else if (drawerItem == sponsorItem) {
+                            CloseDrawer();
+                            //Intent intent = new Intent(activity, AdActivity.class);
+                            //activity.startActivity(new Intent(intent));
                         }
                         return true;
                     }
@@ -243,7 +251,7 @@ public class NavigationDrawer {
             public void run() {
                 Status status;
                 try {
-                    status = Status.getStatusByString(GetRequest.getRequest("http://magis-app.nl/status/API/status", null));
+                    status = Status.getStatusByString(GetRequest.getRequest("https://status.magistify.nl/API/status", null));
                 } catch (IOException e) {
                     e.printStackTrace();
                     return;
