@@ -16,6 +16,8 @@
 
 package com.z3r0byte.magis;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -158,6 +160,31 @@ public class CalendarActivity extends MagisActivity implements DatePickerDialog.
         SharedListener.finishInitiator = new FinishInitiator();
         FinishResponder responder = new FinishResponder(this);
         SharedListener.finishInitiator.addListener(responder);
+
+        showMessage();
+    }
+
+    private void showMessage() {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setTitle("Belangrijk bericht"); //f*ck this shit, no resources! :D
+        alertDialogBuilder.setMessage("Even een vervelende mededeling:\n" +
+                "Ik heb besloten te stoppen met het ontwikkelen van Magis voor verschillende redenen. Mocht je interesse hebben om de ontwikkeling over te nemen, mail dan even.\n" +
+                "De app zal gewoon blijven werken zoals je gewent bent, maar zal geen updates meer ontvangen.\n\n" +
+                "Maar ik heb ook nog wat leuker nieuws: er komt wel een andere app voor magister, maar daarin zullen vooral handige tooltjes zitten zoals de aut-stil functie en meldingen. Mocht je een mailtje willen krijgen wanneer deze app af is, ga dan even naar https://magistify.nl/ \n\n" +
+                "Bedankt voor het gebruiken van Magis!");
+        alertDialogBuilder.setPositiveButton("Oké", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("data", MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putBoolean("message_shown", true);
+                editor.apply();
+            }
+        });
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("data", MODE_PRIVATE);
+        Boolean show = sharedPreferences.getBoolean("message_shown", false);
+        if (show) alertDialog.show();
     }
 
 
