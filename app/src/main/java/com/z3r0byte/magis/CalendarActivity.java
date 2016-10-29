@@ -169,8 +169,8 @@ public class CalendarActivity extends MagisActivity implements DatePickerDialog.
         alertDialogBuilder.setTitle("Belangrijk bericht"); //f*ck this shit, no resources! :D
         alertDialogBuilder.setMessage("Even een vervelende mededeling:\n" +
                 "Ik heb besloten te stoppen met het ontwikkelen van Magis voor verschillende redenen. Mocht je interesse hebben om de ontwikkeling over te nemen, mail dan even.\n" +
-                "De app zal gewoon blijven werken zoals je gewent bent, maar zal geen updates meer ontvangen.\n\n" +
-                "Maar ik heb ook nog wat leuker nieuws: er komt wel een andere app voor magister, maar daarin zullen vooral handige tooltjes zitten zoals de aut-stil functie en meldingen. Mocht je een mailtje willen krijgen wanneer deze app af is, ga dan even naar https://magistify.nl/ \n\n" +
+                "De app zal gewoon blijven werken zoals je gewend bent, maar zal geen updates meer ontvangen.\n\n" +
+                "Maar ik heb ook nog wat leuker nieuws: er komt wel een andere app voor magister, maar daarin zullen vooral handige tooltjes zitten zoals de auto-stil functie en meldingen. Mocht je een mailtje willen krijgen wanneer deze app af is, ga dan even naar https://magistify.nl/ \n\n" +
                 "Bedankt voor het gebruiken van Magis!");
         alertDialogBuilder.setPositiveButton("Oké", new DialogInterface.OnClickListener() {
             @Override
@@ -184,7 +184,7 @@ public class CalendarActivity extends MagisActivity implements DatePickerDialog.
         AlertDialog alertDialog = alertDialogBuilder.create();
         SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("data", MODE_PRIVATE);
         Boolean show = sharedPreferences.getBoolean("message_shown", false);
-        if (show) alertDialog.show();
+        if (!show) alertDialog.show();
     }
 
 

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.z3r0byte.magis;
+/*package com.z3r0byte.magis;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -201,3 +201,5 @@ public class AdActivity extends AppCompatActivity {
         Log.e(TAG, "**** Magis Error: " + message);
     }
 }
+*/
+//This isnt done yet, so it is commented out
