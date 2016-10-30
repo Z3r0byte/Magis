@@ -1,5 +1,5 @@
-# Magis !!Abandoned!!
-This is the github repository for my app Magis, an unofficial, free and open-source Magister 6 App. This project is abandoned, if you'd like to take over the development, please contact me.
+# Magis
+This is the github repository for my app Magis, an unofficial, free and open-source Magister 6 App. This project is now maintained by [Jordy Sinke](http://jordysinke.com/)
 
 
 ######[Website](http://magis-app.nl)
