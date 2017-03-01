@@ -1,5 +1,5 @@
 # Magis
-This is the github repository for my app Magis, an unofficial, free and open-source Magister 6 App.
+This is the github repository for my app Magis, an unofficial, free and open-source Magister 6 App. This project is now maintained by [Jordy Sinke](http://jordysinke.com/)
 
 
 ######[Website](http://magis-app.nl)
