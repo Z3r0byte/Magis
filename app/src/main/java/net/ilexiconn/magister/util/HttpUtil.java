@@ -88,7 +88,6 @@ public class HttpUtil {
     }
 
     public static InputStreamReader httpPost(String url, String data) throws IOException {
-        Log.d(TAG, "httpPost() called with: url = [" + url + "], data = [" + data + "]");  //Sorry, but this is really nescessary for debugging TODO remove this when #25 is fixed
         HttpsURLConnection connection = (HttpsURLConnection) new URL(url).openConnection();
         connection.setDoOutput(true);
         connection.setRequestMethod("POST");

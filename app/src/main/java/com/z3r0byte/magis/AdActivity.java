@@ -14,21 +14,9 @@
  * limitations under the License.
  */
 
-/*package com.z3r0byte.magis;
+package com.z3r0byte.magis;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-
-import com.z3r0byte.magis.Utils.IabHelper;
-import com.z3r0byte.magis.Utils.IabResult;
-
-public class AdActivity extends AppCompatActivity {
+/*public class AdActivity extends AppCompatActivity {
 
     Toolbar mToolbar;
     Boolean ForceAction;
@@ -37,7 +25,7 @@ public class AdActivity extends AppCompatActivity {
     Button wachtAd;
     IabHelper mHelper;
 
-    static final String SKU_50_CENTS = "50cents";
+    static final String SKU_100_CENTS = "com.z3r0byte.magis.donation1";
     static final int RC_REQUEST = 10001;
     private static final String TAG = "AdActivity";
 
@@ -97,7 +85,7 @@ public class AdActivity extends AppCompatActivity {
         }
 
 
-        String base64EncodedPublicKey = "CONSTRUCT_YOUR_KEY_AND_PLACE_IT_HERE";
+        String base64EncodedPublicKey = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAmLr6TccuLpJerL0p0wvzn9l9rYNkVpu45TbeMwWBra2aLw30OePnxRjevs9tASRaq72Yv7pElQv2YMRPwjZKt0mnmkSDNQTCFTsadsq5FYsFZ8EK6S7DIsDIoe32rjST8+hqsMDuGaEtmuv7a/UKmWbzzMgaI+DQMx7qG9fimc2qmlup+hZzlqN9z4I4Wn5BzecIyAL0lLWV/fRsEQNeaFj3shqdfeZMZ0a14AbHwzNDLXdT4uvXLq2lrJieOFWZ2Y9c7hkkmkpA43VhCTo3NYSfhnDOrjbUM0PzDp7Fw4ol748qgKXJf8a/0ExEKM369U+xrE6bmTLFiStabUlsHwIDAQAB";
         Log.d(TAG, "Creating IAB helper.");
         mHelper = new IabHelper(this, base64EncodedPublicKey);
 
@@ -167,7 +155,7 @@ public class AdActivity extends AppCompatActivity {
 
 
     public void donate() {
-        mHelper.launchPurchaseFlow(this, SKU_50_CENTS, RC_REQUEST, mFinishedPurchaseListener, "some_key");
+        mHelper.launchPurchaseFlow(this, SKU_100_CENTS, RC_REQUEST, mFinishedPurchaseListener, "some_key");
     }
 
     public void watchAd() {
@@ -200,6 +188,55 @@ public class AdActivity extends AppCompatActivity {
     void complain(String message) {
         Log.e(TAG, "**** Magis Error: " + message);
     }
+
+    IabHelper.OnIabPurchaseFinishedListener mFinishedPurchaseListener = new IabHelper.OnIabPurchaseFinishedListener() {
+        @Override
+        public void onIabPurchaseFinished(IabResult result, Purchase info) {
+            if (result.isFailure()){
+                //handle error
+                return;
+            } else if (info.getSku().equals(SKU_100_CENTS)){
+                handlePurchase();
+            }
+        }
+    };
+
+    private void handlePurchase(){
+        mHelper.queryInventoryAsync(mReceivedInventoryListener);
+    }
+
+    IabHelper.QueryInventoryFinishedListener mReceivedInventoryListener = new IabHelper.QueryInventoryFinishedListener() {
+        @Override
+        public void onQueryInventoryFinished(IabResult result, Inventory inv) {
+            if (result.isFailure()){
+                //handle error
+                return;
+            } else {
+                mHelper.consumeAsync(inv.getPurchase(SKU_100_CENTS), mConsumeFinishedListener);
+            }
+        }
+    };
+
+    IabHelper.OnConsumeFinishedListener mConsumeFinishedListener = new IabHelper.OnConsumeFinishedListener() {
+        @Override
+        public void onConsumeFinished(Purchase purchase, IabResult result) {
+            if (result.isSuccess()){
+                sayThanks();
+            } else {
+                //handle error
+            }
+        }
+    };
+
+    private void sayThanks() {
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mHelper != null) mHelper.dispose();
+        mHelper = null;
+    }
 }
 */
-//This isnt done yet, so it is commented out

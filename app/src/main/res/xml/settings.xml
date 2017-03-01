@@ -49,12 +49,12 @@
 
 
     <com.codevscolor.materialpreference.widget.MaterialPreferenceCategory android:title="Over">
-        <android.support.v7.preference.ListPreference
+        <!--<android.support.v7.preference.ListPreference
             android:entries="@array/web_array"
             android:entryValues="@array/web_array_values"
             android:title="Bezoek de website:"
             android:summary="http://magis-app.nl"
-            android:key="website" />
+            android:key="website" /> -->
         <android.support.v7.preference.ListPreference
             android:entries="@array/library_array"
             android:entryValues="@array/library_array_values"

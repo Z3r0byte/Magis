@@ -25,16 +25,6 @@
         android:layout_width="match_parent"
         android:layout_height="56dp">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Belangrijke Toets"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
-            android:layout_marginTop="10dp"
-            android:id="@+id/list_text_subject"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
-            android:singleLine="true"/>
 
         <TextView
             android:id="@+id/list_text_date"
@@ -48,7 +38,7 @@
             android:singleLine="true"/>
 
         <TextView
-            android:layout_width="150dp"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:text="9.5"
             android:id="@+id/list_text_grade"
@@ -75,6 +65,18 @@
             android:layout_alignParentEnd="true"
             android:textAlignment="viewStart"
             android:text="× 3.0" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Belangrijke Toets"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:layout_toLeftOf="@id/list_text_grade"
+            android:layout_marginTop="10dp"
+            android:id="@+id/list_text_subject"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
+            android:singleLine="true" />
 
     </RelativeLayout>
 

@@ -43,7 +43,7 @@ import java.util.List;
 public class GradesDB extends SQLiteOpenHelper {
     private static final String TAG = "GradesDB";
 
-    private static final int DATABASE_VERSION = 11;
+    private static final int DATABASE_VERSION = 12;
 
     private static final String DATABASE_NAME = "gradesDB";
     private static final String TABLE_GRADES = "grades";
@@ -122,6 +122,7 @@ public class GradesDB extends SQLiteOpenHelper {
         for (Grade grade :
                 grades) {
 
+
             if (!isInDataBase(grade, db)) {
                 contentValues.put(KEY_GRADE_ID, grade.id);
                 contentValues.put(KEY_DISPENSATION, grade.dispensation);
@@ -185,13 +186,20 @@ public class GradesDB extends SQLiteOpenHelper {
         db.close();
     }
 
-    public Grade[] getUniqueAverageGrades(Study study) {
+    public Grade[] getUniqueAverageGrades(Study study, Boolean isOldFormat) {
         SQLiteDatabase db = this.getWritableDatabase();
-        String Query = "SELECT * FROM " + TABLE_GRADES + " WHERE " + KEY_STUDY_ID + " = " + study.id + " AND " + KEY_GRADE_ID
-                + " != 0 AND " + KEY_SORTABLE_DATE + " IN (SELECT MAX(" + KEY_SORTABLE_DATE
-                + ") FROM " + TABLE_GRADES + " WHERE " + KEY_GRADE_ROW_TYPE + " = 1 OR " + KEY_GRADE_ROW_TYPE + " = 2 OR "
-                + KEY_GRADE_ROW_TYPE + " = 6"
-                + " GROUP BY " + KEY_SUBJECT + ") ORDER BY " + KEY_GRADE_ROW_TYPE + " DESC";
+        String Query;
+        if (isOldFormat) {
+            Query = "SELECT * FROM " + TABLE_GRADES + " WHERE " + KEY_STUDY_ID + " = " + study.id + " AND " + KEY_GRADE_ID
+                    + " != 0 AND " + KEY_SORTABLE_DATE + " IN (SELECT MAX(" + KEY_SORTABLE_DATE
+                    + ") FROM " + TABLE_GRADES + " WHERE " + KEY_GRADE_ROW_TYPE + " = 2 OR " + KEY_GRADE_ROW_TYPE + " = 6"
+                    + " GROUP BY " + KEY_SUBJECT + ") ORDER BY " + KEY_GRADE_ROW_TYPE + " DESC";
+        } else {
+            Query = "SELECT * FROM " + TABLE_GRADES + " WHERE " + KEY_STUDY_ID + " = " + study.id + " AND " + KEY_GRADE_ID
+                    + " != 0 AND " + KEY_SORTABLE_DATE + " IN (SELECT MAX(" + KEY_SORTABLE_DATE
+                    + ") FROM " + TABLE_GRADES + " WHERE " + KEY_GRADE_ROW_TYPE + " = 4 OR " + KEY_GRADE_ROW_TYPE + " = 6"
+                    + " GROUP BY " + KEY_SUBJECT + ") ORDER BY " + KEY_GRADE_ROW_TYPE + " DESC";
+        }
         Cursor cursor = db.rawQuery(Query, null);
         Log.d(TAG, "getAppointmentsByDate: Query: " + Query);
         Log.d(TAG, "getAppointmentsByDate: amount of items: " + cursor.getCount());
@@ -207,8 +215,8 @@ public class GradesDB extends SQLiteOpenHelper {
                     grade.subject = gson.fromJson(cursor.getString(cursor.getColumnIndex(KEY_SUBJECT)), SubSubject.class);
                     grade.filledInDate = DateUtils.parseDate(cursor.getString(cursor.getColumnIndex(KEY_FILLED_IN_DATE)), "yyyy-MM-dd'T'HH:mm:ss");
                     grade.gradeRow = new GradeRow();
-                    Log.d(TAG, "getUniqueAverageGrades: rowtype: " + cursor.getInt(cursor.getColumnIndex(KEY_GRADE_ROW_TYPE)));
                     grade.gradeRow.rowSort = RowType.getTypeById(cursor.getInt(cursor.getColumnIndex(KEY_GRADE_ROW_TYPE)));
+                    Log.d(TAG, "getUniqueAverageGrades: rowtype: " + grade.gradeRow.rowSort.getID());
                     grades[i] = grade;
                     i++;
                 } while (cursor.moveToNext());
@@ -217,17 +225,32 @@ public class GradesDB extends SQLiteOpenHelper {
         cursor.close();
 
         List<Grade> gradeList = new ArrayList<Grade>();
-        for (Grade grade : grades) {
-            try {
-                if (grade.gradeRow.rowSort.getID() == 2 || grade.gradeRow.rowSort.getID() == 6 || grade.gradeRow.rowSort.getID() == 1) {
-                    gradeList.add(grade);
+        if (isOldFormat) {
+            for (Grade grade : grades) {
+                try {
+                    if (grade.gradeRow.rowSort.getID() == 2 || grade.gradeRow.rowSort.getID() == 6) {
+                        gradeList.add(grade);
+                    }
+                } catch (NullPointerException e) {
+                    e.printStackTrace();
                 }
-            } catch (NullPointerException e) {
+            }
+        } else {
+            for (Grade grade : grades) {
+                try {
+                    if (grade.gradeRow.rowSort.getID() == 2 || grade.gradeRow.rowSort.getID() == 4 || grade.gradeRow.rowSort.getID() == 6) {
+                        gradeList.add(grade);
+                    }
+                } catch (NullPointerException e) {
+                    e.printStackTrace();
+                }
             }
         }
         grades = gradeList.toArray(new Grade[gradeList.size()]);
 
-        Collections.reverse(Arrays.asList(grades));
+        if (isOldFormat) {
+            Collections.reverse(Arrays.asList(grades));
+        }
         return grades;
     }
 
