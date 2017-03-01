@@ -41,7 +41,6 @@ import com.mikepenz.materialdrawer.model.SectionDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 import com.z3r0byte.magis.AccountActivity;
-import com.z3r0byte.magis.AdActivity;
 import com.z3r0byte.magis.GradeActivity;
 import com.z3r0byte.magis.HomeworkActivity;
 import com.z3r0byte.magis.Networking.GetRequest;
@@ -141,7 +140,7 @@ public class NavigationDrawer {
                         //refreshSessionItem,
                         settingsItem,
                         bugItem,
-                        sponsorItem,
+                        //sponsorItem,
                         statusItem,
                         logoutItem
                 )
@@ -201,8 +200,8 @@ public class NavigationDrawer {
                             drawer.closeDrawer();
                         } else if (drawerItem == sponsorItem) {
                             CloseDrawer();
-                            Intent intent = new Intent(activity, AdActivity.class);
-                            activity.startActivity(new Intent(intent));
+                            //Intent intent = new Intent(activity, AdActivity.class);
+                            //activity.startActivity(new Intent(intent));
                         }
                         return true;
                     }
@@ -252,7 +251,7 @@ public class NavigationDrawer {
             public void run() {
                 Status status;
                 try {
-                    status = Status.getStatusByString(GetRequest.getRequest("http://magis-app.nl/status/API/status", null));
+                    status = Status.getStatusByString(GetRequest.getRequest("http://status.magistify.nl/API/status", null));
                 } catch (IOException e) {
                     e.printStackTrace();
                     return;

@@ -33,6 +33,8 @@ import net.ilexiconn.magister.handler.GradeHandler;
 
 import java.io.IOException;
 import java.security.InvalidParameterException;
+import java.util.Arrays;
+import java.util.Collections;
 
 /**
  * Created by bas on 7-7-16.
@@ -46,6 +48,7 @@ public class GradesTask extends AsyncTask<Void, Void, Grade[]> {
     public Study study;
 
     public String error;
+    Boolean isOldFormat;
 
 
     public GradesTask(MagisFragment fragment, Magister magister, Study study) {
@@ -79,17 +82,22 @@ public class GradesTask extends AsyncTask<Void, Void, Grade[]> {
 
 
             if (study == null || study.id == magister.currentStudy.id) {
-                grades = gradeHandler.getGrades(false, true, true);
+                Log.d(TAG, "doInBackground: Getting grades of current study");
+                grades = gradeHandler.getGrades(false, false, true);
+                isOldFormat = false;
             } else {
+                Log.d(TAG, "doInBackground: Getting grades of other study");
                 grades = gradeHandler.getGradesFromStudy(study, true, false);
+                Collections.reverse(Arrays.asList(grades));
+                isOldFormat = true;
             }
-            Log.d(TAG, "doInBackground: Amount of new grades: " + grades.length);
+            Log.d(TAG, "doInBackground: Amount of grades: " + grades.length);
 
 
             GradesDB gradesDB = new GradesDB(fragment.getActivity());
             gradesDB.addGrades(grades, study.id);
 
-            grades = gradesDB.getUniqueAverageGrades(study);
+            grades = gradesDB.getUniqueAverageGrades(study, isOldFormat);
             Log.d(TAG, "doInBackground: amount of Grades: " + grades.length);
             return grades;
         } catch (IOException e) {
@@ -110,7 +118,7 @@ public class GradesTask extends AsyncTask<Void, Void, Grade[]> {
         }
         if (error != null) {
             GradesDB gradesDB = new GradesDB(fragment.getActivity());
-            Grade[] gradesCache = gradesDB.getUniqueAverageGrades(study);
+            Grade[] gradesCache = gradesDB.getUniqueAverageGrades(study, isOldFormat);
             if (gradesCache != null && gradesCache.length > 0) {
                 fragment.errorView.setVisibility(View.GONE);
                 fragment.grades = gradesCache;

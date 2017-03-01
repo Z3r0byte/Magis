@@ -37,7 +37,7 @@ public class SingleGrade implements Serializable {
     public int type;
 
     @SerializedName("Weging")
-    public int wage;
+    public Double wage;
 
     @SerializedName("WerkInformatieOmschrijving")
     public String workDescription;

@@ -20,10 +20,22 @@ import java.io.Serializable;
 
 public enum RowType implements Serializable {
     NULL(0),
-    UNKNOWN(1),
+    GRADE(1),
     AVERAGE(2),
-    NORMAL(3),
-    ACTUAL(6);
+    MAXIMUM(3),
+    FORMULA(4),
+    MINIMUM(5),
+    ACTUAL(6),
+    COUNT(7),
+    CEVO(8),
+    FREETEXT(9),
+    CEVOCPE(10),
+    CEVOCIE(11),
+    WEIGHT(12),
+    FINALGRADE(13),
+    SHORTAGES(14),
+    TREETOP(15),
+    SUBJECTCONDITION(16);
 
     private int id;
 

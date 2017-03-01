@@ -114,7 +114,7 @@ public class MainGradesFragment extends MagisFragment {
     private void showStudyGrades(int index) {
         Grade grade = grades[index];
         try {
-            if (grade.gradeRow.rowSort.getID() == 2) {
+            if (grade.gradeRow.rowSort.getID() == 2 || grade.gradeRow.rowSort.getID() == 4) {
                 Gson gson = new Gson();
                 Intent intent = new Intent(getActivity(), GradesSubjectActivity.class);
                 intent.putExtra("Magister", mMagister);
