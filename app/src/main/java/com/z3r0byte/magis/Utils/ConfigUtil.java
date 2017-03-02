@@ -51,4 +51,25 @@ public class ConfigUtil {
         SharedPreferences sharedPreferences = context.getSharedPreferences("com.z3r0byte.magis_preferences", Context.MODE_PRIVATE);
         return sharedPreferences.getString(name, "");
     }
+
+    public void setInteger(String name, Integer integer) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences("com.z3r0byte.magis_preferences", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(name, integer);
+        editor.apply();
+    }
+
+    public void setBoolean(String name, Boolean bol) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences("com.z3r0byte.magis_preferences", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(name, bol);
+        editor.apply();
+    }
+
+    public void setString(String name, String value) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences("com.z3r0byte.magis_preferences", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(name, value);
+        editor.apply();
+    }
 }

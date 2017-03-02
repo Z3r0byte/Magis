@@ -75,7 +75,7 @@ public class AppointmentsTask extends AsyncTask<Void, Void, Appointment[]> {
             Appointment[] appointments = appointmentHandler.getAppointments(date1, date2);
 
             CalendarDB db = new CalendarDB(activity);
-            db.addItems(appointments);
+            db.addItems(appointments, activity);
             appointments = db.getAppointmentsByDate(activity.date);
 
             Log.d(TAG, "doInBackground: " + appointments.length);

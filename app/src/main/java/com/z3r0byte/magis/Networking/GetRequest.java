@@ -16,8 +16,6 @@
 
 package com.z3r0byte.magis.Networking;
 
-import android.util.Log;
-
 import java.io.IOException;
 
 import okhttp3.OkHttpClient;
@@ -32,8 +30,6 @@ public class GetRequest {
     private static final String TAG = "GetRequest";
 
     public static String getRequest(String url, String cookie) throws IOException {
-        Log.d(TAG, "getRequest() called with: " + "url = [" + url + "], cookie = [" + cookie + "]");
-
         OkHttpClient client = new OkHttpClient.Builder()
                 .build();
 
@@ -53,8 +49,6 @@ public class GetRequest {
         Response response = client.newCall(request).execute();
 
         String responseStr = response.body().string();
-
-        Log.d(TAG, "getRequest: response: " + responseStr);
         return responseStr;
     }
 }

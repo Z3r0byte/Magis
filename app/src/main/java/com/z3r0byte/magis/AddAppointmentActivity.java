@@ -227,6 +227,9 @@ public class AddAppointmentActivity extends AppCompatActivity
             return;
         }
 
+        //startTime = DateUtils.fixTimeDifference(startTime, true, this);
+        //endTime = DateUtils.fixTimeDifference(endTime, true, this);
+
 
         try {
             final PersonalAppointment appointment = new PersonalAppointment(mEditTitle.getText().toString(), mEditDescription.getText().toString(),
