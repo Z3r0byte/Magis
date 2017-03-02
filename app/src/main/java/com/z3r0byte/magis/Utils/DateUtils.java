@@ -17,7 +17,6 @@
 package com.z3r0byte.magis.Utils;
 
 import android.content.Context;
-import android.util.Log;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -80,7 +79,6 @@ public class DateUtils {
     public static Date fixTimeDifference(Date date, Boolean reverse, Context context) {
         ConfigUtil configUtil = new ConfigUtil(context);
         int difference = configUtil.getInteger("timezoneFix");
-        Log.d(TAG, "fixTimeDifference: " + difference);
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
         if (reverse) {
