@@ -89,7 +89,7 @@ public class AppointmentService extends Service {
                             mBuilder.setContentIntent(resultPendingIntent);
 
                             if (appointment.startDate != null) {
-                                String time = DateUtils.formatDate(DateUtils.addHours(appointment.startDate, 2), "HH:mm");
+                                String time = DateUtils.formatDate(DateUtils.addHours(appointment.startDate, 0), "HH:mm");
                                 mBuilder.setContentTitle("Volgende les/afspraak (" + time + ")");
                             } else {
                                 mBuilder.setContentTitle("Volgende afspraak:");

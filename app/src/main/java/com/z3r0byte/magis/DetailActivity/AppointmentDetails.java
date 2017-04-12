@@ -93,8 +93,8 @@ public class AppointmentDetails extends AppCompatActivity {
         } catch (ArrayIndexOutOfBoundsException e) {
             e.printStackTrace();
         }
-        mainCardContent.setTime(this, DateUtils.formatDate(DateUtils.addHours(appointment.startDate, 2), "HH:mm") + " - "
-                + DateUtils.formatDate(DateUtils.addHours(appointment.endDate, 2), "HH:mm"));
+        mainCardContent.setTime(this, DateUtils.formatDate(DateUtils.addHours(appointment.startDate, 0), "HH:mm") + " - "
+                + DateUtils.formatDate(DateUtils.addHours(appointment.endDate, 0), "HH:mm"));
         mainCardContent.addCardHeader(cardHeader);
         cardMain = (CardViewNative) findViewById(R.id.card_main_details);
         cardMain.setCard(mainCardContent);
