@@ -40,7 +40,7 @@
     <string name="dialog_skip_login_title">Inloggen overslaan?</string>
     <string name="dialog_status_title">Magister 6 status</string>
     <string name="dialog_status_desc">Hiermee kun je zien of Magister 6 een storing heeft. Groen betekent alles OK, oranje
-        betekent langzaam, en rood betekent offline. \nDe gegevens worden van http://status.magis-app.nl/ gehaald, een
+        betekent langzaam, en rood betekent offline. \nDe gegevens worden van https://status.magistify.nl/ gehaald, een
         sub-projectje van mij. De API kun je zelf ook gebruiken, mocht je dat willen.</string>
     <string name="dialog_manual_school_title">Handmatig invoeren</string>
     <string name="dialog_manual_school_desc">Voer de url van de school handmatig in. Voer alleen het gedeelte voor .magister.net

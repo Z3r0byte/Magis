@@ -65,8 +65,8 @@ public class AppointmentsAdapter extends ArrayAdapter<Appointment> {
         }
         lesson.setText(appointments[position].description);
         classroom.setText(appointments[position].location);
-        time.setText(DateUtils.formatDate(DateUtils.addHours(appointments[position].startDate, 2), "HH:mm") + " - "
-                + DateUtils.formatDate(DateUtils.addHours(appointments[position].endDate, 2), "HH:mm"));
+        time.setText(DateUtils.formatDate(appointments[position].startDate, "HH:mm") + " - "
+                + DateUtils.formatDate(appointments[position].endDate, "HH:mm"));
 
 
         InfoType infoType = appointments[position].infoType;

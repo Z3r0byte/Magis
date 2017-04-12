@@ -120,7 +120,7 @@ public class CalendarDB extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public void addItems(Appointment[] appointments) {
+    public void addItems(Appointment[] appointments, Context context) {
         if (appointments.length == 0 || appointments == null) {
             return;
         }
@@ -137,7 +137,7 @@ public class CalendarDB extends SQLiteOpenHelper {
 
             /*
             Fixing the Timezone Bug
-             */
+
             String startDateString;
             try {
                 startDateString = DateUtil.dateToString(DateUtils.addHours(item.startDate, 2));
@@ -159,6 +159,29 @@ public class CalendarDB extends SQLiteOpenHelper {
             /*
              End of the bug fix
              */
+            String startDateString;
+            String endDateString;
+            String secondEndDateString;
+
+            item.startDate = DateUtils.fixTimeDifference(item.startDate, false, context);
+            item.endDate = DateUtils.fixTimeDifference(item.endDate, false, context);
+            try {
+                item.startDateString = DateUtil.dateToString(item.startDate);
+                item.endDateString = DateUtil.dateToString(item.endDate);
+            } catch (ParseException e) {
+                e.printStackTrace();
+                return;
+            }
+
+
+            try {
+                startDateString = DateUtil.dateToString(item.startDate);
+                endDateString = DateUtil.dateToString(item.endDate);
+                secondEndDateString = DateUtil.dateToString(item.endDate);
+            } catch (ParseException e) {
+                e.printStackTrace();
+                return;
+            }
 
             if (!day.equals(startDateString.replaceAll("-", "").substring(0, 8))) {
                 deleteAppointmentByDateString(startDateString);

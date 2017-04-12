@@ -29,6 +29,8 @@ import java.util.Date;
  */
 public class DateUtils {
 
+    private static final String TAG = "DateUtils";
+
     public static String formatDate(Date date, String format) {
         DateFormat dateFormat = new SimpleDateFormat(format);
         return dateFormat.format(date);
@@ -71,6 +73,19 @@ public class DateUtils {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
         calendar.add(Calendar.MINUTE, minutes);
+        return new Date(calendar.getTimeInMillis());
+    }
+
+    public static Date fixTimeDifference(Date date, Boolean reverse, Context context) {
+        ConfigUtil configUtil = new ConfigUtil(context);
+        int difference = configUtil.getInteger("timezoneFix");
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        if (reverse) {
+            calendar.add(Calendar.SECOND, -difference);
+        } else {
+            calendar.add(Calendar.SECOND, difference);
+        }
         return new Date(calendar.getTimeInMillis());
     }
 

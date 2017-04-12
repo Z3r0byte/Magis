@@ -45,8 +45,10 @@ import com.z3r0byte.magis.GUI.NavigationDrawer;
 import com.z3r0byte.magis.Listeners.FinishInitiator;
 import com.z3r0byte.magis.Listeners.FinishResponder;
 import com.z3r0byte.magis.Listeners.SharedListener;
+import com.z3r0byte.magis.Networking.GetRequest;
 import com.z3r0byte.magis.Tasks.AppointmentsTask;
 import com.z3r0byte.magis.Tasks.LoginTask;
+import com.z3r0byte.magis.Utils.ConfigUtil;
 import com.z3r0byte.magis.Utils.DB_Handlers.CalendarDB;
 import com.z3r0byte.magis.Utils.DateUtils;
 import com.z3r0byte.magis.Utils.ErrorViewConfigs;
@@ -57,6 +59,7 @@ import net.ilexiconn.magister.container.Profile;
 import net.ilexiconn.magister.container.School;
 import net.ilexiconn.magister.container.User;
 
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -161,7 +164,26 @@ public class CalendarActivity extends MagisActivity implements DatePickerDialog.
         FinishResponder responder = new FinishResponder(this);
         SharedListener.finishInitiator.addListener(responder);
 
-        showMessage();
+        //showMessage();
+        getTimeDifference();
+    }
+
+    private void getTimeDifference() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Integer difference = Integer.parseInt(GetRequest
+                            .getRequest("https://api.z3r0byteapps.eu/timezones/magister-local", null)
+                            .replace("\n", ""));
+                    ConfigUtil configUtil = new ConfigUtil(getApplicationContext());
+                    configUtil.setInteger("timezoneFix", difference);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+
     }
 
     private void showMessage() {

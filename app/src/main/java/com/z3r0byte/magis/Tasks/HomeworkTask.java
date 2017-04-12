@@ -69,7 +69,7 @@ public class HomeworkTask extends AsyncTask<Void, Void, Appointment[]> {
             Appointment[] appointments = appointmentHandler.getAppointments(date1, date2);
 
             CalendarDB db = new CalendarDB(activity);
-            db.addItems(appointments);
+            db.addItems(appointments, activity);
             appointments = db.getHomework(date1);
 
             Log.d(TAG, "doInBackground: " + appointments.length);
