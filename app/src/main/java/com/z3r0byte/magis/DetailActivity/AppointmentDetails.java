@@ -30,6 +30,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.z3r0byte.magis.GUI.AppointmentContentCard;
 import com.z3r0byte.magis.GUI.AppointmentDetailCard;
+import com.z3r0byte.magis.Listeners.SharedListener;
 import com.z3r0byte.magis.R;
 import com.z3r0byte.magis.Utils.DB_Handlers.CalendarDB;
 import com.z3r0byte.magis.Utils.DateUtils;
@@ -205,6 +206,7 @@ public class AppointmentDetails extends AppCompatActivity {
                                 Toast.makeText(AppointmentDetails.this, R.string.msg_deleted, Toast.LENGTH_SHORT).show();
                             }
                         });
+                        SharedListener.finishInitiator.finished();
                         finish();
                     } catch (IOException e) {
                         e.printStackTrace();
