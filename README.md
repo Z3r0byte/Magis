@@ -2,11 +2,11 @@
 
 This is the github repository for my app Magis, an unofficial, free and open-source Magister 6 App.
 
-######[Website](http://magis-app.nl)  (Temporary offline)
+###### [Website](http://magis-app.nl)  (Temporary offline)
 
 
 
-###Contributing: <br>
+### Contributing: <br>
 If you wanna help, please don't hesitate and create a Pull Request!
 However try to follow these guidelines:
 <ul>
@@ -21,7 +21,7 @@ However try to follow these guidelines:
 </ul>
 <br><br><br>
 
-###License
+### License
 ```
 Copyright 2016 Bas van den Boom 'Z3r0byte'
 
