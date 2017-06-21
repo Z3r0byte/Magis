@@ -63,10 +63,13 @@ public class PresenceAdapter extends ArrayAdapter<Presence> {
         TextView headerText = (TextView) rowView.findViewById(R.id.header_text);
         RelativeLayout header = (RelativeLayout) rowView.findViewById(R.id.header);
 
-        String day = stringToString(presences[position].start);
+        String day = DateUtils.formatDate(DateUtils.fixTimeDifference(
+                DateUtils.parseDate(presences[position].start, "yyyy-MM-dd'T'HH:mm:ss"), false, context),
+                "dd MMM yyyy");
+        Log.d(TAG, "getView: Start: " + day);
         if (position != 0) {
             previousDay = stringToString(presences[position - 1].start);
-            if (!previousDay.equals(day)) {
+            if (!previousDay.equals(stringToString(presences[position].start))) {
                 headerText.setText(day);
             } else {
                 header.setVisibility(android.view.View.GONE);

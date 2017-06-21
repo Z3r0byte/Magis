@@ -153,7 +153,7 @@ public class PresenceActivity extends MagisActivity {
                 try {
                     PresenceHandler presenceHandler = new PresenceHandler(mMagister);
                     PresencePeriod[] Periods = presenceHandler.getPresencePeriods();
-                    //removing out empty ones
+                    //removing empty ones
                     ArrayList<PresencePeriod> presencePeriods1 = new ArrayList<PresencePeriod>();
                     for (PresencePeriod presencePeriod : Periods) {
                         if (presencePeriod.description != "" && presencePeriod.description != null
