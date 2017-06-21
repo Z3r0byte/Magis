@@ -27,6 +27,8 @@ import java.text.ParseException;
 import java.util.Date;
 
 public class PersonalAppointment implements Serializable {
+    private static final String TAG = "PersonalAppointment";
+
     @SerializedName("Id")
     public int id = 0;
 
@@ -68,8 +70,8 @@ public class PersonalAppointment implements Serializable {
 
     public PersonalAppointment(String title, String content, String location, AppointmentType type, Date start, Date end) throws ParseException, InvalidParameterException {
         this.location = location;
-        if (content == null || content == "") {
-            content = " ";
+        if (content == null || content.equals("")) {
+            content = "Geen beschrijving opgegeven";
         }
         this.content = content;
         if (title == null || "".equals(title)) {
