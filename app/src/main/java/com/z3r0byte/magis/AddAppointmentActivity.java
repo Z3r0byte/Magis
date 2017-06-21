@@ -33,6 +33,7 @@ import android.widget.Toast;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
+import com.z3r0byte.magis.Listeners.SharedListener;
 import com.z3r0byte.magis.Utils.DateUtils;
 
 import net.ilexiconn.magister.ParcelableMagister;
@@ -249,6 +250,7 @@ public class AddAppointmentActivity extends AppCompatActivity
                                         Toast.LENGTH_SHORT).show();
                             }
                         });
+                        SharedListener.finishInitiator.finished();
                         finish();
                     } catch (IOException e) {
                         e.printStackTrace();
