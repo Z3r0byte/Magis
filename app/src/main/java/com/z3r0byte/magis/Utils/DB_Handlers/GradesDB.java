@@ -197,7 +197,7 @@ public class GradesDB extends SQLiteOpenHelper {
         } else {
             Query = "SELECT * FROM " + TABLE_GRADES + " WHERE " + KEY_STUDY_ID + " = " + study.id + " AND " + KEY_GRADE_ID
                     + " != 0 AND " + KEY_SORTABLE_DATE + " IN (SELECT MAX(" + KEY_SORTABLE_DATE
-                    + ") FROM " + TABLE_GRADES + " WHERE " + KEY_GRADE_ROW_TYPE + " = 4 OR " + KEY_GRADE_ROW_TYPE + " = 6"
+                    + ") FROM " + TABLE_GRADES + " WHERE " + KEY_GRADE_ROW_TYPE + " = 2 OR " + KEY_GRADE_ROW_TYPE + " = 4 OR " + KEY_GRADE_ROW_TYPE + " = 6"
                     + " GROUP BY " + KEY_SUBJECT + ") ORDER BY " + KEY_GRADE_ROW_TYPE + " DESC";
         }
         Cursor cursor = db.rawQuery(Query, null);
