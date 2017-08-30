@@ -23,6 +23,7 @@ import android.view.View;
 import com.z3r0byte.magis.Adapters.GradesAdapter;
 import com.z3r0byte.magis.R;
 import com.z3r0byte.magis.Utils.DB_Handlers.GradesDB;
+import com.z3r0byte.magis.Utils.DateUtils;
 import com.z3r0byte.magis.Utils.ErrorViewConfigs;
 import com.z3r0byte.magis.Utils.MagisFragment;
 
@@ -35,6 +36,7 @@ import java.io.IOException;
 import java.security.InvalidParameterException;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
 
 /**
  * Created by bas on 7-7-16.
@@ -84,12 +86,17 @@ public class GradesTask extends AsyncTask<Void, Void, Grade[]> {
             if (study == null || study.id == magister.currentStudy.id) {
                 Log.d(TAG, "doInBackground: Getting grades of current study");
                 grades = gradeHandler.getGrades(false, false, true);
-                isOldFormat = false;
             } else {
                 Log.d(TAG, "doInBackground: Getting grades of other study");
                 grades = gradeHandler.getGradesFromStudy(study, true, false);
-                Collections.reverse(Arrays.asList(grades));
+            }
+
+            Date newformatDate = DateUtils.parseDate("2016", "YYYY");
+            if (study != null && study.startDate.before(newformatDate)) {
                 isOldFormat = true;
+                Collections.reverse(Arrays.asList(grades));
+            } else {
+                isOldFormat = false;
             }
             Log.d(TAG, "doInBackground: Amount of grades: " + grades.length);
 
