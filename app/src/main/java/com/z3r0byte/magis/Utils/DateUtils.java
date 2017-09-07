@@ -32,11 +32,13 @@ public class DateUtils {
     private static final String TAG = "DateUtils";
 
     public static String formatDate(Date date, String format) {
+        format = format.replace("YYYY", "yyyy");
         DateFormat dateFormat = new SimpleDateFormat(format);
         return dateFormat.format(date);
     }
 
     public static Date parseDate(String date, String format) {
+        format = format.replace("YYYY", "yyyy");
         DateFormat dateFormat = new SimpleDateFormat(format);
         try {
             return dateFormat.parse(date);

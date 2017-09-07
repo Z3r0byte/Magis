@@ -18,6 +18,7 @@ package com.z3r0byte.magis;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Looper;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -42,7 +43,11 @@ import com.z3r0byte.magis.Utils.MagisActivity;
 import net.ilexiconn.magister.container.Appointment;
 import net.ilexiconn.magister.container.Profile;
 import net.ilexiconn.magister.container.User;
+import net.ilexiconn.magister.handler.AppointmentHandler;
 
+import org.json.JSONException;
+
+import java.io.IOException;
 import java.security.InvalidParameterException;
 import java.util.Date;
 
@@ -109,7 +114,16 @@ public class HomeworkActivity extends MagisActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Appointment appointment = mAppointments[i];
-                finishAppointment(appointment);
+                showAppointment(appointment);
+            }
+        });
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+                mAppointments[i].finished = !mAppointments[i].finished;
+                finishAppointment(mAppointments[i]);
+                SharedListener.finishInitiator.finished();
+                return true;
             }
         });
 
@@ -118,11 +132,34 @@ public class HomeworkActivity extends MagisActivity {
         SharedListener.finishInitiator.addListener(responder);
     }
 
-    private void finishAppointment(final Appointment appointment) {
+    private void showAppointment(final Appointment appointment) {
         Intent intent = new Intent(this, HomeworkDetails.class);
         intent.putExtra("Magister", mMagister);
         intent.putExtra("Appointment", new Gson().toJson(appointment));
         startActivity(intent);
+    }
+
+    public void finishAppointment(final Appointment appointment) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Looper.prepare();
+                AppointmentHandler appointmentHandler = new AppointmentHandler(mMagister);
+                try {
+                    Boolean finished = appointmentHandler.finishAppointment(appointment);
+                    CalendarDB dbHelper = new CalendarDB(getApplicationContext());
+                    dbHelper.finishAppointment(appointment);
+                    applyFinish();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    Toast.makeText(getApplicationContext(), R.string.err_no_connection, Toast.LENGTH_SHORT).show();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Toast.makeText(getApplicationContext(), R.string.err_unknown, Toast.LENGTH_SHORT).show();
+                }
+            }
+        }).start();
+
     }
 
 
