@@ -19,17 +19,21 @@ package com.z3r0byte.magis.DetailActivity;
 import android.os.Bundle;
 import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
-import com.z3r0byte.magis.GUI.AppointmentContentCard;
-import com.z3r0byte.magis.GUI.AppointmentDetailCard;
+import com.mikepenz.google_material_typeface_library.GoogleMaterial;
+import com.mikepenz.iconics.IconicsDrawable;
 import com.z3r0byte.magis.Listeners.SharedListener;
 import com.z3r0byte.magis.R;
 import com.z3r0byte.magis.Utils.DB_Handlers.CalendarDB;
@@ -40,10 +44,9 @@ import net.ilexiconn.magister.container.Appointment;
 import net.ilexiconn.magister.container.type.InfoType;
 import net.ilexiconn.magister.handler.AppointmentHandler;
 
-import java.io.IOException;
+import org.json.JSONException;
 
-import it.gmariotti.cardslib.library.internal.CardHeader;
-import it.gmariotti.cardslib.library.view.CardViewNative;
+import java.io.IOException;
 
 public class AppointmentDetails extends AppCompatActivity {
     private static final String TAG = "AppointmentDetails";
@@ -51,9 +54,6 @@ public class AppointmentDetails extends AppCompatActivity {
     Appointment appointment;
     String Type;
     ParcelableMagister mMagister;
-    CardViewNative cardMain;
-    CardViewNative cardHomeWork;
-    AppointmentContentCard contentCard;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,94 +81,193 @@ public class AppointmentDetails extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-
-        AppointmentDetailCard mainCardContent = new AppointmentDetailCard(this);
-        CardHeader cardHeader = new CardHeader(this);
-        cardHeader.setTitle(getString(R.string.msg_details));
-        mainCardContent.waitForReady();
-        mainCardContent.setDescription(this, appointment.description);
-        mainCardContent.setLocation(this, appointment.location);
-        mainCardContent.setPeriod(this, appointment.periodFrom + "");
-        try {
-            mainCardContent.setTeacher(this, appointment.teachers[0].name);
-        } catch (ArrayIndexOutOfBoundsException e) {
-            e.printStackTrace();
-        }
-        mainCardContent.setTime(this, DateUtils.formatDate(DateUtils.addHours(appointment.startDate, 0), "HH:mm") + " - "
-                + DateUtils.formatDate(DateUtils.addHours(appointment.endDate, 0), "HH:mm"));
-        mainCardContent.addCardHeader(cardHeader);
-        cardMain = (CardViewNative) findViewById(R.id.card_main_details);
-        cardMain.setCard(mainCardContent);
-
-
-        cardHomeWork = (CardViewNative) findViewById(R.id.card_content);
-        if (appointment.infoType.getID() != 0 && !appointment.content.isEmpty()) {
-
-            contentCard = new AppointmentContentCard(this, mMagister, appointment, this);
-            CardHeader cardHeader2 = new CardHeader(this);
-            InfoType infoType = appointment.infoType;
-            int type = infoType.getID();
-            switch (type) {
-                case 1:
-                    Type = getString(R.string.msg_homework);
-                    break;
-                case 2:
-                    Type = getString(R.string.msg_test);
-                    break;
-                case 3:
-                    Type = getString(R.string.msg_exam);
-                    break;
-                case 4:
-                    Type = getString(R.string.msg_quiz);
-                    break;
-                case 5:
-                    Type = getString(R.string.msg_oral);
-                    break;
-                case 6:
-                    Type = getString(R.string.msg_info);
-                    break;
-                case 7:
-                    Type = getString(R.string.msg_annotation);
-                    break;
-                default:
-                    Type = getString(R.string.msg_homework);
-                    break;
-            }
-            if (appointment.finished) {
-                cardHeader2.setTitle(Type + " (" + getString(R.string.msg_finished) + ")");
-            } else {
-                cardHeader2.setTitle(Type);
-            }
-            contentCard.waitForReady();
-            contentCard.addCardHeader(cardHeader2);
-            contentCard.setContent(this, Html.fromHtml(appointment.content).toString(), appointment.finished);
-            cardHomeWork.setCard(contentCard);
+        setupDetailscard(appointment);
+        if (appointment.content != null && appointment.content != "") {
+            setupContentCard(appointment);
         } else {
-            cardHomeWork.setVisibility(View.GONE);
+            CardView cardView = (CardView) findViewById(R.id.card_view_2);
+            cardView.setVisibility(View.GONE);
         }
     }
 
-    public void updateAppointment(final Appointment appointment) {
+    private void setupDetailscard(Appointment appointment) {
+        RelativeLayout descriptionLayout;
+        TextView descriptionTextInput;
+        ImageView descriptionImageView;
+        RelativeLayout periodLayout;
+        TextView periodTextInput;
+        ImageView periodImageView;
+        RelativeLayout teacherLayout;
+        TextView teacherTextInput;
+        ImageView teacherImageView;
+        RelativeLayout durationLayout;
+        TextView durationTextInput;
+        ImageView durationImageView;
+        RelativeLayout locationLayout;
+        TextView locationTextInput;
+        ImageView locationImageView;
+
+        descriptionLayout = (RelativeLayout) findViewById(R.id.card_details_layout_description);
+        descriptionTextInput = (TextView) findViewById(R.id.card_details_textview_description_input);
+        descriptionImageView = (ImageView) findViewById(R.id.card_details_imageview_description);
+
+        periodLayout = (RelativeLayout) findViewById(R.id.card_details_layout_period);
+        periodTextInput = (TextView) findViewById(R.id.card_details_textview_period_input);
+        periodImageView = (ImageView) findViewById(R.id.card_details_imageview_period);
+
+        teacherLayout = (RelativeLayout) findViewById(R.id.card_details_layout_teacher);
+        teacherTextInput = (TextView) findViewById(R.id.card_details_textview_teacher_input);
+        teacherImageView = (ImageView) findViewById(R.id.card_details_imageview_teacher);
+
+        durationLayout = (RelativeLayout) findViewById(R.id.card_details_layout_duration);
+        durationTextInput = (TextView) findViewById(R.id.card_details_textview_duration_input);
+        durationImageView = (ImageView) findViewById(R.id.card_details_imageview_duration);
+
+        locationLayout = (RelativeLayout) findViewById(R.id.card_details_layout_location);
+        locationTextInput = (TextView) findViewById(R.id.card_details_textview_location_input);
+        locationImageView = (ImageView) findViewById(R.id.card_details_imageview_location);
+
+
+        Log.d(TAG, "run: Setting desc...");
+        IconicsDrawable drawable = new IconicsDrawable(this, GoogleMaterial.Icon.gmd_description);
+        descriptionLayout.setVisibility(View.VISIBLE);
+        descriptionImageView.setImageDrawable(drawable);
+        descriptionTextInput.setText(appointment.description);
+
+        Log.d(TAG, "run: Setting period...");
+        drawable = new IconicsDrawable(this, GoogleMaterial.Icon.gmd_info);
+        periodLayout.setVisibility(View.VISIBLE);
+        periodImageView.setImageDrawable(drawable);
+        periodTextInput.setText(appointment.periodFrom + "");
+
+
+        Log.d(TAG, "run: Setting teacher...");
+        try {
+            String teacher = appointment.teachers[0].name;
+            drawable = new IconicsDrawable(this, GoogleMaterial.Icon.gmd_person);
+            teacherLayout.setVisibility(View.VISIBLE);
+            teacherImageView.setImageDrawable(drawable);
+            teacherTextInput.setText(teacher);
+        } catch (ArrayIndexOutOfBoundsException e) {
+            e.printStackTrace();
+        }
+
+
+        Log.d(TAG, "run: Setting time...");
+        String duration = DateUtils.formatDate(DateUtils.addHours(appointment.startDate, 2), "HH:mm") + " - "
+                + DateUtils.formatDate(DateUtils.addHours(appointment.endDate, 2), "HH:mm");
+        drawable = new IconicsDrawable(this, GoogleMaterial.Icon.gmd_today);
+        durationLayout.setVisibility(View.VISIBLE);
+        durationImageView.setImageDrawable(drawable);
+        durationTextInput.setText(duration);
+
+        Log.d(TAG, "run: Setting location...");
+        drawable = new IconicsDrawable(this, GoogleMaterial.Icon.gmd_location_on);
+        locationLayout.setVisibility(View.VISIBLE);
+        locationImageView.setImageDrawable(drawable);
+        locationTextInput.setText(appointment.location);
+
+    }
+
+    private void setupContentCard(final Appointment appointment) {
+        TextView ContentTextView;
+        TextView ContentButton;
+        TextView ContentTitle;
+
+        ContentTextView = (TextView) findViewById(R.id.card_content_textview);
+        ContentButton = (TextView) findViewById(R.id.card_content_button);
+        ContentTitle = (TextView) findViewById(R.id.card_title_content);
+
+        InfoType infoType = appointment.infoType;
+        int type = infoType.getID();
+        switch (type) {
+            case 1:
+                Type = getString(R.string.msg_homework);
+                break;
+            case 2:
+                Type = getString(R.string.msg_test);
+                break;
+            case 3:
+                Type = getString(R.string.msg_exam);
+                break;
+            case 4:
+                Type = getString(R.string.msg_quiz);
+                break;
+            case 5:
+                Type = getString(R.string.msg_oral);
+                break;
+            case 6:
+                Type = getString(R.string.msg_info);
+                break;
+            case 7:
+                Type = getString(R.string.msg_annotation);
+                break;
+            default:
+                Type = getString(R.string.msg_homework);
+                break;
+        }
+
+
+        if (appointment.finished) {
+            ContentTitle.setText(Type + " (" + getString(R.string.msg_finished) + ")");
+        } else {
+            ContentTitle.setText(Type);
+        }
+
+        ContentTextView.setText(Html.fromHtml(appointment.content));
+
+        ContentButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Looper.prepare();
+                        AppointmentHandler appointmentHandler = new AppointmentHandler(mMagister);
+                        try {
+                            appointment.finished = !appointment.finished;
+                            Boolean finished = appointmentHandler.finishAppointment(appointment);
+                            Log.d(TAG, "run: Gelukt: " + finished);
+                            if (finished) {
+                                SharedListener.finishInitiator.finished();
+                                updateAppointment(appointment);
+                            }
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                            Toast.makeText(getApplicationContext(), R.string.err_no_connection, Toast.LENGTH_SHORT).show();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(getApplicationContext(), R.string.err_unknown, Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }).start();
+            }
+        });
+
+
+    }
+
+
+    private void updateAppointment(final Appointment appointment) {
         this.appointment = appointment;
 
-        final AppointmentDetails activity = this;
 
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                TextView ContentTitle = (TextView) findViewById(R.id.card_title_content);
                 if (appointment.finished) {
-                    contentCard.getCardHeader().setTitle(Type + " (" + getString(R.string.msg_finished) + ")");
+                    ContentTitle.setText(Type + " (" + getString(R.string.msg_finished) + ")");
                 } else {
-                    contentCard.getCardHeader().setTitle(Type);
+                    ContentTitle.setText(Type);
                 }
-                contentCard.notifyDataSetChanged();
-                cardHomeWork.refreshCard(contentCard);
             }
         });
 
         CalendarDB dbHelper = new CalendarDB(this);
         dbHelper.finishAppointment(appointment);
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

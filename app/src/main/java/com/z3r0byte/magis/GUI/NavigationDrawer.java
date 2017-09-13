@@ -251,7 +251,7 @@ public class NavigationDrawer {
             public void run() {
                 Status status;
                 try {
-                    status = Status.getStatusByString(GetRequest.getRequest("http://status.magistify.nl/API/status", null));
+                    status = Status.getStatusByString(GetRequest.getRequest("https://status.magistify.nl/API/status", null));
                 } catch (IOException e) {
                     e.printStackTrace();
                     return;

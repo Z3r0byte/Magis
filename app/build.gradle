@@ -55,8 +55,6 @@ dependencies {
     compile 'com.google.code.gson:gson:2.6.2'
     compile 'com.afollestad:digitus:0.2.11'
     compile 'com.github.xiprox.errorview:library:2.+'
-    compile 'com.github.gabrielemariotti.cards:cardslib-core:2.1.0'
-    compile 'com.github.gabrielemariotti.cards:cardslib-cards:2.1.0'
     compile 'com.wdullaer:materialdatetimepicker:2.3.0'
     compile 'it.neokree:MaterialTabs:0.11'
     compile 'com.android.support.constraint:constraint-layout:1.0.0-beta4'
