@@ -19,7 +19,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context=".DetailActivity.AppointmentDetails">
 
     <android.support.v7.widget.Toolbar
@@ -37,26 +36,301 @@
         android:fillViewport="true">
 
         <RelativeLayout
+            android:padding="11dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <it.gmariotti.cardslib.library.view.CardViewNative
-                android:id="@+id/card_main_details"
+            <android.support.v7.widget.CardView android:layout_margin="5dp"
+                xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/card_view"
+                android:layout_gravity="center"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="12dp"
-                android:layout_marginRight="12dp"
-                android:layout_marginTop="12dp" />
+                card_view:cardCornerRadius="4dp">
 
-            <it.gmariotti.cardslib.library.view.CardViewNative
-                android:layout_below="@+id/card_main_details"
-                android:id="@+id/card_content"
+                <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:id="@+id/card_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/msg_details"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+
+                    <RelativeLayout
+                        android:layout_below="@+id/card_title"
+                        android:layout_marginTop="16dp"
+                        android:visibility="visible"
+                        android:id="@+id/card_details_layout_description"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_toRightOf="@+id/card_details_imageview_description"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/msg_description"
+                            android:id="@+id/card_details_textview_description"
+                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Foutcode (001)"
+                            android:id="@+id/card_details_textview_description_input"
+                            android:layout_below="@+id/card_details_textview_description"
+                            android:layout_alignLeft="@+id/card_details_textview_description"
+                            android:layout_alignStart="@+id/card_details_textview_description"
+                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1" />
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/magis512"
+                            android:id="@+id/card_details_imageview_description"
+                            android:layout_alignTop="@+id/card_details_textview_description"
+                            android:layout_marginTop="6dp"
+                            android:layout_marginRight="15dp"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentStart="true" />
+
+                    </RelativeLayout>
+
+
+                    <RelativeLayout
+                        android:visibility="visible"
+                        android:layout_marginTop="20dp"
+                        android:layout_below="@+id/card_details_layout_description"
+                        android:id="@+id/card_details_layout_period"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_toRightOf="@+id/card_details_imageview_period"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/msg_period"
+                            android:id="@+id/card_details_textview_period"
+                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Foutcode (001)"
+                            android:id="@+id/card_details_textview_period_input"
+                            android:layout_below="@+id/card_details_textview_period"
+                            android:layout_alignLeft="@+id/card_details_textview_period"
+                            android:layout_alignStart="@+id/card_details_textview_period"
+                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1" />
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/magis512"
+                            android:id="@+id/card_details_imageview_period"
+                            android:layout_alignTop="@+id/card_details_textview_period"
+                            android:layout_marginTop="6dp"
+                            android:layout_marginRight="15dp"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentStart="true" />
+
+                    </RelativeLayout>
+
+
+                    <RelativeLayout
+                        android:visibility="visible"
+                        android:layout_marginTop="20dp"
+                        android:layout_below="@+id/card_details_layout_period"
+                        android:id="@+id/card_details_layout_duration"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_toRightOf="@+id/card_details_imageview_duration"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/msg_duration"
+                            android:id="@+id/card_details_textview_duration"
+                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Foutcode (001)"
+                            android:id="@+id/card_details_textview_duration_input"
+                            android:layout_below="@+id/card_details_textview_duration"
+                            android:layout_alignLeft="@+id/card_details_textview_duration"
+                            android:layout_alignStart="@+id/card_details_textview_duration"
+                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1" />
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/magis512"
+                            android:id="@+id/card_details_imageview_duration"
+                            android:layout_alignTop="@+id/card_details_textview_duration"
+                            android:layout_marginTop="6dp"
+                            android:layout_marginRight="15dp"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentStart="true" />
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:visibility="visible"
+                        android:layout_marginTop="20dp"
+                        android:layout_below="@+id/card_details_layout_duration"
+                        android:id="@+id/card_details_layout_location"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_toRightOf="@+id/card_details_imageview_location"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/msg_location"
+                            android:id="@+id/card_details_textview_location"
+                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Foutcode (001)"
+                            android:id="@+id/card_details_textview_location_input"
+                            android:layout_below="@+id/card_details_textview_location"
+                            android:layout_alignLeft="@+id/card_details_textview_location"
+                            android:layout_alignStart="@+id/card_details_textview_location"
+                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1" />
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/magis512"
+                            android:id="@+id/card_details_imageview_location"
+                            android:layout_alignTop="@+id/card_details_textview_location"
+                            android:layout_marginTop="6dp"
+                            android:layout_marginRight="15dp"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentStart="true" />
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:visibility="visible"
+                        android:layout_marginTop="20dp"
+                        android:layout_below="@+id/card_details_layout_location"
+                        android:id="@+id/card_details_layout_teacher"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_toRightOf="@+id/card_details_imageview_teacher"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/msg_teacher"
+                            android:id="@+id/card_details_textview_teacher"
+                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Foutcode (001)"
+                            android:id="@+id/card_details_textview_teacher_input"
+                            android:layout_below="@+id/card_details_textview_teacher"
+                            android:layout_alignLeft="@+id/card_details_textview_teacher"
+                            android:layout_alignStart="@+id/card_details_textview_teacher"
+                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1" />
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/magis512"
+                            android:id="@+id/card_details_imageview_teacher"
+                            android:layout_alignTop="@+id/card_details_textview_teacher"
+                            android:layout_marginTop="6dp"
+                            android:layout_marginRight="15dp"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentStart="true" />
+
+                    </RelativeLayout>
+
+                </RelativeLayout>
+
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView android:layout_margin="5dp"
+                android:layout_below="@+id/card_view"
+                xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/card_view_2"
+                android:layout_gravity="center"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="12dp"
-                android:layout_marginRight="12dp"
-                android:layout_marginTop="12dp"
-                style="@style/card_external" />
+                android:layout_marginTop="16dp"
+                card_view:cardCornerRadius="4dp">
+
+
+                <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:id="@+id/card_title_content"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/msg_homework"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/card_content_time_edited_textview"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/card_title_content"
+                        android:layout_marginTop="16dp"
+                        android:autoLink="email|web"
+                        android:text="@string/msg_last_edited"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Caption" />
+
+                    <TextView
+                        android:text="diguygfds"
+                        android:layout_below="@+id/card_content_time_edited_textview"
+                        android:layout_marginTop="8dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/card_content_textview"
+                        android:autoLink="email|web"
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1" />
+
+                    <TextView
+                        android:id="@+id/card_content_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_below="@+id/card_content_textview"
+                        android:padding="12dp"
+                        android:background="?android:selectableItemBackground"
+                        android:text="@string/msg_finish"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Button"
+                        android:textColor="@color/about_libraries_accent"
+                        android:textStyle="bold" />
+
+                </RelativeLayout>
+
+            </android.support.v7.widget.CardView>
 
         </RelativeLayout>
 
