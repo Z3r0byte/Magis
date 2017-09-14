@@ -89,6 +89,9 @@ public class Appointment implements Serializable {
     @SerializedName("Omschrijving")
     public String description;
 
+    @SerializedName("TaakGewijzigdOp")
+    public String homeworkLastEdited;
+
     @Override
     public String toString() {
         return "Appointment{" +

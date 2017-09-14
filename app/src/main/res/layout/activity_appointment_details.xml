@@ -295,10 +295,20 @@
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
-
                     <TextView
+                        android:id="@+id/card_content_time_edited_textview"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_below="@+id/card_title_content"
                         android:layout_marginTop="16dp"
+                        android:autoLink="email|web"
+                        android:text="@string/msg_last_edited"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Caption" />
+
+                    <TextView
+                        android:text="diguygfds"
+                        android:layout_below="@+id/card_content_time_edited_textview"
+                        android:layout_marginTop="8dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/card_content_textview"
@@ -311,7 +321,7 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
                         android:layout_below="@+id/card_content_textview"
-                        android:layout_marginTop="12dp"
+                        android:padding="12dp"
                         android:background="?android:selectableItemBackground"
                         android:text="@string/msg_finish"
                         android:textAppearance="@style/TextAppearance.AppCompat.Button"

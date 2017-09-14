@@ -43,10 +43,13 @@ import net.ilexiconn.magister.ParcelableMagister;
 import net.ilexiconn.magister.container.Appointment;
 import net.ilexiconn.magister.container.type.InfoType;
 import net.ilexiconn.magister.handler.AppointmentHandler;
+import net.ilexiconn.magister.util.DateUtil;
 
 import org.json.JSONException;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.util.Date;
 
 public class HomeworkDetails extends AppCompatActivity {
     private static final String TAG = "HomeworkDetails";
@@ -173,6 +176,7 @@ public class HomeworkDetails extends AppCompatActivity {
         ContentTextView = (TextView) findViewById(R.id.card_content_textview);
         ContentButton = (TextView) findViewById(R.id.card_content_button);
         ContentTitle = (TextView) findViewById(R.id.card_title_content);
+        final TextView lastEdited = (TextView) findViewById(R.id.card_content_time_edited_textview);
 
         InfoType infoType = appointment.infoType;
         int type = infoType.getID();
@@ -239,6 +243,27 @@ public class HomeworkDetails extends AppCompatActivity {
                 }).start();
             }
         });
+
+        lastEdited.setText(String.format(getString(R.string.msg_last_edited), getString(R.string.msg_loading)));
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Appointment appointmentDetails = new Gson().fromJson(new AppointmentHandler(mMagister).getRawAppointment(appointment.id), Appointment.class);
+                    final Date lastEditedDate = DateUtil.stringToDate(appointmentDetails.homeworkLastEdited);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            lastEdited.setText(String.format(getString(R.string.msg_last_edited), DateUtils.formatDate(lastEditedDate, "dd MMM HH:mm")));
+                        }
+                    });
+
+                } catch (IOException | ParseException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }).start();
 
 
     }

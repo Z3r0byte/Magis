@@ -105,6 +105,8 @@
     <string name="msg_get_user_data">Gebruikersdata opvragen...</string>
     <string name="msg_homework">Huiswerk</string>
     <string name="msg_info">Informatie</string>
+    <string name="msg_last_edited">Laatst aangepast om: %1$s</string>
+    <string name="msg_loading">laden...</string>
     <string name="msg_location">Lokatie</string>
     <string name="msg_logged_in">Ingelogd</string>
     <string name="msg_logging_in">Inloggen…</string>
