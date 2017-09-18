@@ -157,8 +157,8 @@ public class AppointmentDetails extends AppCompatActivity {
 
 
         Log.d(TAG, "run: Setting time...");
-        String duration = DateUtils.formatDate(DateUtils.addHours(appointment.startDate, 2), "HH:mm") + " - "
-                + DateUtils.formatDate(DateUtils.addHours(appointment.endDate, 2), "HH:mm");
+        String duration = DateUtils.formatDate(appointment.startDate, "HH:mm") + " - "
+                + DateUtils.formatDate(appointment.endDate, "HH:mm");
         drawable = new IconicsDrawable(this, GoogleMaterial.Icon.gmd_today);
         durationLayout.setVisibility(View.VISIBLE);
         durationImageView.setImageDrawable(drawable);
