@@ -29,6 +29,7 @@ import com.z3r0byte.magis.CalendarActivity;
 import com.z3r0byte.magis.R;
 import com.z3r0byte.magis.Utils.DB_Handlers.CalendarDB;
 import com.z3r0byte.magis.Utils.ErrorViewConfigs;
+import com.z3r0byte.magis.Utils.GlobalMagister;
 import com.z3r0byte.magis.Utils.LoginUtils;
 import com.z3r0byte.magis.Utils.MagisActivity;
 
@@ -114,6 +115,7 @@ public class LoginTask extends AsyncTask<Void, Void, ParcelableMagister> {
         CalendarActivity activity1 = (CalendarActivity) activity;
         if (magister != null) {
             activity.mMagister = magister;
+            GlobalMagister.MAGISTER = magister;
             activity.retrieveData(activity);
             LoginUtils.loginError(activity, false);
             Snackbar.make(activity.coordinatorLayout, activity1.getString(R.string.msg_logged_in), Snackbar.LENGTH_LONG).show();

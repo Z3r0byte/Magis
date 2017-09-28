@@ -38,6 +38,7 @@ import com.z3r0byte.magis.Tasks.HomeworkTask;
 import com.z3r0byte.magis.Utils.DB_Handlers.CalendarDB;
 import com.z3r0byte.magis.Utils.DateUtils;
 import com.z3r0byte.magis.Utils.ErrorViewConfigs;
+import com.z3r0byte.magis.Utils.GlobalMagister;
 import com.z3r0byte.magis.Utils.MagisActivity;
 
 import net.ilexiconn.magister.container.Appointment;
@@ -48,7 +49,6 @@ import net.ilexiconn.magister.handler.AppointmentHandler;
 import org.json.JSONException;
 
 import java.io.IOException;
-import java.security.InvalidParameterException;
 import java.util.Date;
 
 import tr.xip.errorview.ErrorView;
@@ -66,14 +66,7 @@ public class HomeworkActivity extends MagisActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_homework);
-        Bundle extras = getIntent().getExtras();
-        if (extras != null) {
-            mMagister = extras.getParcelable("Magister");
-        } else {
-            Log.e(TAG, "onCreate: No valid Magister!", new InvalidParameterException());
-            Toast.makeText(this, R.string.err_unknown, Toast.LENGTH_SHORT).show();
-            finish();
-        }
+        mMagister = GlobalMagister.MAGISTER;
 
         mToolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.Toolbar);
         mToolbar.setTitle(R.string.title_homework);

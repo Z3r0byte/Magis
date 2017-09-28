@@ -40,7 +40,6 @@ import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.SectionDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IProfile;
-import com.z3r0byte.magis.AccountActivity;
 import com.z3r0byte.magis.GradeActivity;
 import com.z3r0byte.magis.HomeworkActivity;
 import com.z3r0byte.magis.Networking.GetRequest;
@@ -118,7 +117,7 @@ public class NavigationDrawer {
                 .withOnAccountHeaderListener(new AccountHeader.OnAccountHeaderListener() {
                     @Override
                     public boolean onProfileChanged(View view, IProfile profile, boolean currentProfile) {
-                        activity.startActivity(new Intent(activity, AccountActivity.class));
+                        //activity.startActivity(new Intent(activity, AccountActivity.class));
                         drawer.closeDrawer();
                         return false;
                     }
@@ -177,19 +176,17 @@ public class NavigationDrawer {
                         } else if (drawerItem == homeworkItem && selection != "Huiswerk") {
                             drawer.closeDrawer();
                             Intent intent = new Intent(activity, HomeworkActivity.class);
-                            intent.putExtra("Magister", activity.mMagister);
                             activity.startActivity(intent);
                             closeActivity();
                         } else if (drawerItem == presenceItem && selection != "Aanwezigheid") {
+                            Log.d(TAG, "onItemClick: Magister: " + activity.mMagister);
                             drawer.closeDrawer();
                             Intent intent = new Intent(activity, PresenceActivity.class);
-                            intent.putExtra("Magister", activity.mMagister);
                             activity.startActivity(intent);
                             closeActivity();
                         } else if (drawerItem == gradeItem && selection != "Cijfers") {
                             CloseDrawer();
                             Intent intent = new Intent(activity, GradeActivity.class);
-                            intent.putExtra("Magister", activity.mMagister);
                             activity.startActivity(new Intent(intent));
                             closeActivity();
                         } else if (drawerItem == bugItem) {

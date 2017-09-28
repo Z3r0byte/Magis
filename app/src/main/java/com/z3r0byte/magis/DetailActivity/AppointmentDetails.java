@@ -38,6 +38,7 @@ import com.z3r0byte.magis.Listeners.SharedListener;
 import com.z3r0byte.magis.R;
 import com.z3r0byte.magis.Utils.DB_Handlers.CalendarDB;
 import com.z3r0byte.magis.Utils.DateUtils;
+import com.z3r0byte.magis.Utils.GlobalMagister;
 
 import net.ilexiconn.magister.ParcelableMagister;
 import net.ilexiconn.magister.container.Appointment;
@@ -66,7 +67,7 @@ public class AppointmentDetails extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             appointment = new Gson().fromJson(extras.getString("Appointment"), Appointment.class);
-            mMagister = extras.getParcelable("Magister");
+            mMagister = GlobalMagister.MAGISTER;
         } else {
             Log.e(TAG, "onCreate: Impossible to show details of a null Appointment!", new IllegalArgumentException());
             Toast.makeText(AppointmentDetails.this, R.string.err_unknown, Toast.LENGTH_SHORT).show();

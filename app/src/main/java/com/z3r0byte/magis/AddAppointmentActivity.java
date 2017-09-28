@@ -35,6 +35,7 @@ import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 import com.z3r0byte.magis.Listeners.SharedListener;
 import com.z3r0byte.magis.Utils.DateUtils;
+import com.z3r0byte.magis.Utils.GlobalMagister;
 
 import net.ilexiconn.magister.ParcelableMagister;
 import net.ilexiconn.magister.container.PersonalAppointment;
@@ -73,14 +74,7 @@ public class AddAppointmentActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_appointment);
 
-        Bundle extras = getIntent().getExtras();
-        if (extras != null) {
-            mMagister = extras.getParcelable("Magister");
-        } else {
-            Log.e(TAG, "onCreate: No valid Magister!", new InvalidParameterException());
-            Toast.makeText(this, R.string.err_unknown, Toast.LENGTH_SHORT).show();
-            finish();
-        }
+        mMagister = GlobalMagister.MAGISTER;
 
         mToolbar = (Toolbar) findViewById(R.id.Toolbar);
         mToolbar.setTitle(getString(R.string.title_new_appointment));

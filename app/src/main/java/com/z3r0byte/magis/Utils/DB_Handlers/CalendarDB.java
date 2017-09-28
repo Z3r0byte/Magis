@@ -131,6 +131,8 @@ public class CalendarDB extends SQLiteOpenHelper {
         Log.d(TAG, "addItems: amount of items: " + appointments.length);
         String day = "";
 
+        purgeCache();
+
         for (Appointment item :
                 appointments) {
             Integer id = item.id;
@@ -220,6 +222,18 @@ public class CalendarDB extends SQLiteOpenHelper {
 
         }
 
+    }
+
+    private void purgeCache() {
+        Date twoWeeksAgo = addDays(getToday(), -14);
+        Date twoWeekFromNow = addDays(getToday(), 14);
+        int twoWeeksAgoInt = Integer.parseInt(formatDate(twoWeeksAgo, "yyyyMMdd"));
+        int twoWeeksFromNowInt = Integer.parseInt(formatDate(twoWeekFromNow, "yyyyMMdd"));
+        SQLiteDatabase db = this.getWritableDatabase();
+        String Query = "DELETE FROM " + TABLE_CALENDAR + " WHERE " + KEY_FORMATTED_START + " <= " + twoWeeksFromNowInt + " AND "
+                + KEY_FORMATTED_END + " >= " + twoWeeksAgoInt;
+        Log.d(TAG, "deleteAppointmentByDateInt: Query: " + Query);
+        db.execSQL(Query);
     }
 
     public void deleteAppointmentByDate(Date date) {
