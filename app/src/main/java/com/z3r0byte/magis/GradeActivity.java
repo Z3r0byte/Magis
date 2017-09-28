@@ -28,7 +28,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.z3r0byte.magis.Adapters.StudyAdapter;
@@ -36,6 +35,7 @@ import com.z3r0byte.magis.Fragments.MainGradesFragment;
 import com.z3r0byte.magis.Fragments.NewGradesFragment;
 import com.z3r0byte.magis.GUI.NavigationDrawer;
 import com.z3r0byte.magis.Utils.DateUtils;
+import com.z3r0byte.magis.Utils.GlobalMagister;
 import com.z3r0byte.magis.Utils.MagisActivity;
 
 import net.ilexiconn.magister.ParcelableMagister;
@@ -46,7 +46,6 @@ import net.ilexiconn.magister.container.User;
 import net.ilexiconn.magister.handler.StudyHandler;
 
 import java.io.IOException;
-import java.security.InvalidParameterException;
 import java.util.Arrays;
 import java.util.Collections;
 
@@ -80,13 +79,7 @@ public class GradeActivity extends MagisActivity implements MaterialTabListener 
         setContentView(R.layout.activity_grade);
 
         Bundle extras = getIntent().getExtras();
-        if (extras != null) {
-            mMagister = extras.getParcelable("Magister");
-        } else {
-            Log.e(TAG, "onCreate: No valid Magister!", new InvalidParameterException());
-            Toast.makeText(this, R.string.err_unknown, Toast.LENGTH_SHORT).show();
-            finish();
-        }
+        mMagister = GlobalMagister.MAGISTER;
 
         mToolbar = (Toolbar) findViewById(R.id.Toolbar);
         mToolbar.setTitle(R.string.title_grades);

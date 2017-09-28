@@ -91,8 +91,9 @@ public class GradesTask extends AsyncTask<Void, Void, Grade[]> {
                 grades = gradeHandler.getGradesFromStudy(study, true, false);
             }
 
+            isOldFormat = false;
             Date newformatDate = DateUtils.parseDate("2016", "YYYY");
-            if (study != null && study.startDate.before(newformatDate)) {
+            if (study != null && study.startDate != null && study.startDate.before(newformatDate)) {
                 isOldFormat = true;
                 Collections.reverse(Arrays.asList(grades));
             } else {

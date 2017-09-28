@@ -25,13 +25,13 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.z3r0byte.magis.Adapters.PresencePeriodAdapter;
 import com.z3r0byte.magis.GUI.NavigationDrawer;
 import com.z3r0byte.magis.Tasks.PresenceTask;
 import com.z3r0byte.magis.Utils.ErrorViewConfigs;
+import com.z3r0byte.magis.Utils.GlobalMagister;
 import com.z3r0byte.magis.Utils.MagisActivity;
 
 import net.ilexiconn.magister.container.PresencePeriod;
@@ -41,7 +41,6 @@ import net.ilexiconn.magister.container.User;
 import net.ilexiconn.magister.handler.PresenceHandler;
 
 import java.io.IOException;
-import java.security.InvalidParameterException;
 import java.util.ArrayList;
 
 import tr.xip.errorview.ErrorView;
@@ -63,14 +62,7 @@ public class PresenceActivity extends MagisActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_presence);
 
-        Bundle extras = getIntent().getExtras();
-        if (extras != null) {
-            mMagister = extras.getParcelable("Magister");
-        } else {
-            Log.e(TAG, "onCreate: No valid Magister!", new InvalidParameterException());
-            Toast.makeText(this, R.string.err_unknown, Toast.LENGTH_SHORT).show();
-            finish();
-        }
+        mMagister = GlobalMagister.MAGISTER;
 
         mProfile = new Gson().fromJson(getSharedPreferences("data", MODE_PRIVATE).getString("Profile", null), Profile.class);
         mUser = new Gson().fromJson(getSharedPreferences("data", MODE_PRIVATE).getString("User", null), User.class);

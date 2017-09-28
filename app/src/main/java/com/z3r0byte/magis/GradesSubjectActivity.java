@@ -27,6 +27,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.z3r0byte.magis.Adapters.GradesAdapter;
 import com.z3r0byte.magis.Tasks.GradesSubjectTask;
+import com.z3r0byte.magis.Utils.GlobalMagister;
 import com.z3r0byte.magis.Utils.MagisActivity;
 
 import net.ilexiconn.magister.container.Grade;
@@ -49,7 +50,6 @@ public class GradesSubjectActivity extends MagisActivity {
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            mMagister = extras.getParcelable("Magister");
             Gson gson = new Gson();
             study = gson.fromJson(extras.getString("Study"), Study.class);
             subject = gson.fromJson(extras.getString("Subject"), SubSubject.class);
@@ -58,6 +58,7 @@ public class GradesSubjectActivity extends MagisActivity {
             Toast.makeText(this, R.string.err_unknown, Toast.LENGTH_SHORT).show();
             finish();
         }
+        mMagister = GlobalMagister.MAGISTER;
 
         mToolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.Toolbar);
         mToolbar.setTitle(subject.name);
