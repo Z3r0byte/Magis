@@ -85,7 +85,7 @@ public class PresenceTask extends AsyncTask<Void, Void, Presence[]> {
             Log.d(TAG, "onPostExecute: Valid appointments");
             activity.mPresences = presences;
             activity.mSwipeRefreshLayout.setRefreshing(false);
-            //activity.errorView.setVisibility(View.GONE);
+            activity.errorView.setVisibility(View.GONE);
 
             Log.d(TAG, "onPostExecute: Creating adapter");
             activity.mPresenceAdapter = new PresenceAdapter(activity, activity.mPresences);
