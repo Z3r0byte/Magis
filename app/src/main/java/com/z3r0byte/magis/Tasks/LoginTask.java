@@ -74,7 +74,7 @@ public class LoginTask extends AsyncTask<Void, Void, ParcelableMagister> {
         dialogBuilder = new MaterialDialog.Builder(activity);
         dialogBuilder.title(R.string.msg_logging_in)
                 .content(R.string.msg_patience)
-                .positiveText(android.R.string.cancel)
+                .positiveText(R.string.msg_skip)
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
@@ -85,6 +85,7 @@ public class LoginTask extends AsyncTask<Void, Void, ParcelableMagister> {
                     }
                 })
                 .progress(true, 0);
+        dialogBuilder.canceledOnTouchOutside(false);
         dialog = dialogBuilder.build();
         dialog.show();
     }
