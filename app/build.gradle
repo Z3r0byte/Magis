@@ -24,8 +24,8 @@ android {
         applicationId "com.z3r0byte.magis"
         minSdkVersion 15
         targetSdkVersion 24
-        versionCode 162
-        versionName "1.6.2"
+        versionCode 163
+        versionName "1.6.3"
     }
     buildTypes {
         release {
