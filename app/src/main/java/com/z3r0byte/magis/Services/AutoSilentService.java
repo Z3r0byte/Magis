@@ -16,16 +16,23 @@
 
 package com.z3r0byte.magis.Services;
 
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.AudioManager;
+import android.os.Build;
 import android.os.IBinder;
+import android.support.v4.app.TaskStackBuilder;
+import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
+import com.z3r0byte.magis.CalendarActivity;
+import com.z3r0byte.magis.R;
 import com.z3r0byte.magis.Utils.ConfigUtil;
 import com.z3r0byte.magis.Utils.DB_Handlers.CalendarDB;
 
@@ -65,6 +72,31 @@ public class AutoSilentService extends Service {
             TimerTask notificationTask = new TimerTask() {
                 @Override
                 public void run() {
+                    NotificationManager notificationManager =
+                            (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
+                            && !notificationManager.isNotificationPolicyAccessGranted()) {
+                        Log.w(TAG, "run: Not allowed to change state of do not disturb!");
+                        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(getApplicationContext());
+                        mBuilder.setSmallIcon(R.drawable.magis512);
+
+                        Intent resultIntent = new Intent(android.provider.Settings
+                                .ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS);
+                        TaskStackBuilder stackBuilder = TaskStackBuilder.create(getApplicationContext());
+                        stackBuilder.addParentStack(CalendarActivity.class);
+                        stackBuilder.addNextIntent(resultIntent);
+                        PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+                        mBuilder.setContentIntent(resultPendingIntent);
+
+                        mBuilder.setContentTitle("Magis kan de telefoon niet op stil zetten");
+                        mBuilder.setContentText("Klik om op te lossen");
+                        mBuilder.setAutoCancel(true);
+                        mBuilder.setVisibility(NotificationCompat.VISIBILITY_PUBLIC);
+
+                        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                        mNotificationManager.notify(9999, mBuilder.build());
+                        return;
+                    }
                     appointments = calendarDB.getSilentAppointments(getMargin());
                     if (doSilent(appointments)) {
                         silenced(true);
