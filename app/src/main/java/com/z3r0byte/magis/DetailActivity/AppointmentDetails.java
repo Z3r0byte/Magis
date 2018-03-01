@@ -42,6 +42,7 @@ import com.z3r0byte.magis.Utils.GlobalMagister;
 
 import net.ilexiconn.magister.ParcelableMagister;
 import net.ilexiconn.magister.container.Appointment;
+import net.ilexiconn.magister.container.type.AppointmentType;
 import net.ilexiconn.magister.container.type.InfoType;
 import net.ilexiconn.magister.handler.AppointmentHandler;
 import net.ilexiconn.magister.util.DateUtil;
@@ -146,14 +147,18 @@ public class AppointmentDetails extends AppCompatActivity {
 
 
         Log.d(TAG, "run: Setting teacher...");
-        try {
-            String teacher = appointment.teachers[0].name;
-            drawable = new IconicsDrawable(this, GoogleMaterial.Icon.gmd_person);
-            teacherLayout.setVisibility(View.VISIBLE);
-            teacherImageView.setImageDrawable(drawable);
-            teacherTextInput.setText(teacher);
-        } catch (ArrayIndexOutOfBoundsException e) {
-            e.printStackTrace();
+        if (appointment.type != AppointmentType.PERSONAL) {
+            try {
+                String teacher = appointment.teachers[0].name;
+                drawable = new IconicsDrawable(this, GoogleMaterial.Icon.gmd_person);
+                teacherLayout.setVisibility(View.VISIBLE);
+                teacherImageView.setImageDrawable(drawable);
+                teacherTextInput.setText(teacher);
+            } catch (ArrayIndexOutOfBoundsException e) {
+                e.printStackTrace();
+            }
+        } else {
+            teacherLayout.setVisibility(View.GONE);
         }
 
 
@@ -249,6 +254,10 @@ public class AppointmentDetails extends AppCompatActivity {
             }
         });
 
+        if (appointment.type == AppointmentType.PERSONAL) {
+            lastEdited.setVisibility(View.GONE);
+            return;
+        }
         lastEdited.setText(String.format(getString(R.string.msg_last_edited), getString(R.string.msg_loading)));
         new Thread(new Runnable() {
             @Override
