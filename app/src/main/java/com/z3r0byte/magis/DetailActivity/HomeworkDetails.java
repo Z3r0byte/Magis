@@ -259,7 +259,13 @@ public class HomeworkDetails extends AppCompatActivity {
                         }
                     });
 
-                } catch (IOException | ParseException e) {
+                } catch (IOException | ParseException | NullPointerException e) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            lastEdited.setText(getString(R.string.err_no_connection));
+                        }
+                    });
                     e.printStackTrace();
                 }
 

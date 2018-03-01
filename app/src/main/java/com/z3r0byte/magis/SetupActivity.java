@@ -16,7 +16,6 @@
 
 package com.z3r0byte.magis;
 
-import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -52,7 +51,7 @@ public class SetupActivity extends IntroActivity {
                 .backgroundDark(R.color.setup_color_1)
                 .build());
 
-        final Slide permissionsSlide;
+        /*final Slide permissionsSlide;
         permissionsSlide = new SimpleSlide.Builder()
                 .title(R.string.setup_title_2)
                 .description(R.string.setup_desc_2)
@@ -60,7 +59,7 @@ public class SetupActivity extends IntroActivity {
                 .backgroundDark(R.color.setup_color_2)
                 .permission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 .build();
-        addSlide(permissionsSlide);
+        addSlide(permissionsSlide);*/
 
         final FragmentSlide searchSlide = new FragmentSlide.Builder()
                 .background(R.color.setup_color_3)
@@ -82,9 +81,10 @@ public class SetupActivity extends IntroActivity {
                 View contentView = findViewById(android.R.id.content);
                 Slide slide = getSlide(position);
 
-                if (slide == permissionsSlide) {
+                /*if (slide == permissionsSlide) {
                     Snackbar.make(contentView, R.string.snackbar_no_permissions, Snackbar.LENGTH_LONG).show();
-                } else if (slide == searchSlide) {
+                } else*/
+                if (slide == searchSlide) {
                     Snackbar.make(contentView, R.string.snackbar_no_school_selected, Snackbar.LENGTH_LONG).show();
                 } else if (slide == loginSlide) {
                     Snackbar.make(contentView, R.string.snackbar_not_logged_in, Snackbar.LENGTH_LONG).show();
@@ -95,7 +95,7 @@ public class SetupActivity extends IntroActivity {
         addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                if (positionOffset == 0 && position == 4) {
+                if (positionOffset == 0 && position == 3) {
                     Intent intent = new Intent(getApplicationContext(), StartActivity.class);
                     startActivity(intent);
                     finish();
