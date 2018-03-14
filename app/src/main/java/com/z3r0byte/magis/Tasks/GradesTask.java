@@ -126,6 +126,7 @@ public class GradesTask extends AsyncTask<Void, Void, Grade[]> {
         }
         if (error != null) {
             GradesDB gradesDB = new GradesDB(fragment.getActivity());
+            if (isOldFormat == null) isOldFormat = false;
             Grade[] gradesCache = gradesDB.getUniqueAverageGrades(study, isOldFormat);
             if (gradesCache != null && gradesCache.length > 0) {
                 fragment.errorView.setVisibility(View.GONE);
