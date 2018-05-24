@@ -16,11 +16,15 @@
 
 package com.z3r0byte.magis.Tasks;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 
+import com.google.gson.Gson;
 import com.z3r0byte.magis.Adapters.GradesAdapter;
+import com.z3r0byte.magis.DetailActivity.GradeDetails;
 import com.z3r0byte.magis.R;
 import com.z3r0byte.magis.Utils.MagisActivity;
 
@@ -124,6 +128,14 @@ public class GradesSubjectTask extends AsyncTask<Void, Void, Grade[]> {
                     activity.mGradesAdapter = new GradesAdapter(activity, activity.grades, false);
                     activity.mGradesAdapter.notifyDataSetChanged();
                     activity.listView.setAdapter(activity.mGradesAdapter);
+                    activity.listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                            Intent intent = new Intent(activity, GradeDetails.class);
+                            intent.putExtra("Grade", new Gson().toJson(grades[i]));
+                            activity.startActivity(intent);
+                        }
+                    });
                     activity.listView.setVisibility(View.VISIBLE);
                     activity.mSwipeRefreshLayout.setRefreshing(false);
                     activity.mProgressBar.setVisibility(View.GONE);

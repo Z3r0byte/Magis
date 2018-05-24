@@ -114,6 +114,7 @@
     <string name="msg_login_progress_1">Stap 1/2: oude sessie verwijderen...</string>
     <string name="msg_login_progress_2">Stap 2/2: opnieuw inloggen...</string>
     <string name="msg_login">Log in</string>
+    <string name="msg_no">Nee</string>
     <string name="msg_no_subject">Dit is geen vak!</string>
     <string name="msg_no_results">Er zijn (nog) geen resultaten, tik om handmatig in te voeren.</string>
     <string name="msg_old_version">De data-structuur van Magis is veranderd, we laten je daarom de login-stappen opnieuw doorlopen.</string>
@@ -140,6 +141,15 @@
     <string name="msg_today">Vandaag</string>
     <string name="msg_undo">Ongedaan maken</string>
     <string name="msg_using_cache">Cache wordt gebruikt.</string>
+    <string name="msg_yes">Ja</string>
+    <string name="msg_test_name">Toets:</string>
+    <string name="msg_subject">Vak:</string>
+    <string name="msg_date_submitted">Ingevoerd op:</string>
+    <string name="msg_is_pass_grade">Voldoende:</string>
+    <string name="msg_weight">Weging:</string>
+    <string name="msg_grade">Cijfer:</string>
+    <string name="msg_test_date">Toetsdatum:</string>
+    <string name="msg_no_content">-</string>
 
     <string name="setup_desc_1">Let op: Ouder-accounts zijn op dit moment nog niet ondersteund.</string>
     <string name="setup_desc_2">Magis heeft toegang nodig tot de sdkaart om logbestanden en dergelijken op te slaan.</string>

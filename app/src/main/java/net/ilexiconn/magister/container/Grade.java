@@ -29,16 +29,16 @@ public class Grade implements Serializable {
     @SerializedName("CijferId")
     public int id;
 
-    @SerializedName("CijferStr")
+    @SerializedName(value = "CijferStr", alternate = "waarde")
     public String grade;
 
-    @SerializedName(value = "IsCijferVoldoende", alternate = "IsVoldoende")
+    @SerializedName(value = "IsCijferVoldoende", alternate = {"IsVoldoende", "isVoldoende"})
     public boolean isSufficient;
 
     @SerializedName("IngevoerdDoor")
     public String filledInBy;
 
-    @SerializedName("DatumIngevoerd")
+    @SerializedName(value = "DatumIngevoerd", alternate = "ingevoerdOp")
     public String filledInDateString;
 
     public Date filledInDate;
@@ -52,7 +52,7 @@ public class Grade implements Serializable {
     @SerializedName("Vrijstelling")
     public boolean dispensation;
 
-    @SerializedName("TeltMee")
+    @SerializedName(value = "TeltMee", alternate = "teltMee")
     public boolean doesCount;
 
     @SerializedName("CijferKolom")
@@ -64,7 +64,7 @@ public class Grade implements Serializable {
     @SerializedName("CijferKolomIdEloOpdracht")
     public String gradeRowIdOfElo;
 
-    @SerializedName("Vak")
+    @SerializedName(value = "Vak", alternate = "vak")
     public SubSubject subject;
 
     @SerializedName("VakDispensatie")
@@ -72,6 +72,17 @@ public class Grade implements Serializable {
 
     @SerializedName("VakVrijstelling")
     public String dispensationForCourse2;
+
+    @SerializedName("omschrijving")
+    public String description;
+
+    @SerializedName("weegfactor")
+    public Double wage;
+
+    @SerializedName("behaaldOp")
+    public String testDateString;
+
+    public Date testDate;
 
     public SingleGrade singleGrade;
 }
