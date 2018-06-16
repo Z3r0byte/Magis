@@ -50,7 +50,7 @@
         Als je de verkeerde URL hebt ingevoerd, kun je niet inloggen!</string>
     <string name="dialog_bug_title">Bug melden</string>
     <string name="dialog_bug_desc">Als je een fout wilt melden, kun je gewoon je telefoon op en neer schudden. De app maakt dan
-        automatisch een screenshot en opent een mail venster. Hier kun je dan een korte beschrijving van de fout invullen.</string>
+        automatisch een screenshot en opent een mail venster. Hier kun je dan een korte beschrijving van de fout invullen. Je kunt dit aan- en uitzetten in de instellingen.</string>
     <string name="dialog_do_nothin_title">Niks doen?</string>
     <string name="dialog_do_nothing_desc">Als je niks doet zul je dit bericht vandaag nog elke keer krijgen als je de app opstart. Als je toch een advertentie
     kijkt, zul je dit bericht voorlopig niet meer zien, en als je doneert krijg je dit bericht nooit meer te zien.</string>

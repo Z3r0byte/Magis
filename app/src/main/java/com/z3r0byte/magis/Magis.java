@@ -32,13 +32,15 @@ public final class Magis extends Application {
     public void onCreate() {
         super.onCreate();
 
-        BugShaker.get(this)
-                .setEmailAddresses("z3r0byte.apps@gmail.com")
-                .setEmailSubjectLine("Magis Bug Report")
-                .setLoggingEnabled(BuildConfig.DEBUG)
-                .setAlertDialogType(AlertDialogType.APP_COMPAT)
-                .assemble()
-                .start();
+        if (getSharedPreferences("com.z3r0byte.magis_preferences", MODE_PRIVATE).getBoolean("shake-to-report", false)) {
+            BugShaker.get(this)
+                    .setEmailAddresses("z3r0byte.apps@gmail.com")
+                    .setEmailSubjectLine("Magis Bug Report")
+                    .setLoggingEnabled(BuildConfig.DEBUG)
+                    .setAlertDialogType(AlertDialogType.APP_COMPAT)
+                    .assemble()
+                    .start();
+        }
     }
 
 }
