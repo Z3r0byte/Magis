@@ -48,13 +48,18 @@
     </com.codevscolor.materialpreference.widget.MaterialPreferenceCategory>
 
 
-    <com.codevscolor.materialpreference.widget.MaterialPreferenceCategory android:title="Over">
+    <com.codevscolor.materialpreference.widget.MaterialPreferenceCategory android:title="Overig">
         <!--<android.support.v7.preference.ListPreference
             android:entries="@array/web_array"
             android:entryValues="@array/web_array_values"
             android:title="Bezoek de website:"
             android:summary="http://magis-app.nl"
             android:key="website" /> -->
+        <android.support.v7.preference.SwitchPreferenceCompat
+            android:defaultValue="false"
+            android:key="shake-to-report"
+            android:summary="Zet de shake-to-report-bug functie aan"
+            android:title="Schud om fout te melden" />
         <android.support.v7.preference.ListPreference
             android:entries="@array/library_array"
             android:entryValues="@array/library_array_values"

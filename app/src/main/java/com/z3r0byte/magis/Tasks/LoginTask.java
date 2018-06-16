@@ -119,7 +119,7 @@ public class LoginTask extends AsyncTask<Void, Void, ParcelableMagister> {
             GlobalMagister.MAGISTER = magister;
             activity.retrieveData(activity);
             LoginUtils.loginError(activity, false);
-            Snackbar.make(activity.coordinatorLayout, activity1.getString(R.string.msg_logged_in), Snackbar.LENGTH_LONG).show();
+            Snackbar.make(activity.coordinatorLayout, activity1.getString(R.string.msg_logged_in), Snackbar.LENGTH_SHORT).show();
         } else {
             useCache();
             Log.e(TAG, "" + error);
