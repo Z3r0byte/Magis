@@ -16,7 +16,6 @@
 
 package com.z3r0byte.magis;
 
-import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -164,7 +163,7 @@ public class CalendarActivity extends MagisActivity implements DatePickerDialog.
         FinishResponder responder = new FinishResponder(this);
         SharedListener.finishInitiator.addListener(responder);
 
-        //showMessage();
+        showUpdateMessage();
         getTimeDifference();
     }
 
@@ -186,28 +185,24 @@ public class CalendarActivity extends MagisActivity implements DatePickerDialog.
 
     }
 
-    private void showMessage() {
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-        alertDialogBuilder.setTitle("Belangrijk bericht"); //f*ck this shit, no resources! :D
-        alertDialogBuilder.setMessage("Even een vervelende mededeling:\n" +
-                "Ik heb besloten te stoppen met het ontwikkelen van Magis voor verschillende redenen. Mocht je interesse hebben om de ontwikkeling over te nemen, mail dan even.\n" +
-                "De app zal gewoon blijven werken zoals je gewend bent, maar zal geen updates meer ontvangen.\n\n" +
-                "Maar ik heb ook nog wat leuker nieuws: er komt wel een andere app voor magister, maar daarin zullen vooral handige tooltjes zitten zoals de auto-stil functie en meldingen. Mocht je een mailtje willen krijgen wanneer deze app af is, ga dan even naar https://magistify.nl/ \n\n" +
-                "Bedankt voor het gebruiken van Magis!");
-        alertDialogBuilder.setPositiveButton("Oké", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("data", MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putBoolean("message_shown", true);
-                editor.apply();
-            }
-        });
-        AlertDialog alertDialog = alertDialogBuilder.create();
-        SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("data", MODE_PRIVATE);
-        Boolean show = sharedPreferences.getBoolean("message_shown", false);
-        if (!show) alertDialog.show();
+    private void showUpdateMessage() {
+        final ConfigUtil configUtil = new ConfigUtil(this);
+        final int version = BuildConfig.VERSION_CODE;
+        if (configUtil.getInteger("last_update_message") != version) {
+            android.app.AlertDialog.Builder alertDialogBuilder = new android.app.AlertDialog.Builder(this);
+            alertDialogBuilder.setTitle("Een minder leuk bericht");
+            alertDialogBuilder.setMessage("Ik stop met het verder ontwikkelen van Magis. Magis gaat al een tijd constant achteruit met het aantal installaties en dit is begrijpelijk, want Magis biedt nou eenmaal niet zoveel functies als sommige andere Magister apps. Daarnaast heeft Magister afgelopen jaar een nieuwe manier van inloggen ingevoerd en het is maar de vraag hoe lang de oude manier nog zal blijven werken. Ik heb er simpelweg de tijd niet voor om naast school en werk (apps maken maakt je helaas niet rijk \uD83D\uDE09) nog mijn apps te onderhouden en te updaten met nieuwe functies, zeker niet nu ik in mijn examenjaar zit. Daarom heb ik besloten te stoppen met het verder ontwikkelen van Magis. Ik hoop dat je dit begrijpt en ik wil je hartelijk bedanken voor het downloaden en gebruiken van Magis.");
+            alertDialogBuilder.setPositiveButton("Oké", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    configUtil.setInteger("last_update_message", version);
+                }
+            });
+            android.app.AlertDialog alertDialog = alertDialogBuilder.create();
+            alertDialog.show();
+        }
     }
+
 
 
     public void getMagister() {

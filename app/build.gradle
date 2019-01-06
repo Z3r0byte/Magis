@@ -17,15 +17,15 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion '25.0.0'
+    compileSdkVersion 26
+    buildToolsVersion '26.0.3'
 
     defaultConfig {
         applicationId "com.z3r0byte.magis"
         minSdkVersion 15
-        targetSdkVersion 25
-        versionCode 171
-        versionName "1.7.1"
+        targetSdkVersion 26
+        versionCode 172
+        versionName "1.7.2"
     }
     buildTypes {
         release {
