@@ -94,7 +94,7 @@ public class LoginTask extends AsyncTask<Void, Void, ParcelableMagister> {
     protected ParcelableMagister doInBackground(Void... params) {
         try {
             SchoolUrl url = new SchoolUrl(school);
-            HttpUtil.httpDelete(url.getCurrentSessionUrl());
+//            HttpUtil.httpDelete(url.getCurrentSessionUrl());
             return ParcelableMagister.login(school, username, password);
         } catch (IOException e) {
             Log.e(TAG, "Unable to login", e);

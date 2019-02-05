@@ -16,6 +16,7 @@
 
 package net.ilexiconn.magister.util;
 
+import android.nfc.Tag;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -46,6 +47,7 @@ import java.net.HttpCookie;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -60,12 +62,15 @@ public class HttpUtil {
     private static final String TAG = "HttpUtil";
     private static CookieManager cookieManager = new CookieManager();
 
+    public static String accesToken = "";
+
     public static InputStreamReader httpDelete(String url) throws IOException {
         HttpsURLConnection connection = (HttpsURLConnection) new URL(url).openConnection();
         connection.setRequestMethod("DELETE");
         connection.setRequestProperty("Cookie", getCurrentCookies());
         connection.setRequestProperty("X-API-Client-ID", ApiKeyUtil.getKey());
         connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+        connection.setRequestProperty("Authorization", "Bearer " + accesToken);
         connection.connect();
         storeCookies(connection);
         return new InputStreamReader(connection.getInputStream());
@@ -78,6 +83,8 @@ public class HttpUtil {
         connection.setRequestProperty("Cookie", getCurrentCookies());
         connection.setRequestProperty("X-API-Client-ID", ApiKeyUtil.getKey());
         connection.setRequestProperty("Content-Type", "application/json");
+        connection.setRequestProperty("Authorization", "Bearer " + accesToken);
+
         byte[] data_url = json.getBytes("UTF-8");
         DataOutputStream outputStream = new DataOutputStream(connection.getOutputStream());
         outputStream.write(data_url);
@@ -88,6 +95,11 @@ public class HttpUtil {
     }
 
     public static InputStreamReader httpPost(String url, String data) throws IOException {
+        return httpPost(url, data, Collections.<String, String>emptyMap());
+    }
+
+    public static InputStreamReader httpPost(String url, String data, Map<String, String> headers) throws IOException {
+        Log.d("HTTPGet", "httpPost() called with: " + "url = [" + url + "]");
         HttpsURLConnection connection = (HttpsURLConnection) new URL(url).openConnection();
         connection.setDoOutput(true);
         connection.setRequestMethod("POST");
@@ -95,6 +107,11 @@ public class HttpUtil {
         connection.setRequestProperty("X-API-Client-ID", ApiKeyUtil.getKey());
         connection.setRequestProperty("Cookie", getCurrentCookies());
         connection.setRequestProperty("Content-Type", "application/json");
+        connection.setRequestProperty("Authorization", "Bearer " + accesToken);
+
+        for (Map.Entry<String, String> entry : headers.entrySet()) {
+            connection.setRequestProperty(entry.getKey(), entry.getValue());
+        }
 
         OutputStreamWriter wr = new OutputStreamWriter(connection.getOutputStream());
         wr.write(data);
@@ -124,6 +141,8 @@ public class HttpUtil {
         connection.setRequestProperty("Cookie", getCurrentCookies());
         connection.setRequestProperty("X-API-Client-ID", ApiKeyUtil.getKey());
         connection.setRequestProperty("Content-Type", "application/json");
+        connection.setRequestProperty("Authorization", "Bearer " + accesToken);
+
         byte[] data_url = json.getBytes("UTF-8");
         DataOutputStream outputStream = new DataOutputStream(connection.getOutputStream());
         outputStream.write(data_url);
@@ -146,6 +165,7 @@ public class HttpUtil {
         connection.setRequestProperty("Connection", "Keep-Alive");
         connection.setRequestProperty("Cache-Control", "no-cache");
         connection.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
+        connection.setRequestProperty("Authorization", "Bearer " + accesToken);
         connection.setDoOutput(true);
         connection.setUseCaches(false);
 
@@ -182,10 +202,22 @@ public class HttpUtil {
     }
 
     public static InputStreamReader httpGet(String url) throws IOException {
+        HttpsURLConnection connection = httpGetConnection(url);
+
+        if (connection.getResponseCode() >= 200 && connection.getResponseCode() < 400) {
+            return new InputStreamReader(connection.getInputStream());
+        } else {
+            return new InputStreamReader(connection.getErrorStream());
+        }
+    }
+
+    public static HttpsURLConnection httpGetConnection(String url) throws IOException {
         Log.d("HTTPGet", "httpGet() called with: " + "url = [" + url + "]");
         HttpsURLConnection connection = (HttpsURLConnection) new URL(url).openConnection();
         connection.setRequestMethod("GET");
         connection.setRequestProperty("Cookie", getCurrentCookies());
+        connection.setRequestProperty("Authorization", "Bearer " + accesToken);
+
         if (AndroidUtil.getAndroidSupportCache()) {
             connection.setUseCaches(true);
         }
@@ -196,18 +228,15 @@ public class HttpUtil {
         Log.d(TAG, "httpPost: connection: Cookie: " + connection.getRequestProperty("Cookie"));
         Log.d(TAG, "httpPost: connection: Cookie-Set: " + connection.getHeaderField("Set-Cookie"));
 
-
-        if (connection.getResponseCode() >= 200 && connection.getResponseCode() < 400) {
-            return new InputStreamReader(connection.getInputStream());
-        } else {
-            return new InputStreamReader(connection.getErrorStream());
-        }
+        return connection;
     }
 
     public static File httpGetFile(String url, File downloadDir) throws IOException {
         HttpsURLConnection connection = (HttpsURLConnection) new URL(url).openConnection();
         connection.setRequestMethod("GET");
         connection.setRequestProperty("Cookie", getCurrentCookies());
+        connection.setRequestProperty("Authorization", "Bearer " + accesToken);
+
         if (AndroidUtil.getAndroidSupportCache()) {
             connection.setUseCaches(true);
         }
@@ -244,14 +273,10 @@ public class HttpUtil {
     private static void storeCookies(HttpURLConnection connection) {
         Map<String, List<String>> headers = connection.getHeaderFields();
         List<String> cookies = headers.get("Set-Cookie");
-        /*if (cookies != null) {
+        if (cookies != null) {
             for (String cookie : cookies) {
                 cookieManager.getCookieStore().add(null, HttpCookie.parse(cookie).get(0));
             }
-        }*/
-        if (cookies != null) {
-            cookieManager.getCookieStore().removeAll();
-            cookieManager.getCookieStore().add(null, HttpCookie.parse(cookies.get(cookies.size() - 1)).get(0));
         }
     }
 
