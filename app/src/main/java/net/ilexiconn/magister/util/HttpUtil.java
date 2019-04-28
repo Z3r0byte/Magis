@@ -16,7 +16,6 @@
 
 package net.ilexiconn.magister.util;
 
-import android.nfc.Tag;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -62,7 +61,7 @@ public class HttpUtil {
     private static final String TAG = "HttpUtil";
     private static CookieManager cookieManager = new CookieManager();
 
-    public static String accesToken = "";
+    public static String accessToken = "";
 
     public static InputStreamReader httpDelete(String url) throws IOException {
         HttpsURLConnection connection = (HttpsURLConnection) new URL(url).openConnection();
@@ -70,7 +69,7 @@ public class HttpUtil {
         connection.setRequestProperty("Cookie", getCurrentCookies());
         connection.setRequestProperty("X-API-Client-ID", ApiKeyUtil.getKey());
         connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-        connection.setRequestProperty("Authorization", "Bearer " + accesToken);
+        connection.setRequestProperty("Authorization", "Bearer " + accessToken);
         connection.connect();
         storeCookies(connection);
         return new InputStreamReader(connection.getInputStream());
@@ -83,7 +82,7 @@ public class HttpUtil {
         connection.setRequestProperty("Cookie", getCurrentCookies());
         connection.setRequestProperty("X-API-Client-ID", ApiKeyUtil.getKey());
         connection.setRequestProperty("Content-Type", "application/json");
-        connection.setRequestProperty("Authorization", "Bearer " + accesToken);
+        connection.setRequestProperty("Authorization", "Bearer " + accessToken);
 
         byte[] data_url = json.getBytes("UTF-8");
         DataOutputStream outputStream = new DataOutputStream(connection.getOutputStream());
@@ -107,7 +106,7 @@ public class HttpUtil {
         connection.setRequestProperty("X-API-Client-ID", ApiKeyUtil.getKey());
         connection.setRequestProperty("Cookie", getCurrentCookies());
         connection.setRequestProperty("Content-Type", "application/json");
-        connection.setRequestProperty("Authorization", "Bearer " + accesToken);
+        connection.setRequestProperty("Authorization", "Bearer " + accessToken);
 
         for (Map.Entry<String, String> entry : headers.entrySet()) {
             connection.setRequestProperty(entry.getKey(), entry.getValue());
@@ -141,7 +140,7 @@ public class HttpUtil {
         connection.setRequestProperty("Cookie", getCurrentCookies());
         connection.setRequestProperty("X-API-Client-ID", ApiKeyUtil.getKey());
         connection.setRequestProperty("Content-Type", "application/json");
-        connection.setRequestProperty("Authorization", "Bearer " + accesToken);
+        connection.setRequestProperty("Authorization", "Bearer " + accessToken);
 
         byte[] data_url = json.getBytes("UTF-8");
         DataOutputStream outputStream = new DataOutputStream(connection.getOutputStream());
@@ -165,7 +164,7 @@ public class HttpUtil {
         connection.setRequestProperty("Connection", "Keep-Alive");
         connection.setRequestProperty("Cache-Control", "no-cache");
         connection.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
-        connection.setRequestProperty("Authorization", "Bearer " + accesToken);
+        connection.setRequestProperty("Authorization", "Bearer " + accessToken);
         connection.setDoOutput(true);
         connection.setUseCaches(false);
 
@@ -211,12 +210,18 @@ public class HttpUtil {
         }
     }
 
+    public static URL httpGetRedirectUrl(String url) throws IOException {
+        HttpsURLConnection con = httpGetConnection(url);
+        con.getInputStream().close();
+        return con.getURL();
+    }
+
     public static HttpsURLConnection httpGetConnection(String url) throws IOException {
         Log.d("HTTPGet", "httpGet() called with: " + "url = [" + url + "]");
         HttpsURLConnection connection = (HttpsURLConnection) new URL(url).openConnection();
         connection.setRequestMethod("GET");
         connection.setRequestProperty("Cookie", getCurrentCookies());
-        connection.setRequestProperty("Authorization", "Bearer " + accesToken);
+        connection.setRequestProperty("Authorization", "Bearer " + accessToken);
 
         if (AndroidUtil.getAndroidSupportCache()) {
             connection.setUseCaches(true);
@@ -235,7 +240,7 @@ public class HttpUtil {
         HttpsURLConnection connection = (HttpsURLConnection) new URL(url).openConnection();
         connection.setRequestMethod("GET");
         connection.setRequestProperty("Cookie", getCurrentCookies());
-        connection.setRequestProperty("Authorization", "Bearer " + accesToken);
+        connection.setRequestProperty("Authorization", "Bearer " + accessToken);
 
         if (AndroidUtil.getAndroidSupportCache()) {
             connection.setUseCaches(true);

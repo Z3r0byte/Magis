@@ -18,7 +18,6 @@ package net.ilexiconn.magister;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.util.Log;
 
 import net.ilexiconn.magister.container.Profile;
 import net.ilexiconn.magister.container.School;
@@ -34,6 +33,7 @@ import net.ilexiconn.magister.util.LoginUrl;
 import net.ilexiconn.magister.util.SchoolUrl;
 
 import java.io.IOException;
+import java.net.URL;
 import java.net.URLDecoder;
 import java.security.InvalidParameterException;
 import java.text.ParseException;
@@ -109,7 +109,7 @@ public class ParcelableMagister extends Magister implements Parcelable {
         magister.user = new User(username, password, false);
 
         //The new secret magister login method.
-        HttpsURLConnection con = HttpUtil.httpGetConnection((LoginUrl.getAuthorizeUrl() +
+        URL redirectUrl = HttpUtil.httpGetRedirectUrl((LoginUrl.getAuthorizeUrl() +
                 "?client_id=" + url.getClientId() +
                 "&redirect_uri=" + url.getRedirectUrl() +
                 "&response_type=id_token token" +
@@ -119,8 +119,7 @@ public class ParcelableMagister extends Magister implements Parcelable {
         );
 
         //The request is redirected and there is some information in the final redirected url.
-        con.getInputStream().close();
-        String query = con.getURL().getQuery();
+        String query = redirectUrl.getQuery();
         query = query.replaceFirst("\\?", "");
 
         String sessionId = "";
@@ -194,11 +193,8 @@ public class ParcelableMagister extends Magister implements Parcelable {
         }
 
         //Now we need to get a bearer token and we are done :D
-        con = HttpUtil.httpGetConnection(LoginUrl.getMainUrl() + returnUrl);
-
         //The token is hidden in the redirected location so we get that url.
-        con.getInputStream().close();
-        String uri = con.getURL().toString();
+        String uri = HttpUtil.httpGetRedirectUrl(LoginUrl.getMainUrl() + returnUrl).toString();
         String hash = uri.split("#", 2)[1];
 
         String accessToken = "";
@@ -213,7 +209,7 @@ public class ParcelableMagister extends Magister implements Parcelable {
             return null;
         }
 
-        HttpUtil.accesToken = accessToken;
+        HttpUtil.accessToken = accessToken;
 
         magister.loginTime = System.currentTimeMillis();
         magister.profile = magister.gson.fromJson(HttpUtil.httpGet(url.getAccountUrl()), Profile.class);

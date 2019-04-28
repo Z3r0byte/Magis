@@ -20,7 +20,6 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonNull;
 import com.google.gson.reflect.TypeToken;
 
 import net.ilexiconn.magister.adapter.ProfileAdapter;
@@ -51,11 +50,8 @@ import net.ilexiconn.magister.util.SchoolUrl;
 import net.ilexiconn.magister.util.android.ImageContainer;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLDecoder;
-import java.net.URLEncoder;
 import java.security.InvalidParameterException;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -134,7 +130,7 @@ public class Magister {
         magister.user = new User(username, password, false);
 
         //The new secret magister login method.
-        HttpsURLConnection con = HttpUtil.httpGetConnection((LoginUrl.getAuthorizeUrl() +
+        URL redirectUrl = HttpUtil.httpGetRedirectUrl((LoginUrl.getAuthorizeUrl() +
                 "?client_id=" + url.getClientId() +
                 "&redirect_uri=" + url.getRedirectUrl() +
                 "&response_type=id_token token" +
@@ -144,8 +140,7 @@ public class Magister {
         );
 
         //The request is redirected and there is some information in the final redirected url.
-        con.getInputStream().close();
-        String query = con.getURL().getQuery();
+        String query = redirectUrl.getQuery();
         query = query.replaceFirst("\\?", "");
 
         String sessionId = "";
@@ -219,11 +214,8 @@ public class Magister {
         }
 
         //Now we need to get a bearer token and we are done :D
-        con = HttpUtil.httpGetConnection(LoginUrl.getMainUrl() + returnUrl);
-
         //The token is hidden in the redirected location so we get that url.
-        con.getInputStream().close();
-        String uri = con.getURL().toString();
+        String uri = HttpUtil.httpGetRedirectUrl(LoginUrl.getMainUrl() + returnUrl).toString();
         String hash = uri.split("#", 2)[1];
 
         String accessToken = "";
@@ -240,7 +232,7 @@ public class Magister {
 
         Log.d(TAG, "login: Token: " + accessToken);
 
-        HttpUtil.accesToken = accessToken;
+        HttpUtil.accessToken = accessToken;
 
         magister.loginTime = System.currentTimeMillis();
         HttpUtil.httpGet(url.getCurrentSessionUrl()); // more mimicing the magister client
