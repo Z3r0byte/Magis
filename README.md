@@ -1,4 +1,4 @@
-# Magis
+# Magis [NO LONGER MAINTAINED]
 
 This is the github repository for my app Magis, an unofficial, free and open-source Magister 6 App.
 
@@ -23,7 +23,7 @@ However try to follow these guidelines:
 
 ### License
 ```
-Copyright 2016 Bas van den Boom 'Z3r0byte'
+Copyright 2016-2019 Bas van den Boom 'Z3r0byte'
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
