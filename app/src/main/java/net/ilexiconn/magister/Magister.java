@@ -226,21 +226,21 @@ public class Magister {
         String uri = con.getURL().toString();
         String hash = uri.split("#", 2)[1];
 
-        String accesToken = "";
+        String accessToken = "";
         for (String entry : hash.split("&")) {
             String[] values = entry.split("=");
             if (!values[0].equalsIgnoreCase("access_token")) continue;
-            accesToken = values[1];
+            accessToken = values[1];
         }
 
-        if (accesToken.isEmpty()) {
+        if (accessToken.isEmpty()) {
             LogUtil.printError("Invalid credentials", new InvalidParameterException());
             return null;
         }
 
-        Log.d(TAG, "login: Token: " + accesToken);
+        Log.d(TAG, "login: Token: " + accessToken);
 
-        HttpUtil.accesToken = accesToken;
+        HttpUtil.accesToken = accessToken;
 
         magister.loginTime = System.currentTimeMillis();
         HttpUtil.httpGet(url.getCurrentSessionUrl()); // more mimicing the magister client
