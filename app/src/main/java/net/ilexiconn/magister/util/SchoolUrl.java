@@ -16,7 +16,11 @@
 
 package net.ilexiconn.magister.util;
 
+import android.util.Log;
+
 import net.ilexiconn.magister.container.School;
+
+import java.util.logging.Logger;
 
 public class SchoolUrl {
     private School school;
@@ -51,5 +55,14 @@ public class SchoolUrl {
 
     public String getStudiesUrl(int profileId) {
         return getApiUrl() + "personen/" + profileId + "/aanmeldingen";
+    }
+
+    public String getClientId() {
+        //WOW they out done their self with this security feature.
+        return "M6-" + school.url.replace("https://", "");
+    }
+
+    public String getRedirectUrl() {
+        return getMagisterUrl() + "oidc/redirect_callback.html";
     }
 }

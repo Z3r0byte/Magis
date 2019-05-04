@@ -29,12 +29,20 @@ import net.ilexiconn.magister.container.Version;
 import net.ilexiconn.magister.util.AndroidUtil;
 import net.ilexiconn.magister.util.HttpUtil;
 import net.ilexiconn.magister.util.LogUtil;
+import net.ilexiconn.magister.util.LoginUrl;
 import net.ilexiconn.magister.util.SchoolUrl;
 
 import java.io.IOException;
+import java.net.URL;
+import java.net.URLDecoder;
 import java.security.InvalidParameterException;
 import java.text.ParseException;
+import java.util.Collections;
 import java.util.Date;
+import java.util.Map;
+import java.util.Random;
+
+import javax.net.ssl.HttpsURLConnection;
 
 /**
  * A special Magister class implementing Parcelable.
@@ -52,6 +60,8 @@ public class ParcelableMagister extends Magister implements Parcelable {
             return new ParcelableMagister[size];
         }
     };
+
+    private static final Random random = new Random();
 
     protected ParcelableMagister() {
         super();
@@ -97,17 +107,110 @@ public class ParcelableMagister extends Magister implements Parcelable {
         SchoolUrl url = magister.schoolUrl = new SchoolUrl(school);
         magister.version = magister.gson.fromJson(HttpUtil.httpGet(url.getVersionUrl()), Version.class);
         magister.user = new User(username, password, false);
-        magister.logout();
-        String data = magister.gson.toJson(magister.user);
-        String session = LogUtil.getStringFromInputStream(HttpUtil.httpPost(url.getSessionUrl(), data)); //logging
-        if (session.startsWith("{\"message\"")) {
-            return null;
+
+        //The new secret magister login method.
+        URL redirectUrl = HttpUtil.httpGetRedirectUrl((LoginUrl.getAuthorizeUrl() +
+                "?client_id=" + url.getClientId() +
+                "&redirect_uri=" + url.getRedirectUrl() +
+                "&response_type=id_token token" +
+                "&scope=openid profile magister.ecs.legacy magister.mdv.broker.read magister.dnn.roles.read" +
+                "&nonce=" + random.nextLong())
+                .replace(" ", "%20")
+        );
+
+        //The request is redirected and there is some information in the final redirected url.
+        String query = redirectUrl.getQuery();
+        query = query.replaceFirst("\\?", "");
+
+        String sessionId = "";
+        String returnUrl = "";
+        for (String entry : query.split("&")) {
+            String[] values = entry.split("=");
+            switch (values[0]) {
+                case "sessionId":
+                    sessionId = values[1];
+                    break;
+                case "returnUrl":
+                    returnUrl = URLDecoder.decode(values[1], "UTF-8");
+                    break;
+                default:
+                    break;
+            }
         }
-        magister.session = magister.gson.fromJson(session, Session.class);
-        if (!magister.session.state.equals("active")) {
+        if (sessionId.isEmpty() || returnUrl.isEmpty()) {
             LogUtil.printError("Invalid credentials", new InvalidParameterException());
             return null;
         }
+
+        //XSRF-TOKEN needs to be a header so we get that here.
+        String xrsfToken = "";
+        String[] cookies = HttpUtil.getCurrentCookies().split(";");
+        for (String cookie : cookies) {
+            String[] values = cookie.split("=");
+            if (values[0].equalsIgnoreCase("XSRF-TOKEN")) {
+                xrsfToken = values[1];
+                break;
+            }
+        }
+        if (xrsfToken.isEmpty()) {
+            LogUtil.printError("Invalid credentials", new InvalidParameterException());
+            return null;
+        }
+
+        //We get the authCode from another site, because magister likes to changes thing around for "security" reasons.
+        String authCode = magister.gson.fromJson(LogUtil.getStringFromInputStream(HttpUtil.httpGet(LoginUrl.getAuthCodeUrl())), LoginUrl.AuthCode.class).authCode;
+        LoginUrl.ChallengeData challengeData = new LoginUrl.ChallengeData(authCode, returnUrl, sessionId);
+
+        Map<String, String> header = Collections.singletonMap("X-XSRF-TOKEN", xrsfToken);
+
+        //Send the data to magister, don't know why it can't be one request.
+        String data = magister.gson.toJson(challengeData);
+        String response =  LogUtil.getStringFromInputStream(HttpUtil.httpPost(LoginUrl.getCurrentUrl(), data, header));
+
+        String error = magister.gson.fromJson(response, LoginUrl.Error.class).error;
+        if (error != null && !error.isEmpty()) {
+            LogUtil.printError("Invalid credentials", new InvalidParameterException());
+            return null;
+        }
+
+        challengeData.setUsername(username);
+        data = magister.gson.toJson(challengeData);
+        response =  LogUtil.getStringFromInputStream(HttpUtil.httpPost(LoginUrl.getUsernameUrl(), data, header));
+
+        error = magister.gson.fromJson(response, LoginUrl.Error.class).error;
+        if (error != null && !error.isEmpty()) {
+            LogUtil.printError("Invalid credentials", new InvalidParameterException());
+            return null;
+        }
+        challengeData.setPassword(password);
+        data = magister.gson.toJson(challengeData);
+        response =  LogUtil.getStringFromInputStream(HttpUtil.httpPost(LoginUrl.getPasswordUrl(), data, header));
+
+        error = magister.gson.fromJson(response, LoginUrl.Error.class).error;
+        if (error != null && !error.isEmpty()) {
+            LogUtil.printError("Invalid credentials", new InvalidParameterException());
+            return null;
+        }
+
+        //Now we need to get a bearer token and we are done :D
+        //The token is hidden in the redirected location so we get that url.
+        String uri = HttpUtil.httpGetRedirectUrl(LoginUrl.getMainUrl() + returnUrl).toString();
+        String hash = uri.split("#", 2)[1];
+
+        String accessToken = "";
+        for (String entry : hash.split("&")) {
+            String[] values = entry.split("=");
+            if (!values[0].equalsIgnoreCase("access_token")) continue;
+            accessToken = values[1];
+        }
+
+        if (accessToken.isEmpty()) {
+            LogUtil.printError("Invalid credentials", new InvalidParameterException());
+            return null;
+        }
+
+        HttpUtil.accessToken = accessToken;
+
         magister.loginTime = System.currentTimeMillis();
         magister.profile = magister.gson.fromJson(HttpUtil.httpGet(url.getAccountUrl()), Profile.class);
         magister.studies = magister.gson.fromJson(HttpUtil.httpGet(url.getStudiesUrl(magister.profile.id)), Study[].class);
